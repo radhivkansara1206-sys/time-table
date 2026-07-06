@@ -279,15 +279,44 @@ td.time {
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
-    header h1 { font-size: 4rem; }
+    .college-name { font-size: 2.5rem; }
+    .spiderman-title h2 { font-size: 3.5rem; }
     th, td { padding: 10px 5px; font-size: 0.9rem; }
-    .title-banner { padding: 10px 30px; }
 }
 
 @media (max-width: 768px) {
-    .table-wrapper { overflow-x: auto; }
-    table { min-width: 800px; }
+    .main-header { gap: 10px; }
+    .college-name { font-size: 2rem; }
+    .spiderman-title h2 { font-size: 2.5rem; }
+    .batch-info { font-size: 0.9rem; padding: 5px 15px; }
+    
+    .table-wrapper { 
+        overflow-x: auto; 
+        -webkit-overflow-scrolling: touch;
+        border-width: 3px;
+        box-shadow: 8px 8px 0px rgba(0,0,0,1);
+    }
+    table { 
+        min-width: 550px; 
+    }
+    th, td {
+        padding: 5px;
+        font-size: 0.8rem;
+        border-width: 2px;
+    }
+    th { font-size: 1.1rem; }
     .comic-action { display: none; }
+}
+
+.creator-footer {
+    text-align: center;
+    font-family: 'Bangers', cursive;
+    color: #ffeb3b;
+    font-size: 1.5rem;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 0 #d32f2f, -1px -1px 0 #d32f2f, 1px -1px 0 #d32f2f, -1px 1px 0 #d32f2f, 4px 4px 0 #000;
+    letter-spacing: 2px;
 }
 
 /* Highlighting styles for current time/day */
