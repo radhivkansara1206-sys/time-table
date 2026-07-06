@@ -23,7 +23,10 @@
             <div class="title-banner">
                 <h1>TIME TABLE</h1>
             </div>
-            <button id="install-btn" class="install-btn comic-button" hidden>Install App</button>
+            <div class="header-buttons" style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                <button id="install-btn" class="install-btn comic-button" hidden>Install App</button>
+                <button id="download-btn" class="download-btn comic-button">Save as PNG</button>
+            </div>
         </header>
         
         <div class="comic-action thip-1">THIP!</div>
@@ -148,6 +151,26 @@
             installBtn.hidden = true;
             deferredPrompt = null;
         });
+
+        // Download as PNG functionality
+        const downloadBtn = document.getElementById('download-btn');
+        downloadBtn.addEventListener('click', () => {
+            // Temporarily hide actions for cleaner screenshot if capturing whole container
+            // We'll just capture the table-wrapper to get a clean timetable image
+            const tableWrapper = document.querySelector('.table-wrapper');
+            
+            html2canvas(tableWrapper, {
+                scale: 2, // Higher quality
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'timetable.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
     </script>
+    <!-- Include html2canvas for downloading the timetable as an image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
