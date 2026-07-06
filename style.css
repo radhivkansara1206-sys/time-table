@@ -176,18 +176,33 @@ tbody td.time {
 }
 
 /* Break Row */
-.break-row td {
-    background-color: rgba(226, 54, 54, 0.15);
-    border-top: 2px dashed var(--spidey-blue);
-    border-bottom: 2px dashed var(--spidey-blue);
+.break-row {
+    background-color: transparent !important;
 }
 
-.break-text {
-    font-weight: 700;
-    letter-spacing: 4px;
-    color: var(--spidey-red);
+.break-row td.time {
+    border: none;
+    background-color: transparent;
+}
+
+.break-row td.break-text {
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(226, 54, 54, 0.1),
+        rgba(226, 54, 54, 0.1) 10px,
+        rgba(11, 79, 108, 0.1) 10px,
+        rgba(11, 79, 108, 0.1) 20px
+    );
+    border-top: 2px dashed var(--spidey-red);
+    border-bottom: 2px dashed var(--spidey-red);
+    border-left: none;
+    border-right: none;
+    font-weight: 800;
+    letter-spacing: 8px;
+    color: #fff;
     text-transform: uppercase;
-    text-shadow: 0 0 10px rgba(226, 54, 54, 0.5);
+    text-shadow: 0 0 10px var(--spidey-red), 0 0 20px var(--spidey-blue);
+    padding: 10px;
 }
 
 /* Install Button */
