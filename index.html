@@ -25,7 +25,7 @@
             </div>
             <div class="header-buttons" style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
                 <button id="install-btn" class="install-btn comic-button" hidden>Install App</button>
-                <button id="download-btn" class="download-btn comic-button">Save as PNG</button>
+                <button id="download-btn" class="download-btn comic-button">Save Image</button>
             </div>
         </header>
         
@@ -161,10 +161,20 @@
         const downloadBtn = document.getElementById('download-btn');
         downloadBtn.addEventListener('click', () => {
             const tableWrapper = document.querySelector('.table-wrapper');
+            
+            // Temporarily adjust styles for full capture on mobile
+            const originalOverflow = tableWrapper.style.overflowX;
+            tableWrapper.style.overflowX = 'visible';
+            
             html2canvas(tableWrapper, {
                 scale: 2, 
-                backgroundColor: '#ffffff'
+                backgroundColor: '#ffffff',
+                windowWidth: tableWrapper.scrollWidth,
+                width: tableWrapper.scrollWidth
             }).then(canvas => {
+                // Restore original styles
+                tableWrapper.style.overflowX = originalOverflow;
+                
                 const link = document.createElement('a');
                 link.download = 'timetable.png';
                 link.href = canvas.toDataURL('image/png');
