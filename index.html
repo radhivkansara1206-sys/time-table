@@ -156,12 +156,9 @@
         // Download as PNG functionality
         const downloadBtn = document.getElementById('download-btn');
         downloadBtn.addEventListener('click', () => {
-            // Temporarily hide actions for cleaner screenshot if capturing whole container
-            // We'll just capture the table-wrapper to get a clean timetable image
             const tableWrapper = document.querySelector('.table-wrapper');
-            
             html2canvas(tableWrapper, {
-                scale: 2, // Higher quality
+                scale: 2, 
                 backgroundColor: '#ffffff'
             }).then(canvas => {
                 const link = document.createElement('a');
@@ -170,6 +167,78 @@
                 link.click();
             });
         });
+
+        // Highlight current day and lecture
+        function highlightCurrent() {
+            // Remove existing highlights
+            document.querySelectorAll('.highlight-day').forEach(el => el.classList.remove('highlight-day'));
+            document.querySelectorAll('.highlight-lecture').forEach(el => el.classList.remove('highlight-lecture'));
+
+            const now = new Date();
+            const currentDay = now.getDay(); // 1=Mon, 5=Fri
+            const currentMins = now.getHours() * 60 + now.getMinutes();
+
+            // Highlight day header
+            if (currentDay >= 1 && currentDay <= 5) {
+                const headers = document.querySelectorAll('thead th');
+                if (headers[currentDay]) headers[currentDay].classList.add('highlight-day');
+            }
+
+            // Build matrix to handle rowspans
+            const matrix = [];
+            const trs = document.querySelectorAll('tbody tr');
+            
+            trs.forEach((tr, rIdx) => {
+                matrix[rIdx] = matrix[rIdx] || [];
+                let cIdx = 0;
+                Array.from(tr.children).forEach(td => {
+                    while (matrix[rIdx][cIdx]) cIdx++;
+                    
+                    const rowspan = parseInt(td.getAttribute('rowspan') || 1);
+                    const colspan = parseInt(td.getAttribute('colspan') || 1);
+                    
+                    for (let r = 0; r < rowspan; r++) {
+                        for (let c = 0; c < colspan; c++) {
+                            matrix[rIdx + r] = matrix[rIdx + r] || [];
+                            matrix[rIdx + r][cIdx + c] = td;
+                        }
+                    }
+                });
+            });
+
+            // Find current time slot and highlight
+            trs.forEach((tr, rIdx) => {
+                if (tr.classList.contains('break-row')) return;
+                const timeCell = tr.querySelector('.time');
+                if (!timeCell) return;
+                
+                const timeText = timeCell.innerText; 
+                const [startStr, endStr] = timeText.split('-');
+                
+                const parseTime = (t) => {
+                    let [h, m] = t.split(':').map(Number);
+                    if (h < 6) h += 12; // Convert PM (e.g. 1:25 -> 13:25)
+                    return h * 60 + m;
+                };
+                
+                const startMins = parseTime(startStr);
+                const endMins = parseTime(endStr);
+                
+                if (currentMins >= startMins && currentMins <= endMins) {
+                    timeCell.classList.add('highlight-day');
+                    
+                    if (currentDay >= 1 && currentDay <= 5) {
+                        const activeCell = matrix[rIdx][currentDay];
+                        if (activeCell && activeCell !== timeCell && activeCell.innerText.trim() !== '') {
+                            activeCell.classList.add('highlight-lecture');
+                        }
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('load', highlightCurrent);
+        setInterval(highlightCurrent, 60000); // Check every minute
     </script>
     <!-- Include html2canvas for downloading the timetable as an image -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>

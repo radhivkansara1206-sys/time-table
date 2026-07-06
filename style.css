@@ -289,3 +289,25 @@ td.time {
     table { min-width: 800px; }
     .comic-action { display: none; }
 }
+
+/* Highlighting styles for current time/day */
+.highlight-day {
+    box-shadow: inset 0 0 15px rgba(255, 235, 59, 0.8) !important;
+    border: 4px solid #ffeb3b !important;
+    color: #ffeb3b !important;
+    background-color: #000 !important;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.highlight-lecture {
+    background-color: #f1c40f !important;
+    color: #000 !important;
+    border: 4px dashed #000 !important;
+    animation: pulse-lecture 2s infinite;
+}
+
+@keyframes pulse-lecture {
+    0% { transform: scale(1); box-shadow: 0 0 0px #f1c40f; z-index: 10; position: relative; }
+    50% { transform: scale(1.05); box-shadow: 0 0 15px #f1c40f; z-index: 10; position: relative; }
+    100% { transform: scale(1); box-shadow: 0 0 0px #f1c40f; z-index: 10; position: relative; }
+}
