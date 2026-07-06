@@ -1,6 +1,6 @@
-# Class Schedule PWA
+# Spider-Man Class Schedule PWA 🕸️🕷️
 
-A beautiful, modern class schedule built as a Progressive Web App (PWA). It features a glassmorphism design, dynamic background animations, and can be installed natively on both Windows and Android devices. It also includes an integration for the Windows 11 Widget Board.
+A stunning, Spider-Man themed class schedule built as a Progressive Web App (PWA). It features a dark moody design, animated web backgrounds, glowing typography, and can be installed natively on both Windows and Android devices. It also includes an integration for the Windows 11 Widget Board.
 
 ## 🚀 How to Run Locally
 
@@ -16,7 +16,7 @@ To install and use this app, it must be served over a local web server (PWAs can
 
 ## 💻 Installation & Setup on Windows
 
-1. Open `http://localhost:8080` (or your hosted URL) in **Microsoft Edge** or **Google Chrome**.
+1. Open the hosted URL (`https://radhivkansara1206-sys.github.io/time-table/`) in **Microsoft Edge** or **Google Chrome**.
 2. Click the **"Install as App & Add Widget"** button on the webpage, or click the app installation icon that appears in the right side of the URL address bar.
 3. Once installed, the Class Schedule will open in its own standalone window and appear in your Windows Start Menu.
 
@@ -29,14 +29,14 @@ After installing the app on Windows 11:
 
 ## 📱 Installation & Setup on Android
 
-1. Host the files on a public web server (like GitHub Pages, Vercel, or Netlify), or access your computer's local IP address from your phone on the same Wi-Fi network.
-2. Open the URL in **Google Chrome** on your Android device.
-3. A prompt may appear at the bottom of the screen saying **"Add Class Schedule to Home screen"**. Tap it.
+1. Open the GitHub Pages URL (`https://radhivkansara1206-sys.github.io/time-table/`) in **Google Chrome** on your Android device.
+2. A prompt may appear at the bottom of the screen saying **"Add Class Schedule to Home screen"**. Tap it.
    - *If the prompt doesn't appear automatically, tap the three dots (menu) in the top right corner of Chrome and select **"Add to Home screen"** or **"Install app"**.*
-4. The app will be installed and you will find the "Schedule" icon in your app drawer and home screen. It will run in full-screen mode like a native app.
+3. The app will be installed and you will find the "Schedule" icon with the Spider-Man theme in your app drawer and home screen. It will run in full-screen mode like a native app.
 
-## 🎨 Features
+## 🎨 Theme Features
+- **Spider-Man Aesthetics**: Deep reds, navy blues, and dark mode for a cinematic feel.
+- **Animated Background**: Features a rotating, subtle web background.
 - **PWA Ready**: Works offline with a registered Service Worker.
-- **Windows 11 Widget**: Includes an Adaptive Card template (`widget-template.json`) and data (`widget-data.json`) to display your schedule in the Windows widget board.
+- **Windows 11 Widget**: Displays your schedule in the Windows widget board.
 - **Responsive Design**: Looks great on both desktop and mobile devices.
-- **Modern UI**: CSS animations and a clean, glass-like aesthetic.
