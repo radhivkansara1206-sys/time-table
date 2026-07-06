@@ -8,27 +8,34 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Dynamic Background added via CSS to body -->
+    <div class="comic-bg">
+        <div class="halftone-dots"></div>
+        <div class="cityscape"></div>
+        <div class="spider-man top-left"></div>
+        <div class="spider-man bottom-right"></div>
+    </div>
     
     <div class="container">
         <header>
             <div class="title-banner">
-                <h1>Class Schedule</h1>
+                <h1>TIME TABLE</h1>
             </div>
-            <div class="header-buttons">
-                <button id="install-btn" class="glass-button" hidden>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    Install App
-                </button>
-                <button id="download-btn" class="glass-button">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    Save as PNG
-                </button>
+            <div class="header-buttons" style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                <button id="install-btn" class="install-btn comic-button" hidden>Install App</button>
+                <button id="download-btn" class="download-btn comic-button">Save as PNG</button>
             </div>
         </header>
+        
+        <div class="comic-action thip-1">THIP!</div>
+        <div class="comic-action whoosh">WHOOSH!</div>
+        <div class="comic-action thip-2">THIP!</div>
+        
+        <div class="speech-bubble bubble-1"></div>
+        <div class="speech-bubble bubble-2"></div>
+        <div class="speech-bubble bubble-3"></div>
 
         <div class="table-wrapper">
             <table>
@@ -148,19 +155,14 @@
         // Download as PNG functionality
         const downloadBtn = document.getElementById('download-btn');
         downloadBtn.addEventListener('click', () => {
+            // Temporarily hide actions for cleaner screenshot if capturing whole container
+            // We'll just capture the table-wrapper to get a clean timetable image
             const tableWrapper = document.querySelector('.table-wrapper');
-            // Add a temporary solid background for the screenshot since html2canvas doesn't handle backdrop-filter blur well
-            const originalBackground = tableWrapper.style.background;
-            const originalBorder = tableWrapper.style.border;
-            tableWrapper.style.background = 'linear-gradient(135deg, #1e1e2f, #2d2d44)';
-            tableWrapper.style.border = '1px solid rgba(255, 255, 255, 0.1)';
             
             html2canvas(tableWrapper, {
-                scale: 2, 
-                backgroundColor: '#13131f'
+                scale: 2, // Higher quality
+                backgroundColor: '#ffffff'
             }).then(canvas => {
-                tableWrapper.style.background = originalBackground;
-                tableWrapper.style.border = originalBorder;
                 const link = document.createElement('a');
                 link.download = 'timetable.png';
                 link.href = canvas.toDataURL('image/png');
