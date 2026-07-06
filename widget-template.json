@@ -1,0 +1,34 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "Container",
+      "style": "emphasis",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "Today's Schedule",
+          "weight": "Bolder",
+          "size": "ExtraLarge",
+          "color": "Accent"
+        }
+      ]
+    },
+    {
+      "type": "FactSet",
+      "spacing": "Large",
+      "facts": [
+        { "title": "09:05", "value": "${class1}" },
+        { "title": "10:00", "value": "${class2}" },
+        { "title": "10:55", "value": "${class3}" },
+        { "title": "11:50", "value": "${class4}" },
+        { "title": "13:25", "value": "${class5}" },
+        { "title": "14:20", "value": "${class6}" },
+        { "title": "15:15", "value": "${class7}" },
+        { "title": "16:10", "value": "${class8}" }
+      ]
+    }
+  ]
+}

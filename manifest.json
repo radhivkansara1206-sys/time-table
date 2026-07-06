@@ -1,0 +1,28 @@
+{
+  "name": "Class Schedule",
+  "short_name": "Schedule",
+  "description": "Your beautiful weekly class schedule",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#b3dcf4",
+  "theme_color": "#1282a2",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "widgets": [
+    {
+      "name": "Today's Schedule",
+      "short_name": "Schedule",
+      "description": "Shows your upcoming classes",
+      "tag": "class-schedule-widget",
+      "ms_ac_template": "widget-template.json",
+      "data": "widget-data.json",
+      "type": "application/json"
+    }
+  ]
+}

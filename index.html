@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Schedule</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-decor">
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        <div class="sun"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>Class Schedule</h1>
+            <button id="install-btn" class="install-btn" hidden>Install as App & Add Widget</button>
+        </header>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-time">Time</th>
+                        <th class="col-mon">Monday</th>
+                        <th class="col-tue">Tuesday</th>
+                        <th class="col-wed">Wednesday</th>
+                        <th class="col-thu">Thursday</th>
+                        <th class="col-fri">Friday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="time">9:05-9:55</td>
+                        <td></td>
+                        <td>Python</td>
+                        <td></td>
+                        <td>Cyber Lab<br>1A08<br>D203E</td>
+                        <td>Cyber lab<br>B08<br>D303A</td>
+                    </tr>
+                    <tr>
+                        <td class="time">10:00-10:50</td>
+                        <td>Python</td>
+                        <td>Design</td>
+                        <td>SE</td>
+                        <td>Cyber Lab<br>1A08<br>D203E</td>
+                        <td>Cyber lab<br>B08<br>D303A</td>
+                    </tr>
+                    <tr>
+                        <td class="time">10:55-11:45</td>
+                        <td>Web Dev</td>
+                        <td>SE lab<br>D303B</td>
+                        <td>Python</td>
+                        <td>Cyber</td>
+                        <td>Web dev</td>
+                    </tr>
+                    <tr>
+                        <td class="time">11:50-12:40</td>
+                        <td>SE</td>
+                        <td>SE lab<br>D303B</td>
+                        <td>Design</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="break-row">
+                        <td class="time"></td>
+                        <td colspan="5" class="break-text">Break</td>
+                    </tr>
+                    <tr>
+                        <td class="time">1:25-2:15</td>
+                        <td>Web Dev lab<br>A-313</td>
+                        <td>Python lab<br>D303D</td>
+                        <td></td>
+                        <td></td>
+                        <td>DAA lab<br>D303D</td>
+                    </tr>
+                    <tr>
+                        <td class="time">2:20-3:10</td>
+                        <td>Web Dev lab<br>A-313</td>
+                        <td>Python lab<br>D303D</td>
+                        <td>Web Dev</td>
+                        <td>SE</td>
+                        <td>DAA lab<br>D303D</td>
+                    </tr>
+                    <tr>
+                        <td class="time">3:15-4:05</td>
+                        <td>Design</td>
+                        <td>Cyber</td>
+                        <td>Cyber</td>
+                        <td>Design</td>
+                        <td>Open Elective</td>
+                    </tr>
+                    <tr>
+                        <td class="time">4:10-5:00</td>
+                        <td>Open Elective</td>
+                        <td></td>
+                        <td>Open Elective</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('SW registered:', registration);
+                }).catch(error => {
+                    console.log('SW registration failed:', error);
+                });
+            });
+        }
+
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.hidden = false;
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt !== null) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    deferredPrompt = null;
+                    installBtn.hidden = true;
+                }
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installBtn.hidden = true;
+            deferredPrompt = null;
+        });
+    </script>
+</body>
+</html>
