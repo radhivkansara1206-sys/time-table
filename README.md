@@ -1,32 +1,16 @@
-# Spider-Man Class Schedule PWA 🕸️🕷️
+# Spider-Man Themed College Timetable
 
-**👉 [View the Live Website Here!](https://radhivkansara1206-sys.github.io/time-table/) 👈**
+A fun, interactive, and responsive college timetable web application styled with a spectacular Spider-Man comic book theme! 🕸️🕷️
 
-A stunning, Spider-Man themed class schedule built as a Progressive Web App (PWA). It features a dark moody design, animated web backgrounds, glowing typography, and can be installed natively on both Windows and Android devices. It also includes an integration for the Windows 11 Widget Board.
+## 🔗 Live Demo
+[**Click here to view the live Time Table**](https://radhivkansara1206-sys.github.io/time-table/)
 
-## 💻 Installation & Setup on Windows
+## 🚀 Features
+- **Dynamic Auto-Highlighting:** Automatically highlights the current day of the week and pulses on the currently active lecture based on your local time!
+- **Mobile Responsive:** Perfectly tailored for small screens. Scroll smoothly through the schedule without it cutting off.
+- **Export to Image:** Save your beautiful timetable straight to your device as a high-quality PNG for quick reference.
+- **Progressive Web App (PWA):** Install it directly to your home screen! Complete with offline caching using Service Workers.
+- **Comic Aesthetic:** Vibrant colors, halftone dots, action bubbles, and comic-style fonts that pop out of the screen.
 
-1. Open the hosted URL (`https://radhivkansara1206-sys.github.io/time-table/`) in **Microsoft Edge** or **Google Chrome**.
-2. Click the **"Install as App & Add Widget"** button on the webpage, or click the app installation icon that appears in the right side of the URL address bar.
-3. Once installed, the Class Schedule will open in its own standalone window and appear in your Windows Start Menu.
-
-### Setting up the Windows 11 Widget
-After installing the app on Windows 11:
-1. Press `Win + W` to open the Windows Widgets board.
-2. Click the **+** (Add Widget) button at the top of the board.
-3. Look for "Class Schedule" or "Today's Schedule" in the list of available widgets.
-4. Click to pin it to your board!
-
-## 📱 Installation & Setup on Android
-
-1. Open the GitHub Pages URL (`https://radhivkansara1206-sys.github.io/time-table/`) in **Google Chrome** on your Android device.
-2. A prompt may appear at the bottom of the screen saying **"Add Class Schedule to Home screen"**. Tap it.
-   - *If the prompt doesn't appear automatically, tap the three dots (menu) in the top right corner of Chrome and select **"Add to Home screen"** or **"Install app"**.*
-3. The app will be installed and you will find the "Schedule" icon with the Spider-Man theme in your app drawer and home screen. It will run in full-screen mode like a native app.
-
-## 🎨 Theme Features
-- **Spider-Man Aesthetics**: Deep reds, navy blues, and dark mode for a cinematic feel.
-- **Animated Background**: Features a rotating, subtle web background.
-- **PWA Ready**: Works offline with a registered Service Worker.
-- **Windows 11 Widget**: Displays your schedule in the Windows widget board.
-- **Responsive Design**: Looks great on both desktop and mobile devices.
+---
+*Created by **Radhiv Kansara***
