@@ -1,6 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="100" fill="#1282a2"/>
-  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="200" font-weight="bold" fill="white">CS</text>
-  <rect x="150" y="320" width="212" height="40" rx="10" fill="white"/>
-  <rect x="150" y="380" width="150" height="40" rx="10" fill="white"/>
+  <rect width="512" height="512" rx="100" fill="#e23636"/>
+  <circle cx="256" cy="256" r="200" fill="none" stroke="#000" stroke-width="15"/>
+  <circle cx="256" cy="256" r="140" fill="none" stroke="#000" stroke-width="15"/>
+  <circle cx="256" cy="256" r="80" fill="none" stroke="#000" stroke-width="15"/>
+  <line x1="256" y1="56" x2="256" y2="456" stroke="#000" stroke-width="15"/>
+  <line x1="56" y1="256" x2="456" y2="256" stroke="#000" stroke-width="15"/>
+  <line x1="114" y1="114" x2="398" y2="398" stroke="#000" stroke-width="15"/>
+  <line x1="114" y1="398" x2="398" y2="114" stroke="#000" stroke-width="15"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="140" font-weight="bold" fill="white" stroke="#0b4f6c" stroke-width="8">CS</text>
 </svg>
