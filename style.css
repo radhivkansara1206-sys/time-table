@@ -202,62 +202,7 @@ td.time {
     color: #e64a40;
 }
 
-.speech-bubble {
-    position: absolute;
-    background: #fff;
-    border: 4px solid #000;
-    border-radius: 50%;
-    z-index: 5;
-}
 
-.speech-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -15px;
-    left: 20px;
-    border-width: 15px 15px 0;
-    border-style: solid;
-    border-color: #fff transparent transparent;
-    display: block;
-    width: 0;
-}
-
-.speech-bubble::before {
-    content: '';
-    position: absolute;
-    bottom: -21px;
-    left: 17px;
-    border-width: 18px 18px 0;
-    border-style: solid;
-    border-color: #000 transparent transparent;
-    display: block;
-    width: 0;
-}
-
-.bubble-1 {
-    width: 100px;
-    height: 70px;
-    top: 20%;
-    left: -15px;
-}
-
-.bubble-2 {
-    width: 80px;
-    height: 60px;
-    bottom: 30%;
-    left: -15px;
-}
-.bubble-2::after { left: 40px; border-width: 15px 0 0 15px; }
-.bubble-2::before { left: 37px; border-width: 18px 0 0 18px; }
-
-.bubble-3 {
-    width: 90px;
-    height: 60px;
-    bottom: -30px;
-    left: 40%;
-}
-.bubble-3::after { left: 40px; top: -15px; border-width: 0 15px 15px 15px; border-color: transparent transparent #fff transparent; }
-.bubble-3::before { left: 37px; top: -21px; border-width: 0 18px 18px 18px; border-color: transparent transparent #000 transparent; }
 
 
 /* Install Button */
@@ -296,5 +241,5 @@ td.time {
 @media (max-width: 768px) {
     .table-wrapper { overflow-x: auto; }
     table { min-width: 800px; }
-    .comic-action, .speech-bubble { display: none; }
+    .comic-action { display: none; }
 }
