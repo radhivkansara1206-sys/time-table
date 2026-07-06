@@ -4,18 +4,6 @@
 
 A stunning, Spider-Man themed class schedule built as a Progressive Web App (PWA). It features a dark moody design, animated web backgrounds, glowing typography, and can be installed natively on both Windows and Android devices. It also includes an integration for the Windows 11 Widget Board.
 
-## 🚀 How to Run Locally
-
-To install and use this app, it must be served over a local web server (PWAs cannot be installed directly from a `file://` URL). 
-
-1. Open your terminal or command prompt in this folder.
-2. Start a local server. If you have Python installed, you can run:
-   ```bash
-   python -m http.server 8080
-   ```
-   *(Alternatively, you can use VS Code's "Live Server" extension, or Node's `npx serve`)*
-3. Open your browser and navigate to: `http://localhost:8080`
-
 ## 💻 Installation & Setup on Windows
 
 1. Open the hosted URL (`https://radhivkansara1206-sys.github.io/time-table/`) in **Microsoft Edge** or **Google Chrome**.
