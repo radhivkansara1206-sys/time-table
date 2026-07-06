@@ -1,20 +1,11 @@
 :root {
-    --bg-color: #0b0c10;
-    --text-color: #c5c6c7;
-    --border-color: #1f2833;
-    
-    --col-time-bg: #8b0000; /* Dark Red */
-    --col-mon-bg: #002244; /* Dark Blue */
-    --col-tue-bg: #b22222; /* Firebrick Red */
-    --col-wed-bg: #003366; /* Navy Blue */
-    --col-thu-bg: #b22222; /* Firebrick Red */
-    --col-fri-bg: #002244; /* Dark Blue */
-    
-    --header-text-color: #ffffff;
-    --cell-bg: rgba(11, 12, 16, 0.85);
-    --cell-hover-bg: #1f2833;
-    --spidey-red: #e23636;
-    --spidey-blue: #0b4f6c;
+    --bg-red: #e64a40;
+    --bg-blue: #9ebcda;
+    --bg-white: #ffffff;
+    --header-blue: #436696;
+    --time-bg: #e4ded7;
+    --break-bg: #9a9a9a;
+    --border-color: #000000;
 }
 
 * {
@@ -24,9 +15,8 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
-    color: var(--text-color);
+    font-family: 'Comic Neue', cursive, sans-serif;
+    background-color: #79a1cc; /* base blue */
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -34,10 +24,11 @@ body {
     overflow-x: hidden;
     position: relative;
     padding: 40px 20px;
+    color: #000;
 }
 
-/* Spider Web Background Decor */
-.background-decor {
+/* Comic Background with Halftone and Splits */
+.comic-bg {
     position: fixed;
     top: 0;
     left: 0;
@@ -46,201 +37,264 @@ body {
     z-index: -1;
     overflow: hidden;
     pointer-events: none;
+    background: linear-gradient(135deg, #a6c0df 50%, #f65349 50%);
+}
+
+.halftone-dots {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#000 1.5px, transparent 1.5px);
+    background-size: 10px 10px;
     opacity: 0.15;
 }
 
-.background-decor::before {
-    content: '';
+.cityscape {
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: 
-        repeating-radial-gradient(
-            circle at center,
-            transparent,
-            transparent 40px,
-            rgba(255, 255, 255, 0.8) 41px,
-            rgba(255, 255, 255, 0.8) 42px
-        ),
-        repeating-conic-gradient(
-            from 0deg at center,
-            transparent 0deg,
-            transparent 15deg,
-            rgba(255, 255, 255, 0.8) 15.5deg,
-            rgba(255, 255, 255, 0.8) 16deg
-        );
-    transform: scale(0.6);
-    animation: rotateWeb 120s linear infinite;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    clip-path: polygon(0% 100%, 0% 40%, 5% 40%, 5% 60%, 10% 60%, 10% 30%, 15% 30%, 15% 50%, 20% 50%, 20% 20%, 30% 20%, 30% 60%, 40% 60%, 40% 10%, 50% 10%, 50% 50%, 60% 50%, 60% 30%, 70% 30%, 70% 70%, 80% 70%, 80% 40%, 90% 40%, 90% 60%, 95% 60%, 95% 20%, 100% 20%, 100% 100%);
+    opacity: 0.5;
 }
-
-@keyframes rotateWeb {
-    from { transform: scale(0.6) rotate(0deg); }
-    to { transform: scale(0.6) rotate(360deg); }
-}
-
 
 /* Main Container */
 .container {
     width: 100%;
     max-width: 1200px;
     z-index: 1;
+    position: relative;
 }
 
 header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.title-banner {
+    display: inline-block;
+    background-color: var(--bg-red);
+    padding: 10px 50px;
+    border: 5px solid var(--border-color);
+    box-shadow: 10px 10px 0px rgba(0,0,0,1);
+    transform: rotate(-2deg);
+    position: relative;
+}
+
+.title-banner::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 3px solid #000;
+    z-index: -1;
+    background: #fff;
+    transform: rotate(1deg);
 }
 
 header h1 {
-    font-size: 4.5rem;
-    font-weight: 700;
-    color: transparent;
-    -webkit-text-stroke: 2px var(--spidey-red);
-    background: linear-gradient(45deg, var(--spidey-red), var(--spidey-blue));
-    -webkit-background-clip: text;
-    text-shadow: 0 0 20px rgba(226, 54, 54, 0.4);
-    letter-spacing: 2px;
+    font-family: 'Bangers', cursive;
+    font-size: 5rem;
+    color: #fff;
+    letter-spacing: 4px;
     text-transform: uppercase;
+    text-shadow: 
+        -2px -2px 0 #000,
+        2px -2px 0 #000,
+        -2px 2px 0 #000,
+        2px 2px 0 #000,
+        5px 5px 0 #000;
 }
 
 /* Table Styles */
 .table-wrapper {
-    background: rgba(11, 12, 16, 0.6);
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 0 50px rgba(226, 54, 54, 0.15), inset 0 0 20px rgba(11, 79, 108, 0.2);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(226, 54, 54, 0.3);
+    background: #fff;
+    border: 5px solid var(--border-color);
+    box-shadow: 15px 15px 0px rgba(0,0,0,1);
+    position: relative;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background: transparent;
-    border: 2px solid var(--spidey-red);
-    border-radius: 8px;
-    overflow: hidden;
+    background: #fff;
 }
 
 th, td {
-    border: 1px solid var(--border-color);
+    border: 3px solid var(--border-color);
     padding: 15px 10px;
     text-align: center;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #000;
 }
 
 th {
-    font-weight: 700;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 3px solid var(--spidey-red);
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
 }
 
-/* Column Header Colors */
-.col-time { background-color: var(--col-time-bg); color: var(--header-text-color); }
-.col-mon { background-color: var(--col-mon-bg); color: var(--header-text-color); }
-.col-tue { background-color: var(--col-tue-bg); color: var(--header-text-color); }
-.col-wed { background-color: var(--col-wed-bg); color: var(--header-text-color); }
-.col-thu { background-color: var(--col-thu-bg); color: var(--header-text-color); }
-.col-fri { background-color: var(--col-fri-bg); color: var(--header-text-color); }
-
-/* Table Body */
-tbody tr {
-    background-color: var(--cell-bg);
-}
-
-tbody td {
-    font-weight: 500;
-    color: #e0e0e0;
-}
-
-tbody td:hover {
-    background-color: var(--cell-hover-bg);
-    transform: scale(1.05) translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 0 10px var(--spidey-blue);
-    cursor: default;
-    z-index: 10;
-    position: relative;
-    border-color: var(--spidey-red);
+.col-time { background-color: #000; color: #fff; }
+.col-mon, .col-tue, .col-wed, .col-thu, .col-fri {
+    background-color: var(--header-blue);
     color: #fff;
 }
 
-tbody td.time {
-    font-weight: 600;
-    color: var(--spidey-red);
-    text-shadow: 0 0 5px rgba(226, 54, 54, 0.3);
+/* Table Body Colors */
+td.time {
+    background-color: var(--time-bg);
 }
+
+.bg-blue { background-color: var(--bg-blue); }
+.bg-red { background-color: var(--bg-red); }
+.bg-white { background-color: var(--bg-white); }
 
 /* Break Row */
-.break-row {
-    background-color: transparent !important;
-}
-
-.break-row td.time {
-    border: none;
-    background-color: transparent;
-}
-
-.break-row td.break-text {
-    background: repeating-linear-gradient(
-        45deg,
-        rgba(226, 54, 54, 0.1),
-        rgba(226, 54, 54, 0.1) 10px,
-        rgba(11, 79, 108, 0.1) 10px,
-        rgba(11, 79, 108, 0.1) 20px
-    );
-    border-top: 2px dashed var(--spidey-red);
-    border-bottom: 2px dashed var(--spidey-red);
-    border-left: none;
-    border-right: none;
-    font-weight: 800;
-    letter-spacing: 8px;
-    color: #fff;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px var(--spidey-red), 0 0 20px var(--spidey-blue);
+.break-row td {
+    background-color: var(--break-bg);
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    letter-spacing: 4px;
     padding: 10px;
+    text-transform: uppercase;
 }
+
+/* Comic Decorations */
+.comic-action {
+    font-family: 'Bangers', cursive;
+    position: absolute;
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 
+        -2px -2px 0 #000,
+        2px -2px 0 #000,
+        -2px 2px 0 #000,
+        2px 2px 0 #000,
+        4px 4px 0 #000;
+    z-index: 10;
+}
+
+.thip-1 {
+    top: 50%;
+    right: -60px;
+    transform: rotate(15deg);
+    color: #e64a40;
+}
+
+.whoosh {
+    bottom: -40px;
+    right: 150px;
+    transform: rotate(-10deg);
+    color: #f1c40f;
+    font-size: 4rem;
+}
+
+.thip-2 {
+    bottom: 20%;
+    left: -50px;
+    transform: rotate(-25deg);
+    color: #e64a40;
+}
+
+.speech-bubble {
+    position: absolute;
+    background: #fff;
+    border: 4px solid #000;
+    border-radius: 50%;
+    z-index: 5;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 20px;
+    border-width: 15px 15px 0;
+    border-style: solid;
+    border-color: #fff transparent transparent;
+    display: block;
+    width: 0;
+}
+
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -21px;
+    left: 17px;
+    border-width: 18px 18px 0;
+    border-style: solid;
+    border-color: #000 transparent transparent;
+    display: block;
+    width: 0;
+}
+
+.bubble-1 {
+    width: 100px;
+    height: 70px;
+    top: 20%;
+    left: -80px;
+}
+
+.bubble-2 {
+    width: 80px;
+    height: 60px;
+    bottom: 30%;
+    left: -100px;
+}
+.bubble-2::after { left: 40px; border-width: 15px 0 0 15px; }
+.bubble-2::before { left: 37px; border-width: 18px 0 0 18px; }
+
+.bubble-3 {
+    width: 90px;
+    height: 60px;
+    bottom: -60px;
+    left: 40%;
+}
+.bubble-3::after { left: 40px; top: -15px; border-width: 0 15px 15px 15px; border-color: transparent transparent #fff transparent; }
+.bubble-3::before { left: 37px; top: -21px; border-width: 0 18px 18px 18px; border-color: transparent transparent #000 transparent; }
+
 
 /* Install Button */
-.install-btn {
-    margin-top: 20px;
-    padding: 12px 25px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #fff;
-    background: linear-gradient(135deg, var(--spidey-red), #a01010);
-    border: 2px solid transparent;
-    border-radius: 30px;
+.comic-button {
+    margin-top: 30px;
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    font-family: 'Bangers', cursive;
+    color: #000;
+    background: #f1c40f;
+    border: 4px solid #000;
+    box-shadow: 6px 6px 0px rgba(0,0,0,1);
     cursor: pointer;
-    box-shadow: 0 10px 20px rgba(226, 54, 54, 0.3);
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    transition: all 0.1s ease;
 }
 
-.install-btn:hover {
-    background: linear-gradient(135deg, var(--spidey-blue), #07364a);
-    box-shadow: 0 10px 20px rgba(11, 79, 108, 0.4);
-    border-color: #fff;
-    transform: translateY(-3px) scale(1.02);
+.comic-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 4px 4px 0px rgba(0,0,0,1);
 }
 
-.install-btn:active {
-    transform: translateY(1px);
+.comic-button:active {
+    transform: translate(6px, 6px);
+    box-shadow: 0px 0px 0px rgba(0,0,0,1);
 }
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
-    header h1 { font-size: 3rem; }
+    header h1 { font-size: 4rem; }
     th, td { padding: 10px 5px; font-size: 0.9rem; }
+    .title-banner { padding: 10px 30px; }
 }
 
 @media (max-width: 768px) {
     .table-wrapper { overflow-x: auto; }
     table { min-width: 800px; }
+    .comic-action, .speech-bubble { display: none; }
 }

@@ -8,20 +8,32 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="background-decor">
-        <div class="spider-web web-1"></div>
-        <div class="spider-web web-2"></div>
+    <div class="comic-bg">
+        <div class="halftone-dots"></div>
+        <div class="cityscape"></div>
+        <div class="spider-man top-left"></div>
+        <div class="spider-man bottom-right"></div>
     </div>
     
     <div class="container">
         <header>
-            <h1>Class Schedule</h1>
-            <button id="install-btn" class="install-btn" hidden>Install as App & Add Widget</button>
+            <div class="title-banner">
+                <h1>TIME TABLE</h1>
+            </div>
+            <button id="install-btn" class="install-btn comic-button" hidden>Install App</button>
         </header>
         
+        <div class="comic-action thip-1">THIP!</div>
+        <div class="comic-action whoosh">WHOOSH!</div>
+        <div class="comic-action thip-2">THIP!</div>
+        
+        <div class="speech-bubble bubble-1"></div>
+        <div class="speech-bubble bubble-2"></div>
+        <div class="speech-bubble bubble-3"></div>
+
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -37,64 +49,64 @@
                 <tbody>
                     <tr>
                         <td class="time">9:05-9:55</td>
-                        <td></td>
-                        <td>Python</td>
-                        <td></td>
-                        <td rowspan="2">Cyber Lab<br>1A08<br>D203E</td>
-                        <td rowspan="2">Cyber lab<br>B08<br>D303A</td>
+                        <td class="bg-white"></td>
+                        <td class="bg-blue">Python</td>
+                        <td class="bg-blue"></td>
+                        <td rowspan="2" class="bg-blue">Cyber Lab<br>1A08<br>D203E</td>
+                        <td rowspan="2" class="bg-blue">Cyber lab<br>B08<br>D303A</td>
                     </tr>
                     <tr>
                         <td class="time">10:00-10:50</td>
-                        <td>Python</td>
-                        <td>Design</td>
-                        <td>SE</td>
+                        <td class="bg-blue">Python</td>
+                        <td class="bg-red">Design</td>
+                        <td class="bg-red">SE</td>
                     </tr>
                     <tr>
-                        <td class="time">10:55-11:45</td>
-                        <td>Web Dev</td>
-                        <td rowspan="2">SE lab<br>D303B</td>
-                        <td>Python</td>
-                        <td>Cyber</td>
-                        <td>Web dev</td>
+                        <td class="time">10:55-11:40</td>
+                        <td class="bg-blue">Web Dev</td>
+                        <td rowspan="2" class="bg-blue">SE lab<br>D303B</td>
+                        <td class="bg-blue">Python</td>
+                        <td class="bg-blue">Cyber</td>
+                        <td class="bg-blue">Web dev</td>
                     </tr>
                     <tr>
                         <td class="time">11:50-12:40</td>
-                        <td>SE</td>
-                        <td>Design</td>
-                        <td></td>
-                        <td></td>
+                        <td class="bg-red">SE</td>
+                        <td class="bg-red">Design</td>
+                        <td class="bg-red"></td>
+                        <td class="bg-red"></td>
                     </tr>
                     <tr class="break-row">
                         <td colspan="6" class="break-text">Break</td>
                     </tr>
                     <tr>
-                        <td class="time">1:25-2:15</td>
-                        <td rowspan="2">Web Dev lab<br>A-313</td>
-                        <td rowspan="2">Python lab<br>D303D</td>
-                        <td></td>
-                        <td></td>
-                        <td rowspan="2">DAA lab<br>D303D</td>
+                        <td class="time">1:25-2:10</td>
+                        <td rowspan="2" class="bg-blue">Web Dev lab<br>A-313</td>
+                        <td rowspan="2" class="bg-red">Python lab<br>D303D</td>
+                        <td class="bg-white"></td>
+                        <td class="bg-white"></td>
+                        <td rowspan="2" class="bg-red">DAA lab<br>D303D</td>
                     </tr>
                     <tr>
                         <td class="time">2:20-3:10</td>
-                        <td>Web Dev</td>
-                        <td>SE</td>
+                        <td class="bg-blue">Web Dev</td>
+                        <td class="bg-blue">SE</td>
                     </tr>
                     <tr>
                         <td class="time">3:15-4:05</td>
-                        <td>Design</td>
-                        <td>Cyber</td>
-                        <td>Cyber</td>
-                        <td>Design</td>
-                        <td>Open Elective</td>
+                        <td class="bg-red">Design</td>
+                        <td class="bg-blue">Cyber</td>
+                        <td class="bg-blue">Cyber</td>
+                        <td class="bg-red">Design</td>
+                        <td class="bg-blue">Open Elective</td>
                     </tr>
                     <tr>
                         <td class="time">4:10-5:00</td>
-                        <td>Open Elective</td>
-                        <td></td>
-                        <td>Open Elective</td>
-                        <td></td>
-                        <td></td>
+                        <td class="bg-white">Open Elective</td>
+                        <td class="bg-white"></td>
+                        <td class="bg-white">Open Elective</td>
+                        <td class="bg-white"></td>
+                        <td class="bg-white"></td>
                     </tr>
                 </tbody>
             </table>
