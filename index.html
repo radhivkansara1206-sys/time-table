@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,10 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <div class="comic-bg">
         <div class="halftone-dots"></div>
@@ -17,22 +20,23 @@
         <div class="spider-man top-left"></div>
         <div class="spider-man bottom-right"></div>
     </div>
-    
+
     <div class="container">
         <header>
             <div class="title-banner">
                 <h1>TIME TABLE</h1>
             </div>
-            <div class="header-buttons" style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <div class="header-buttons"
+                style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
                 <button id="install-btn" class="install-btn comic-button" hidden>Install App</button>
                 <button id="download-btn" class="download-btn comic-button">Save Image</button>
             </div>
         </header>
-        
+
         <div class="comic-action thip-1">THIP!</div>
         <div class="comic-action whoosh">WHOOSH!</div>
         <div class="comic-action thip-2">THIP!</div>
-        
+
         <div class="speech-bubble bubble-1"></div>
         <div class="speech-bubble bubble-2"></div>
         <div class="speech-bubble bubble-burst"></div>
@@ -65,7 +69,7 @@
                         <td class="bg-red">SE</td>
                     </tr>
                     <tr>
-                        <td class="time">10:55-11:40</td>
+                        <td class="time">10:55-11:45</td>
                         <td class="bg-blue">Web Dev</td>
                         <td rowspan="2" class="bg-blue">SE lab<br>D303B</td>
                         <td class="bg-blue">Python</td>
@@ -83,7 +87,7 @@
                         <td colspan="6" class="break-text">Break</td>
                     </tr>
                     <tr>
-                        <td class="time">1:25-2:10</td>
+                        <td class="time">1:25-2:15</td>
                         <td rowspan="2" class="bg-blue">Web Dev lab<br>A-313</td>
                         <td rowspan="2" class="bg-red">Python lab<br>D303D</td>
                         <td class="bg-white"></td>
@@ -114,7 +118,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <footer class="creator-footer">
             Created by Radhiv Kansara
         </footer>
@@ -160,20 +164,20 @@
         const downloadBtn = document.getElementById('download-btn');
         downloadBtn.addEventListener('click', () => {
             const tableWrapper = document.querySelector('.table-wrapper');
-            
+
             // Temporarily adjust styles for full capture on mobile
             const originalOverflow = tableWrapper.style.overflowX;
             tableWrapper.style.overflowX = 'visible';
-            
+
             html2canvas(tableWrapper, {
-                scale: 2, 
+                scale: 2,
                 backgroundColor: '#ffffff',
                 windowWidth: tableWrapper.scrollWidth,
                 width: tableWrapper.scrollWidth
             }).then(canvas => {
                 // Restore original styles
                 tableWrapper.style.overflowX = originalOverflow;
-                
+
                 const link = document.createElement('a');
                 link.download = 'timetable.png';
                 link.href = canvas.toDataURL('image/png');
@@ -200,16 +204,16 @@
             // Build matrix to handle rowspans
             const matrix = [];
             const trs = document.querySelectorAll('tbody tr');
-            
+
             trs.forEach((tr, rIdx) => {
                 matrix[rIdx] = matrix[rIdx] || [];
                 let cIdx = 0;
                 Array.from(tr.children).forEach(td => {
                     while (matrix[rIdx][cIdx]) cIdx++;
-                    
+
                     const rowspan = parseInt(td.getAttribute('rowspan') || 1);
                     const colspan = parseInt(td.getAttribute('colspan') || 1);
-                    
+
                     for (let r = 0; r < rowspan; r++) {
                         for (let c = 0; c < colspan; c++) {
                             matrix[rIdx + r] = matrix[rIdx + r] || [];
@@ -224,22 +228,22 @@
                 if (tr.classList.contains('break-row')) return;
                 const timeCell = tr.querySelector('.time');
                 if (!timeCell) return;
-                
-                const timeText = timeCell.innerText; 
+
+                const timeText = timeCell.innerText;
                 const [startStr, endStr] = timeText.split('-');
-                
+
                 const parseTime = (t) => {
                     let [h, m] = t.split(':').map(Number);
                     if (h < 6) h += 12; // Convert PM (e.g. 1:25 -> 13:25)
                     return h * 60 + m;
                 };
-                
+
                 const startMins = parseTime(startStr);
                 const endMins = parseTime(endStr);
-                
+
                 if (currentMins >= startMins && currentMins <= endMins) {
                     timeCell.classList.add('highlight-day');
-                    
+
                     if (currentDay >= 1 && currentDay <= 5) {
                         const activeCell = matrix[rIdx][currentDay];
                         if (activeCell && activeCell !== timeCell && activeCell.innerText.trim() !== '') {
@@ -256,4 +260,5 @@
     <!-- Include html2canvas for downloading the timetable as an image -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
+
 </html>
