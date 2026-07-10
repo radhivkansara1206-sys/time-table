@@ -1,4 +1,4 @@
-const CACHE_NAME = 'schedule-v16';
+const CACHE_NAME = 'schedule-v17';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -32,10 +32,62 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// Network-First with Cache Fallback (2-second timeout)
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+    new Promise((resolve) => {
+      let timeoutId;
+      let networkFetchResolved = false;
+
+      // Start the network timeout to fallback to cache if network is slow
+      timeoutId = setTimeout(() => {
+        caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse && !networkFetchResolved) {
+            resolve(cachedResponse);
+          }
+        });
+      }, 2000);
+
+      // Attempt network fetch
+      fetch(event.request)
+        .then((networkResponse) => {
+          networkFetchResolved = true;
+          clearTimeout(timeoutId);
+
+          // Cache successful responses (including cross-origin opaque responses)
+          if (networkResponse && (networkResponse.status === 200 || networkResponse.status === 0)) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+            resolve(networkResponse);
+          } else {
+            // Non-200 responses (e.g. 404, 500), try fallback to cache
+            caches.match(event.request).then((cachedResponse) => {
+              resolve(cachedResponse || networkResponse);
+            });
+          }
+        })
+        .catch((error) => {
+          networkFetchResolved = true;
+          clearTimeout(timeoutId);
+
+          // Network failure (offline), fallback to cache
+          caches.match(event.request).then((cachedResponse) => {
+            if (cachedResponse) {
+              resolve(cachedResponse);
+            } else {
+              // Return a generic error if no cached version is available
+              resolve(new Response('Network connection failed and no cached data is available.', {
+                status: 503,
+                statusText: 'Service Unavailable',
+                headers: new Headers({ 'Content-Type': 'text/plain' })
+              }));
+            }
+          });
+        });
     })
   );
 });

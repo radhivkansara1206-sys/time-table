@@ -172,6 +172,29 @@ td.time {
 }
 
 /* Comic Decorations */
+.spider-man {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    background-image: url('test1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.spider-man.top-left {
+    top: 50px;
+    left: 50px;
+    transform: rotate(-15deg);
+}
+
+.spider-man.bottom-right {
+    bottom: 50px;
+    right: 50px;
+    transform: rotate(15deg);
+}
+
 .comic-action {
     font-family: 'Bangers', cursive;
     position: absolute;
@@ -187,23 +210,23 @@ td.time {
 }
 
 .thip-1 {
-    top: 50%;
-    right: -15px;
+    top: -10px;
+    right: -25px;
     transform: rotate(15deg);
     color: #e64a40;
 }
 
 .whoosh {
-    bottom: -20px;
-    right: 20px;
+    bottom: -50px;
+    right: 10px;
     transform: rotate(-10deg);
     color: #f1c40f;
     font-size: 4rem;
 }
 
 .thip-2 {
-    bottom: 20%;
-    left: -15px;
+    top: 60px;
+    left: -25px;
     transform: rotate(-25deg);
     color: #e64a40;
 }
@@ -297,7 +320,35 @@ td.time {
         border-width: 2px;
     }
     th { font-size: 1.1rem; }
-    .comic-action { display: none; }
+    .comic-action {
+        font-size: 1.8rem;
+    }
+    .thip-1 {
+        top: -15px;
+        right: 5px;
+    }
+    .thip-2 {
+        top: 5px;
+        left: 5px;
+    }
+    .whoosh {
+        bottom: -40px;
+        right: 5px;
+        font-size: 2.2rem;
+    }
+    .spider-man {
+        width: 80px;
+        height: 80px;
+        opacity: 0.1;
+    }
+    .spider-man.top-left {
+        top: 20px;
+        left: 20px;
+    }
+    .spider-man.bottom-right {
+        bottom: 20px;
+        right: 20px;
+    }
 }
 
 .creator-footer {
