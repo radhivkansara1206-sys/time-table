@@ -727,6 +727,7 @@ td.time {
 /* --- Split Cell and Nested Table Styles --- */
 .split-cell {
     padding: 0 !important;
+    height: 100%;
 }
 
 .nested-table {
