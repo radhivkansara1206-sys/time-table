@@ -294,33 +294,197 @@
             });
         }
 
-        // PWA Install Helper
-        let deferredPrompt;
-        const installBtn = document.getElementById('install-btn');
+        // =================================================================
+        // PWA INSTALL STATE MANAGEMENT
+        // Handles the full install lifecycle correctly across browsers,
+        // page reloads, and standalone re-launches.
+        // =================================================================
 
+        let deferredPrompt = null;
+        const installBtn = document.getElementById('install-btn');
+        const INSTALLED_KEY = 'pwa_installed';
+
+        /**
+         * Returns true if the app is currently running as an installed PWA
+         * (standalone window), using two reliable cross-browser signals.
+         */
+        function isRunningAsInstalledApp() {
+            // Standard display-mode check (Chrome, Edge, Firefox, Samsung)
+            const standaloneMediaQuery = window.matchMedia('(display-mode: standalone)');
+            // Legacy iOS Safari check
+            const iosStandalone = ('standalone' in navigator) && navigator.standalone === true;
+            return standaloneMediaQuery.matches || iosStandalone;
+        }
+
+        /**
+         * Marks the app as installed in localStorage so the install
+         * button stays hidden across future browser-tab visits.
+         */
+        function markAsInstalled() {
+            try {
+                localStorage.setItem(INSTALLED_KEY, 'true');
+            } catch (_) { /* localStorage may be unavailable in private mode */ }
+        }
+
+        /**
+         * Returns true if the user has previously installed the app,
+         * based on the persisted localStorage flag.
+         */
+        function hasInstalledRecord() {
+            try {
+                return localStorage.getItem(INSTALLED_KEY) === 'true';
+            } catch (_) {
+                return false;
+            }
+        }
+
+        /**
+         * Hides the install button and clears the deferred prompt.
+         * This is the single authoritative function for all "installed" outcomes.
+         */
+        function onInstallComplete() {
+            deferredPrompt = null;
+            if (installBtn) installBtn.hidden = true;
+            markAsInstalled();
+            showInstallToast();
+        }
+
+        /**
+         * Shows a brief success toast message after installation.
+         */
+        function showInstallToast() {
+            // Remove any existing toast first
+            const existingToast = document.getElementById('install-toast');
+            if (existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'install-toast';
+            toast.setAttribute('role', 'status');
+            toast.setAttribute('aria-live', 'polite');
+            toast.textContent = '✓ App installed successfully!';
+            document.body.appendChild(toast);
+
+            // Animate in
+            requestAnimationFrame(() => {
+                toast.classList.add('toast-visible');
+            });
+
+            // Auto-dismiss after 3.5 seconds
+            setTimeout(() => {
+                toast.classList.remove('toast-visible');
+                setTimeout(() => toast.remove(), 400);
+            }, 3500);
+        }
+
+        /**
+         * On page load: immediately determine the correct install button
+         * visibility without waiting for any async events.
+         * This prevents the button from flickering visible then hidden.
+         */
+        function initInstallButtonState() {
+            if (!installBtn) return;
+
+            // If already running as installed app OR we have a local record
+            // of a previous installation, keep the button hidden permanently.
+            if (isRunningAsInstalledApp() || hasInstalledRecord()) {
+                installBtn.hidden = true;
+                deferredPrompt = null;
+                return;
+            }
+
+            // Otherwise keep it hidden by default — it will only become
+            // visible once beforeinstallprompt fires and confirms eligibility.
+            installBtn.hidden = true;
+        }
+
+        // Run immediately — before any async events fire.
+        initInstallButtonState();
+
+        /**
+         * beforeinstallprompt — browser signals the app can be installed.
+         * Only show the install button if the app is NOT already installed.
+         */
         window.addEventListener('beforeinstallprompt', (e) => {
+            // Always prevent the default mini-infobar prompt.
             e.preventDefault();
+
+            // If the user already installed the app (detected via standalone
+            // mode OR our localStorage record), discard the prompt silently.
+            if (isRunningAsInstalledApp() || hasInstalledRecord()) {
+                return;
+            }
+
+            // Store the prompt for later use when the button is clicked.
             deferredPrompt = e;
             if (installBtn) installBtn.hidden = false;
         });
 
+        /**
+         * Install button click handler.
+         * Shows the native install prompt and handles the outcome.
+         */
         if (installBtn) {
             installBtn.addEventListener('click', async () => {
-                if (deferredPrompt) {
+                if (!deferredPrompt) return;
+
+                // Immediately disable button to prevent duplicate prompts.
+                installBtn.disabled = true;
+
+                try {
+                    // Trigger the native browser install prompt.
                     deferredPrompt.prompt();
+
+                    // Wait for the user's decision.
                     const { outcome } = await deferredPrompt.userChoice;
+
                     if (outcome === 'accepted') {
+                        // User accepted: clean up immediately.
+                        // (appinstalled will also fire, providing a safety net.)
+                        onInstallComplete();
+                    } else {
+                        // User dismissed: restore button to allow a retry.
+                        // The spec says a dismissed prompt cannot be re-used,
+                        // so we must null it out — the browser will fire a new
+                        // beforeinstallprompt if appropriate.
                         deferredPrompt = null;
+                        installBtn.disabled = false;
                         installBtn.hidden = true;
                     }
+                } catch (err) {
+                    // Safety net: if prompt() fails (e.g., called on a spent
+                    // event object), hide the button gracefully.
+                    console.warn('PWA install prompt error:', err);
+                    deferredPrompt = null;
+                    installBtn.disabled = false;
+                    installBtn.hidden = true;
                 }
             });
         }
 
+        /**
+         * appinstalled — fires when the OS confirms the app was installed.
+         * This is the definitive signal and acts as a safety net in case
+         * userChoice resolved before the OS fully committed the install.
+         */
         window.addEventListener('appinstalled', () => {
-            if (installBtn) installBtn.hidden = true;
-            deferredPrompt = null;
+            onInstallComplete();
         });
+
+        /**
+         * display-mode change listener — detects when the user switches
+         * from browser tab to standalone window (or vice versa) without
+         * a page reload. Hides the install button in standalone context.
+         */
+        if (window.matchMedia) {
+            window.matchMedia('(display-mode: standalone)').addEventListener('change', (e) => {
+                if (e.matches) {
+                    // App just entered standalone mode.
+                    deferredPrompt = null;
+                    if (installBtn) installBtn.hidden = true;
+                    markAsInstalled();
+                }
+            });
+        }
 
         // Render dynamic desktop grid timetable
         function renderTimetableGrid() {

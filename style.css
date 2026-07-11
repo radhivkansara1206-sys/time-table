@@ -737,3 +737,41 @@ td.bg-yellow { border-left: 2px solid var(--color-accent); background: linear-gr
         display: block !important;
     }
 }
+
+/* ==========================================================================
+   PWA INSTALL TOAST NOTIFICATION
+   ========================================================================== */
+
+#install-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+    background-color: #1A1A1A;
+    color: var(--text-white);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: var(--border-radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    pointer-events: none;
+    white-space: nowrap;
+    /* Smooth entrance and exit */
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#install-toast.toast-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Install button disabled state during prompt */
+#install-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
