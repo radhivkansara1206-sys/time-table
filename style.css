@@ -755,6 +755,10 @@ td.time {
     border-right: 3px solid var(--border-color) !important;
 }
 
+.nested-table td:not(:first-child) {
+    border-left: 3px solid var(--border-color) !important;
+}
+
 /* Border styles for rows inside nested table */
 .nested-table tr:not(:last-child) td:not([rowspan="2"]) {
     border-bottom: 3px solid var(--border-color) !important;
@@ -781,6 +785,9 @@ td.time {
     }
     .nested-table td:not(:last-child) {
         border-right: 2px solid var(--border-color) !important;
+    }
+    .nested-table td:not(:first-child) {
+        border-left: 2px solid var(--border-color) !important;
     }
     .nested-table tr:not(:last-child) td:not([rowspan="2"]) {
         border-bottom: 2px solid var(--border-color) !important;
