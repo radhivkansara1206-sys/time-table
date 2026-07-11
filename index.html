@@ -1,197 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="classic">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Schedule</title>
+    <title>Class Schedule - Spider-Man Edition</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Outfit:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 </head>
 
 <body>
-    <div class="comic-bg">
+    <!-- Comic Backdrop Elements -->
+    <div class="comic-bg" aria-hidden="true">
         <div class="halftone-dots"></div>
         <div class="cityscape"></div>
         <div class="spider-man top-left"></div>
         <div class="spider-man bottom-right"></div>
     </div>
 
-    <div class="container">
+    <!-- Main App Container -->
+    <main class="container">
         <header>
-            <div class="title-banner">
+            <div class="title-banner" role="banner">
                 <h1>TIME TABLE</h1>
             </div>
-            <div class="header-buttons"
-                style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
-                <button id="install-btn" class="install-btn comic-button" hidden>Install App</button>
-                <button id="download-btn" class="download-btn comic-button">Save Image</button>
+            
+            <!-- Controls Toolbar -->
+            <div class="header-controls">
+                <button id="theme-toggle" class="theme-toggle comic-button" aria-label="Toggle Spider-Man Suit Theme">
+                    <span class="theme-text">SUIT UP</span>
+                    <span class="theme-icon">🕸️</span>
+                </button>
+                <button id="install-btn" class="install-btn comic-button" hidden aria-label="Install Timetable App">
+                    Install App
+                </button>
+                <button id="download-btn" class="download-btn comic-button" aria-label="Save timetable grid as PNG image">
+                    Save Image
+                </button>
             </div>
-            <div id="break-badge-container" style="display: flex; justify-content: center; margin-top: 15px; margin-bottom: -15px;"></div>
+            
+            <!-- Dynamic break alerts badge -->
+            <div id="break-badge-container" class="break-badge-container"></div>
         </header>
 
-        <div class="comic-action thip-1">THIP!</div>
-        <div class="comic-action whoosh">WHOOSH!</div>
-        <div class="comic-action thip-2">THIP!</div>
+        <!-- Comic Sound Effect Stickers (Visual Interest) -->
+        <div class="comic-action thip-1" aria-hidden="true">THIP!</div>
+        <div class="comic-action whoosh" aria-hidden="true">WHOOSH!</div>
+        <div class="comic-action thip-2" aria-hidden="true">THIP!</div>
 
-
-
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="col-time">Time</th>
-                        <th class="col-mon">Monday</th>
-                        <th class="col-tue">Tuesday</th>
-                        <th class="col-wed">Wednesday</th>
-                        <th class="col-thu">Thursday</th>
-                        <th class="col-fri">Friday</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="time">9:05-9:55</td>
-                        <td class="bg-blue">Cyber Security</td>
-                        <td class="bg-red">Software Engineering</td>
-                        <td class="bg-white"></td>
-                        <td class="bg-white"></td>
-                        <td class="bg-blue">Programming with Python</td>
-                    </tr>
-                    <tr>
-                        <td class="time">10:00-10:50</td>
-                        <td class="bg-blue">Programming with Python</td>
-                        <td class="bg-red">Design and Analysis of Algorithms</td>
-                        <td class="bg-red">Software Engineering</td>
-                        <td class="bg-blue">Programming with Python</td>
-                        <td class="bg-red">Design and Analysis of Algorithms</td>
-                    </tr>
-                    <tr>
-                        <td class="time">10:55-11:45</td>
-                        <td class="bg-blue">Web Development</td>
-                        <td rowspan="2" class="split-cell bg-yellow">
-                            <table class="nested-table">
-                                <tr>
-                                    <td class="bg-yellow">1A08<br>PP<br>D303B</td>
-                                    <td class="bg-yellow">1B08<br>DAA<br>D303E</td>
-                                    <td class="bg-yellow">1C08<br>WD<br>A125</td>
-                                    <td class="bg-yellow">1D08<br>SE<br>D303A</td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="bg-red">Design and Analysis of Algorithms</td>
-                        <td class="bg-blue">Web Development</td>
-                        <td class="bg-blue">Web Development</td>
-                    </tr>
-                    <tr>
-                        <td class="time">11:50-12:40</td>
-                        <td class="bg-red">Software Engineering</td>
-                        <td class="bg-white"></td>
-                        <td class="bg-blue">Artificial Intelligence</td>
-                        <td class="bg-red">Cyber Security</td>
-                    </tr>
-                    <tr class="break-row">
-                        <td colspan="6" class="break-text">Lunch Break</td>
-                    </tr>
-                    <tr>
-                        <td class="time">1:25-2:15</td>
-                        <td rowspan="2" class="split-cell bg-yellow">
-                            <table class="nested-table">
-                                <tr>
-                                    <td class="bg-yellow">1A08<br>SE<br>D303A</td>
-                                    <td class="bg-yellow">1B08<br>PP<br>D203E</td>
-                                    <td class="bg-yellow">1C08<br>DAA<br>D303E</td>
-                                    <td class="bg-yellow">1D08<br>WD<br>A313</td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td rowspan="2" class="split-cell bg-yellow">
-                            <table class="nested-table">
-                                <tr>
-                                    <td class="bg-yellow">1A08<br>DAA<br>D303E</td>
-                                    <td class="bg-yellow">1B08<br>WD<br>A313</td>
-                                    <td class="bg-yellow">1C08<br>SE<br>D303A</td>
-                                    <td class="bg-yellow">1D08<br>PP<br>D203E</td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td rowspan="2" class="split-cell bg-yellow">
-                            <table class="nested-table">
-                                <tr>
-                                    <td class="bg-yellow">1B08<br>CYBER<br>D203E</td>
-                                    <td class="bg-yellow">1B08<br>AI<br>D203B</td>
-                                    <td class="bg-yellow">1A08<br>AI<br>D203A</td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td rowspan="2" class="split-cell bg-yellow">
-                            <table class="nested-table">
-                                <tr>
-                                    <td class="bg-yellow">1A08<br>CYBER<br>D203E</td>
-                                    <td class="bg-yellow">1C08<br>AI<br>D203A</td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td rowspan="2" class="split-cell bg-yellow">
-                            <table class="nested-table">
-                                <tr>
-                                    <td class="bg-yellow">1A08<br>WD<br>A313</td>
-                                    <td class="bg-yellow">1B08<br>SE<br>D303A</td>
-                                    <td class="bg-yellow">1C08<br>PP<br>D203E</td>
-                                    <td class="bg-yellow">1D08<br>DAA<br>D303E</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="time">2:20-3:10</td>
-                    </tr>
-                    <tr>
-                        <td class="time">3:15-4:05</td>
-                        <td class="bg-red">Design and Analysis of Algorithms</td>
-                        <td class="bg-blue">Cyber Security<br>A323</td>
-                        <td class="bg-blue">Artificial Intelligence</td>
-                        <td class="bg-blue">Artificial Intelligence</td>
-                        <td rowspan="2" class="split-cell">
-                            <table class="nested-table">
-                                <tr>
-                                    <td rowspan="2" class="bg-white">Open Elective</td>
-                                    <td class="bg-white"></td>
-                                </tr>
-                                <tr>
-                                    <td class="bg-yellow">OE Lab</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="time">4:10-5:00</td>
-                        <td class="bg-white">Open Elective</td>
-                        <td class="bg-white">Minor Degree</td>
-                        <td class="bg-white">Open Elective</td>
-                        <td class="bg-white">Minor Degree</td>
-                    </tr>
-                </tbody>
+        <!-- 2D Timetable Grid Wrapper (Shown on Desktop/Tablet: width >= 768px) -->
+        <section class="table-wrapper" id="desktop-grid-section" aria-label="Timetable Grid View">
+            <table id="timetable-grid">
+                <!-- Dynamically generated table content -->
             </table>
-        </div>
+        </section>
+
+        <!-- Responsive Mobile Timeline Wrapper (Shown on Mobile: width < 768px) -->
+        <section class="mobile-timeline-wrapper" id="mobile-timeline-section" aria-label="Timetable Daily Timeline View">
+            <div class="day-selector" role="tablist" aria-label="Day Navigation">
+                <button class="day-tab active" data-day="Monday" role="tab" aria-selected="true" id="tab-mon" aria-controls="panel-mon">MON</button>
+                <button class="day-tab" data-day="Tuesday" role="tab" aria-selected="false" id="tab-tue" aria-controls="panel-tue">TUE</button>
+                <button class="day-tab" data-day="Wednesday" role="tab" aria-selected="false" id="tab-wed" aria-controls="panel-wed">WED</button>
+                <button class="day-tab" data-day="Thursday" role="tab" aria-selected="false" id="tab-thu" aria-controls="panel-thu">THU</button>
+                <button class="day-tab" data-day="Friday" role="tab" aria-selected="false" id="tab-fri" aria-controls="panel-fri">FRI</button>
+            </div>
+            
+            <div class="timeline" id="mobile-timeline" role="tabpanel" id="panel-day" aria-labelledby="tab-day">
+                <!-- Dynamically generated timeline list -->
+            </div>
+        </section>
 
         <footer class="creator-footer">
             Created by Radhiv Kansara
         </footer>
-    </div>
+    </main>
 
     <!-- Break Time Celebration Overlay -->
-    <div id="break-overlay" class="break-overlay">
-        <canvas id="break-canvas"></canvas>
+    <div id="break-overlay" class="break-overlay" role="dialog" aria-modal="true" aria-labelledby="break-modal-title">
+        <canvas id="break-canvas" aria-hidden="true"></canvas>
         <div class="break-modal">
-            <div class="break-badge kapow">KAPOW!</div>
-            <div class="break-badge zap">BOOM!</div>
+            <div class="break-badge kapow" aria-hidden="true">KAPOW!</div>
+            <div class="break-badge zap" aria-hidden="true">BOOM!</div>
             
             <div class="break-title-container">
-                <h2 class="break-title">BREAK TIME!</h2>
+                <h2 id="break-modal-title" class="break-title">BREAK TIME!</h2>
             </div>
             
             <div class="break-subtitle">⚡ Citizen, Enjoy Your Rest! ⚡</div>
@@ -204,26 +100,169 @@
             </div>
             
             <div class="break-buttons-container">
-                <button id="break-reload-btn" class="break-btn break-btn-reload">New Mission ⚡</button>
-                <button id="break-close-btn" class="break-btn break-btn-close">Back to Duty</button>
+                <button id="break-reload-btn" class="break-btn break-btn-reload" aria-label="Get a new activity idea">New Mission ⚡</button>
+                <button id="break-close-btn" class="break-btn break-btn-close" aria-label="Close break panel and return to class schedule">Back to Duty</button>
             </div>
         </div>
     </div>
 
+    <!-- JavaScript logic -->
     <script>
+        // Timetable Data Structure
+        const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+        
+        const TIME_SLOTS = [
+            { id: 1, start: "9:05", end: "9:55" },
+            { id: 2, start: "10:00", end: "10:50" },
+            { id: 3, start: "10:55", end: "11:45" },
+            { id: 4, start: "11:50", end: "12:40" },
+            { id: "lunch", label: "Lunch Break", isBreak: true },
+            { id: 5, start: "1:25", end: "2:15" },
+            { id: 6, start: "2:20", end: "3:10" },
+            { id: 7, start: "3:15", end: "4:05" },
+            { id: 8, start: "4:10", end: "5:00" }
+        ];
+
+        const SCHEDULE = {
+            "Monday": {
+                1: { subject: "Cyber Security", type: "blue" },
+                2: { subject: "Programming with Python", type: "blue" },
+                3: { subject: "Web Development", type: "blue" },
+                4: { subject: "Software Engineering", type: "red" },
+                5: { 
+                    isSplit: true, 
+                    rowspan: 2, 
+                    type: "yellow",
+                    labs: [
+                        { batch: "1A08", sub: "SE", room: "D303A" },
+                        { batch: "1B08", sub: "PP", room: "D203E" },
+                        { batch: "1C08", sub: "DAA", room: "D303E" },
+                        { batch: "1D08", sub: "WD", room: "A313" }
+                    ] 
+                },
+                6: null,
+                7: { subject: "Design and Analysis of Algorithms", type: "red" },
+                8: { subject: "Open Elective", type: "white" }
+            },
+            "Tuesday": {
+                1: { subject: "Software Engineering", type: "red" },
+                2: { subject: "Design and Analysis of Algorithms", type: "red" },
+                3: {
+                    isSplit: true,
+                    rowspan: 2,
+                    type: "yellow",
+                    labs: [
+                        { batch: "1A08", sub: "PP", room: "D303B" },
+                        { batch: "1B08", sub: "DAA", room: "D303E" },
+                        { batch: "1C08", sub: "WD", room: "A125" },
+                        { batch: "1D08", sub: "SE", room: "D303A" }
+                    ]
+                },
+                4: null,
+                5: {
+                    isSplit: true,
+                    rowspan: 2,
+                    type: "yellow",
+                    labs: [
+                        { batch: "1A08", sub: "DAA", room: "D303E" },
+                        { batch: "1B08", sub: "WD", room: "A313" },
+                        { batch: "1C08", sub: "SE", room: "D303A" },
+                        { batch: "1D08", sub: "PP", room: "D203E" }
+                    ]
+                },
+                6: null,
+                7: { subject: "Cyber Security", room: "A323", type: "blue" },
+                8: { subject: "Minor Degree", type: "white" }
+            },
+            "Wednesday": {
+                1: { subject: "", type: "white" },
+                2: { subject: "Software Engineering", type: "red" },
+                3: { subject: "Design and Analysis of Algorithms", type: "red" },
+                4: { subject: "", type: "white" },
+                5: {
+                    isSplit: true,
+                    rowspan: 2,
+                    type: "yellow",
+                    labs: [
+                        { batch: "1B08", sub: "CYBER", room: "D203E" },
+                        { batch: "1B08", sub: "AI", room: "D203B" },
+                        { batch: "1A08", sub: "AI", room: "D203A" }
+                    ]
+                },
+                6: null,
+                7: { subject: "Artificial Intelligence", type: "blue" },
+                8: { subject: "Open Elective", type: "white" }
+            },
+            "Thursday": {
+                1: { subject: "", type: "white" },
+                2: { subject: "Programming with Python", type: "blue" },
+                3: { subject: "Web Development", type: "blue" },
+                4: { subject: "Artificial Intelligence", type: "blue" },
+                5: {
+                    isSplit: true,
+                    rowspan: 2,
+                    type: "yellow",
+                    labs: [
+                        { batch: "1A08", sub: "CYBER", room: "D203E" },
+                        { batch: "1C08", sub: "AI", room: "D203A" }
+                    ]
+                },
+                6: null,
+                7: { subject: "Artificial Intelligence", type: "blue" },
+                8: { subject: "Minor Degree", type: "white" }
+            },
+            "Friday": {
+                1: { subject: "Programming with Python", type: "blue" },
+                2: { subject: "Design and Analysis of Algorithms", type: "red" },
+                3: { subject: "Web Development", type: "blue" },
+                4: { subject: "Cyber Security", type: "red" },
+                5: {
+                    isSplit: true,
+                    rowspan: 2,
+                    type: "yellow",
+                    labs: [
+                        { batch: "1A08", sub: "WD", room: "A313" },
+                        { batch: "1B08", sub: "SE", room: "D303A" },
+                        { batch: "1C08", sub: "PP", room: "D203E" },
+                        { batch: "1D08", sub: "DAA", room: "D303E" }
+                    ]
+                },
+                6: null,
+                7: {
+                    isCustomFridaySplit: true,
+                    rowspan: 2,
+                    type: "white",
+                    customHtml: `
+                        <table class="nested-table">
+                            <tr>
+                                <td rowspan="2" class="bg-white">Open Elective</td>
+                                <td class="bg-white"></td>
+                            </tr>
+                            <tr>
+                                <td class="bg-yellow">OE Lab</td>
+                            </tr>
+                        </table>
+                    `,
+                    labs: [
+                        { batch: "All Batches", sub: "Open Elective", room: "N/A" },
+                        { batch: "OE Lab Group", sub: "OE Lab", room: "N/A" }
+                    ]
+                },
+                8: null
+            }
+        };
+
+        // Service Worker registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(registration => {
                     console.log('SW registered:', registration);
-
-                    // Check for updates
+                    
                     registration.addEventListener('updatefound', () => {
                         const newWorker = registration.installing;
                         newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed') {
-                                if (navigator.serviceWorker.controller) {
-                                    console.log('New service worker version installed; update is ready.');
-                                }
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                console.log('New service worker version available.');
                             }
                         });
                     });
@@ -231,7 +270,6 @@
                     console.log('SW registration failed:', error);
                 });
 
-                // Reload page automatically when the new service worker takes control
                 let refreshing = false;
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
                     if (!refreshing) {
@@ -242,59 +280,337 @@
             });
         }
 
+        // PWA Install Helper
         let deferredPrompt;
         const installBtn = document.getElementById('install-btn');
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.hidden = false;
+            if (installBtn) installBtn.hidden = false;
         });
 
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt !== null) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    deferredPrompt = null;
-                    installBtn.hidden = true;
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        deferredPrompt = null;
+                        installBtn.hidden = true;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         window.addEventListener('appinstalled', () => {
-            installBtn.hidden = true;
+            if (installBtn) installBtn.hidden = true;
             deferredPrompt = null;
         });
 
-        // Download as PNG functionality
-        const downloadBtn = document.getElementById('download-btn');
-        downloadBtn.addEventListener('click', () => {
-            const tableWrapper = document.querySelector('.table-wrapper');
+        // Theme Suite Switcher Logic
+        function setupTheme() {
+            const toggleBtn = document.getElementById('theme-toggle');
+            if (!toggleBtn) return;
 
-            // Temporarily adjust styles for full capture on mobile
-            const originalOverflow = tableWrapper.style.overflowX;
-            tableWrapper.style.overflowX = 'visible';
+            const savedTheme = localStorage.getItem('timetable-theme') || 'classic';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButtonUI(savedTheme);
 
-            html2canvas(tableWrapper, {
-                scale: 2,
-                backgroundColor: '#ffffff',
-                windowWidth: tableWrapper.scrollWidth,
-                width: tableWrapper.scrollWidth
-            }).then(canvas => {
-                // Restore original styles
-                tableWrapper.style.overflowX = originalOverflow;
-
-                const link = document.createElement('a');
-                link.download = 'timetable.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+            toggleBtn.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'classic' ? 'symbiote' : 'classic';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('timetable-theme', newTheme);
+                updateThemeButtonUI(newTheme);
             });
-        });
+        }
 
-        // Highlight current day and lecture
+        function updateThemeButtonUI(theme) {
+            const textEl = document.querySelector('#theme-toggle .theme-text');
+            const iconEl = document.querySelector('#theme-toggle .theme-icon');
+            if (theme === 'classic') {
+                if (textEl) textEl.textContent = 'SUIT UP (CLASSIC)';
+                if (iconEl) iconEl.textContent = '🕸️';
+            } else {
+                if (textEl) textEl.textContent = 'SUIT UP (SYMBIOTE)';
+                if (iconEl) iconEl.textContent = '🖤';
+            }
+        }
+
+        // Render functions
+        function renderTimetableGrid() {
+            const table = document.getElementById('timetable-grid');
+            if (!table) return;
+
+            let theadHtml = `
+                <thead>
+                    <tr>
+                        <th class="col-time">Time</th>
+                        <th class="col-mon">Monday</th>
+                        <th class="col-tue">Tuesday</th>
+                        <th class="col-wed">Wednesday</th>
+                        <th class="col-thu">Thursday</th>
+                        <th class="col-fri">Friday</th>
+                    </tr>
+                </thead>
+            `;
+
+            let tbodyHtml = '<tbody>';
+            const rowspanCounters = { "Monday": 0, "Tuesday": 0, "Wednesday": 0, "Thursday": 0, "Friday": 0 };
+
+            TIME_SLOTS.forEach(slot => {
+                if (slot.isBreak) {
+                    tbodyHtml += `
+                        <tr class="break-row">
+                            <td colspan="6" class="break-text">${slot.label}</td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                tbodyHtml += '<tr>';
+                tbodyHtml += `<td class="time">${slot.start}-${slot.end}</td>`;
+
+                DAYS.forEach(day => {
+                    if (rowspanCounters[day] > 0) {
+                        rowspanCounters[day]--;
+                        return; 
+                    }
+
+                    const item = SCHEDULE[day][slot.id];
+                    if (!item) {
+                        tbodyHtml += '<td class="bg-white"></td>';
+                        return;
+                    }
+
+                    const rowspanAttr = item.rowspan ? ` rowspan="${item.rowspan}"` : '';
+                    if (item.rowspan) {
+                        rowspanCounters[day] = item.rowspan - 1;
+                    }
+
+                    if (item.isSplit) {
+                        const nestedCells = item.labs.map(lab => `
+                            <td class="bg-${item.type}">
+                                <div class="lab-cell-content">
+                                    <div class="batch-num">${lab.batch}</div>
+                                    <div class="subject-short">${lab.sub}</div>
+                                    <div class="room-num">${lab.room || ''}</div>
+                                </div>
+                            </td>
+                        `).join('');
+                        
+                        tbodyHtml += `
+                            <td${rowspanAttr} class="split-cell bg-${item.type}">
+                                <table class="nested-table">
+                                    <tr>${nestedCells}</tr>
+                                </table>
+                            </td>
+                        `;
+                    } else if (item.isCustomFridaySplit) {
+                        tbodyHtml += `
+                            <td${rowspanAttr} class="split-cell">
+                                ${item.customHtml}
+                            </td>
+                        `;
+                    } else {
+                        tbodyHtml += `
+                            <td class="bg-${item.type}">
+                                <div class="subject-name">${item.subject}</div>
+                                ${item.room ? `<div class="room-num">${item.room}</div>` : ''}
+                            </td>
+                        `;
+                    }
+                });
+
+                tbodyHtml += '</tr>';
+            });
+
+            tbodyHtml += '</tbody>';
+            table.innerHTML = theadHtml + tbodyHtml;
+        }
+
+        // Selected day state for mobile
+        let currentSelectedDay = DAYS[new Date().getDay() - 1] || "Monday";
+        if (new Date().getDay() === 0 || new Date().getDay() === 6) {
+            currentSelectedDay = "Monday"; // Weekend fallback
+        }
+
+        function renderMobileTimeline() {
+            const timelineContainer = document.getElementById('mobile-timeline');
+            if (!timelineContainer) return;
+
+            const daySchedule = SCHEDULE[currentSelectedDay];
+            let timelineHtml = '';
+
+            const now = new Date();
+            const currentMins = now.getHours() * 60 + now.getMinutes();
+
+            TIME_SLOTS.forEach(slot => {
+                if (slot.isBreak) {
+                    timelineHtml += `
+                        <div class="timeline-break-card" role="note">
+                            <span class="break-icon">🥪</span>
+                            <span class="break-text">${slot.label} (12:40 PM - 1:25 PM)</span>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Check active slot timing boundaries
+                const parseTime = (t) => {
+                    let [h, m] = t.split(':').map(Number);
+                    if (h < 6) h += 12; // Convert PM (e.g. 1:25 -> 13:25)
+                    return h * 60 + m;
+                };
+                const startMins = parseTime(slot.start);
+                const endMins = parseTime(slot.end);
+                
+                const isCurrentDaySelected = (now.getDay() - 1 === DAYS.indexOf(currentSelectedDay));
+                const isActive = isCurrentDaySelected && (currentMins >= startMins && currentMins <= endMins);
+
+                // Handle rowspanned items that start in a previous slot
+                let item = daySchedule[slot.id];
+                let isSpannedRef = false;
+                
+                if (item === null) {
+                    for (let id = slot.id - 1; id >= 1; id--) {
+                        const parentItem = daySchedule[id];
+                        if (parentItem && parentItem.rowspan && (id + parentItem.rowspan > slot.id)) {
+                            item = parentItem;
+                            isSpannedRef = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!item || (!item.subject && !item.isSplit && !item.isCustomFridaySplit)) {
+                    timelineHtml += `
+                        <div class="timeline-card empty ${isActive ? 'active' : ''}">
+                            <div class="card-time">${slot.start} - ${slot.end}</div>
+                            <div class="card-body">
+                                <h3>Free Period</h3>
+                                <p class="room-num">No scheduled classes</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const activeClass = isActive ? 'active' : '';
+                const badgeHtml = isSpannedRef ? '<span class="status-badge continued">Continued</span>' : 
+                                  (isActive ? '<span class="status-badge live">Live Now</span>' : '');
+
+                let cardContentHtml = '';
+
+                if (item.isSplit) {
+                    cardContentHtml = `
+                        <div class="card-content-header">
+                            <h3>Practical Labs</h3>
+                            ${badgeHtml}
+                        </div>
+                        <div class="lab-grid">
+                            ${item.labs.map(lab => `
+                                <div class="lab-badge bg-${item.type}">
+                                    <span class="lab-batch">${lab.batch}</span>
+                                    <span class="lab-subject">${lab.sub}</span>
+                                    <span class="lab-room">📍 Room ${lab.room || 'N/A'}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } else if (item.isCustomFridaySplit) {
+                    cardContentHtml = `
+                        <div class="card-content-header">
+                            <h3>Electives / Lab Split</h3>
+                            ${badgeHtml}
+                        </div>
+                        <div class="lab-grid">
+                            ${item.labs.map(lab => `
+                                <div class="lab-badge bg-white">
+                                    <span class="lab-batch">${lab.batch}</span>
+                                    <span class="lab-subject">${lab.sub}</span>
+                                    <span class="lab-room">📍 N/A</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } else {
+                    cardContentHtml = `
+                        <div class="card-content-header">
+                            <h3>${item.subject}</h3>
+                            ${badgeHtml}
+                        </div>
+                        ${item.room ? `<p class="room-num">📍 Room: ${item.room}</p>` : ''}
+                    `;
+                }
+
+                timelineHtml += `
+                    <div class="timeline-card bg-${item.type} ${activeClass}" tabindex="0">
+                        <div class="card-time">${slot.start} - ${slot.end}</div>
+                        <div class="card-body">
+                            ${cardContentHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            timelineContainer.innerHTML = timelineHtml;
+            
+            // Set ARIA landmark accessibility labels
+            const panel = document.getElementById('panel-day');
+            if (panel) {
+                panel.setAttribute('aria-labelledby', `tab-${currentSelectedDay.toLowerCase().substring(0,3)}`);
+            }
+        }
+
+        function setupDaySelector() {
+            const tabs = document.querySelectorAll('.day-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                    });
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-selected', 'true');
+                    currentSelectedDay = tab.getAttribute('data-day');
+                    renderMobileTimeline();
+                });
+                
+                // Allow keyboard arrow keys traversal
+                tab.addEventListener('keydown', (e) => {
+                    let targetTab = null;
+                    if (e.key === 'ArrowRight' || e.key === 'Right') {
+                        targetTab = tab.nextElementSibling || tabs[0];
+                    } else if (e.key === 'ArrowLeft' || e.key === 'Left') {
+                        targetTab = tab.previousElementSibling || tabs[tabs.length - 1];
+                    }
+                    if (targetTab) {
+                        targetTab.focus();
+                        targetTab.click();
+                        e.preventDefault();
+                    }
+                });
+            });
+        }
+
+        function setInitialDayTab() {
+            const tabs = document.querySelectorAll('.day-tab');
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-day') === currentSelectedDay) {
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-selected', 'true');
+                } else {
+                    tab.classList.remove('active');
+                    tab.setAttribute('aria-selected', 'false');
+                }
+            });
+        }
+
+        // Highlight active classes on 2D table grid (Desktop/Tablet)
         function highlightCurrent() {
-            // Remove existing highlights
             document.querySelectorAll('.highlight-day').forEach(el => el.classList.remove('highlight-day'));
             document.querySelectorAll('.highlight-lecture').forEach(el => el.classList.remove('highlight-lecture'));
 
@@ -302,13 +618,13 @@
             const currentDay = now.getDay(); // 1=Mon, 5=Fri
             const currentMins = now.getHours() * 60 + now.getMinutes();
 
-            // Highlight day header
+            // Highlight the day column header
             if (currentDay >= 1 && currentDay <= 5) {
                 const headers = document.querySelectorAll('thead th');
                 if (headers[currentDay]) headers[currentDay].classList.add('highlight-day');
             }
 
-            // Build matrix to handle rowspans
+            // Build rowspan-aware matrix matching tr layout
             const matrix = [];
             const trs = document.querySelectorAll('tbody tr');
 
@@ -330,7 +646,7 @@
                 });
             });
 
-            // Find current time slot and highlight
+            // Find correct time cell to highlight
             trs.forEach((tr, rIdx) => {
                 if (tr.classList.contains('break-row')) return;
                 const timeCell = tr.querySelector('.time');
@@ -341,7 +657,7 @@
 
                 const parseTime = (t) => {
                     let [h, m] = t.split(':').map(Number);
-                    if (h < 6) h += 12; // Convert PM (e.g. 1:25 -> 13:25)
+                    if (h < 6) h += 12; // Convert PM
                     return h * 60 + m;
                 };
 
@@ -359,15 +675,59 @@
                     }
                 }
             });
+            
+            // Re-render mobile timeline view to refresh its status highlights
+            renderMobileTimeline();
         }
 
-        window.addEventListener('load', highlightCurrent);
-        setInterval(highlightCurrent, 60000); // Check every minute
+        // Save layout canvas export
+        const downloadBtn = document.getElementById('download-btn');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                const tableWrapper = document.querySelector('.table-wrapper');
+                
+                // Backup values
+                const originalDisplay = tableWrapper.style.display;
+                const originalPosition = tableWrapper.style.position;
+                const originalLeft = tableWrapper.style.left;
+                
+                // If viewing on mobile, temporarily show grid layout off-screen for canvas rendering
+                const isMobile = window.innerWidth < 768;
+                if (isMobile) {
+                    tableWrapper.style.display = 'block';
+                    tableWrapper.style.position = 'absolute';
+                    tableWrapper.style.left = '-9999px';
+                }
+                
+                const originalOverflow = tableWrapper.style.overflowX;
+                tableWrapper.style.overflowX = 'visible';
+
+                html2canvas(tableWrapper, {
+                    scale: 2.5, // High resolution crisp export
+                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--card-bg-white').trim() || '#ffffff',
+                    windowWidth: 1200, // Grid width anchor
+                    width: 1200
+                }).then(canvas => {
+                    // Restore layouts
+                    tableWrapper.style.overflowX = originalOverflow;
+                    if (isMobile) {
+                        tableWrapper.style.display = originalDisplay;
+                        tableWrapper.style.position = originalPosition;
+                        tableWrapper.style.left = originalLeft;
+                    }
+
+                    const link = document.createElement('a');
+                    link.download = 'timetable-spiderman.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                });
+            });
+        }
 
         // --- Break Time Celebration System ---
         const breakOverlay = document.getElementById('break-overlay');
         const breakCanvas = document.getElementById('break-canvas');
-        const breakCtx = breakCanvas.getContext('2d');
+        const breakCtx = breakCanvas ? breakCanvas.getContext('2d') : null;
         const breakActivityText = document.getElementById('break-activity-text');
         const breakReloadBtn = document.getElementById('break-reload-btn');
         const breakCloseBtn = document.getElementById('break-close-btn');
@@ -433,7 +793,7 @@
                 this.y = y;
                 this.word = word;
                 this.color = color;
-                this.fontSize = Math.floor(Math.random() * 6) + 14; // 14px to 20px
+                this.fontSize = Math.floor(Math.random() * 6) + 14; 
                 const angle = Math.random() * Math.PI * 2;
                 const speed = Math.random() * 3 + 1;
                 this.vx = Math.cos(angle) * speed;
@@ -446,7 +806,7 @@
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-                this.vy += 0.06; // gravity
+                this.vy += 0.06;
                 this.alpha -= this.decay;
             }
 
@@ -466,27 +826,36 @@
         }
 
         function resizeCanvas() {
-            breakCanvas.width = window.innerWidth;
-            breakCanvas.height = window.innerHeight;
+            if (breakCanvas) {
+                breakCanvas.width = window.innerWidth;
+                breakCanvas.height = window.innerHeight;
+            }
         }
 
         function createExplosion(x, y) {
-            // Spawn 30-45 particle shapes
+            if (!breakCtx) return;
+            
             const count = Math.floor(Math.random() * 15) + 30;
             for (let i = 0; i < count; i++) {
                 const color = comicColors[Math.floor(Math.random() * comicColors.length)];
                 particles.push(new NormalParticle(x, y, color));
             }
-            // Spawn 1-2 visual comic words
+            
             const wordCount = Math.floor(Math.random() * 2) + 1;
             for (let i = 0; i < wordCount; i++) {
                 const word = comicWords[Math.floor(Math.random() * comicWords.length)];
                 const color = comicColors[Math.floor(Math.random() * comicColors.length)];
                 particles.push(new WordParticle(x, y, word, color));
             }
+
+            // Start loop ONLY if it is not already running
+            if (!animationFrameId) {
+                animationFrameId = requestAnimationFrame(updateParticles);
+            }
         }
 
         function updateParticles() {
+            if (!breakCtx) return;
             breakCtx.clearRect(0, 0, breakCanvas.width, breakCanvas.height);
             
             for (let i = particles.length - 1; i >= 0; i--) {
@@ -499,8 +868,11 @@
                 }
             }
 
-            if (particles.length > 0 || isAnimationRunning) {
+            // Performance: break animation loops when particles are depleted
+            if (particles.length > 0) {
                 animationFrameId = requestAnimationFrame(updateParticles);
+            } else {
+                animationFrameId = null;
             }
         }
 
@@ -509,9 +881,7 @@
                 isAnimationRunning = true;
                 resizeCanvas();
                 particles = [];
-                // First automatic fireworks burst
                 triggerAutoFireworks();
-                updateParticles();
             }
         }
 
@@ -521,15 +891,14 @@
                 cancelAnimationFrame(animationFrameId);
                 animationFrameId = null;
             }
-            breakCtx.clearRect(0, 0, breakCanvas.width, breakCanvas.height);
+            if (breakCtx) breakCtx.clearRect(0, 0, breakCanvas.width, breakCanvas.height);
             particles = [];
         }
 
         function triggerAutoFireworks() {
             if (!isAnimationRunning) return;
-            const w = breakCanvas.width;
-            const h = breakCanvas.height;
-            // Trigger 3 to 5 fireworks bursts at random positions in upper screen
+            const w = window.innerWidth;
+            const h = window.innerHeight;
             const burstCount = Math.floor(Math.random() * 3) + 3;
             for (let i = 0; i < burstCount; i++) {
                 setTimeout(() => {
@@ -543,44 +912,42 @@
         }
 
         function setRandomActivity() {
+            if (!breakActivityText) return;
             const current = breakActivityText.innerText;
             let available = breakActivities.filter(act => act !== current);
             if (available.length === 0) available = breakActivities;
-            const newAct = available[Math.floor(Math.random() * available.length)];
-            breakActivityText.innerText = newAct;
+            breakActivityText.innerText = available[Math.floor(Math.random() * available.length)];
         }
 
         function showBreakPopup() {
             setRandomActivity();
-            breakOverlay.style.display = 'flex';
-            // Reflow
-            breakOverlay.offsetWidth;
-            breakOverlay.classList.add('active');
+            if (breakOverlay) {
+                breakOverlay.style.display = 'flex';
+                breakOverlay.offsetWidth; // Reflow
+                breakOverlay.classList.add('active');
+                
+                // Focus container for keyboard modal lock
+                breakOverlay.focus();
+            }
             startAnimation();
         }
 
-        // Check if break is active (12:40 PM to 1:25 PM)
         function isBreakActive() {
             const now = new Date();
             const day = now.getDay();
-            // Monday to Friday
             if (day < 1 || day > 5) return false;
 
             const currentMins = now.getHours() * 60 + now.getMinutes();
-            const startMins = 12 * 60 + 40; // 12:40 PM
-            const endMins = 13 * 60 + 25;   // 1:25 PM
+            const startMins = 12 * 60 + 40; 
+            const endMins = 13 * 60 + 25;   
             return currentMins >= startMins && currentMins < endMins;
         }
 
-        // Test Mode Parameter Check
         const urlParams = new URLSearchParams(window.location.search);
         const isTestMode = urlParams.has('test') && urlParams.get('test') === 'break';
 
         function checkAndOpenBreak() {
-            // Update the header indicator badge
             updateBreakAlertBadge();
-
-            // Auto open on load if break is active and not shown this session, or in test mode
             const hasShownThisSession = sessionStorage.getItem('breakPopupShown') === 'true';
             
             if (isTestMode) {
@@ -612,48 +979,71 @@
         }
 
         function closeBreakPopup() {
-            breakOverlay.classList.remove('active');
-            setTimeout(() => {
-                breakOverlay.style.display = 'none';
-                stopAnimation();
-            }, 400); // Wait for transition
+            if (breakOverlay) {
+                breakOverlay.classList.remove('active');
+                setTimeout(() => {
+                    breakOverlay.style.display = 'none';
+                    stopAnimation();
+                }, 400); 
+            }
         }
 
         // Event Listeners
         window.addEventListener('resize', resizeCanvas);
         
-        breakCanvas.addEventListener('click', (e) => {
-            createExplosion(e.clientX, e.clientY);
-        });
+        if (breakCanvas) {
+            breakCanvas.addEventListener('click', (e) => {
+                createExplosion(e.clientX, e.clientY);
+            });
 
-        breakCanvas.addEventListener('touchstart', (e) => {
-            if (e.touches && e.touches.length > 0) {
-                createExplosion(e.touches[0].clientX, e.touches[0].clientY);
+            breakCanvas.addEventListener('touchstart', (e) => {
+                if (e.touches && e.touches.length > 0) {
+                    createExplosion(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            });
+        }
+
+        if (breakReloadBtn) {
+            breakReloadBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setRandomActivity();
+                const rect = breakReloadBtn.getBoundingClientRect();
+                createExplosion(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            });
+        }
+
+        if (breakCloseBtn) {
+            breakCloseBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeBreakPopup();
+            });
+        }
+
+        // Accessibility Modal Lock: Allow escape key closing for the break popup
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && breakOverlay && breakOverlay.classList.contains('active')) {
+                closeBreakPopup();
             }
         });
 
-        breakReloadBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            setRandomActivity();
-            const rect = breakReloadBtn.getBoundingClientRect();
-            createExplosion(rect.left + rect.width / 2, rect.top + rect.height / 2);
-        });
-
-        breakCloseBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            closeBreakPopup();
-        });
-
-        // Initialize checking break on load
-        window.addEventListener('load', () => {
+        // Initialize Dynamic Pages on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTimetableGrid();
+            setInitialDayTab();
+            renderMobileTimeline();
+            setupDaySelector();
+            setupTheme();
+            highlightCurrent();
             checkAndOpenBreak();
-            setInterval(() => {
-                checkAndOpenBreak();
-            }, 60000);
+            
+            // Periodical loops
+            setInterval(highlightCurrent, 60000);
+            setInterval(checkAndOpenBreak, 60000);
         });
     </script>
-    <!-- Include html2canvas for downloading the timetable as an image -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Load local offline-capable html2canvas library -->
+    <script src="html2canvas.min.js"></script>
 </body>
 
 </html>

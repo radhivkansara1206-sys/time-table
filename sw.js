@@ -6,7 +6,8 @@ const ASSETS_TO_CACHE = [
   './icon.svg',
   './manifest.json',
   './widget-template.json',
-  './widget-data.json'
+  './widget-data.json',
+  './html2canvas.min.js'
 ];
 
 self.addEventListener('install', (event) => {
