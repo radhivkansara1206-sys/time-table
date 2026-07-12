@@ -744,7 +744,7 @@
                     const endFormatted = formatTime(times.end);
 
                     let cardSubject = item.subject || "";
-                    let cardRoom = item.room || "";
+                    let cardRoom = item.room || "A218";
                     let cardFaculty = item.faculty || "Staff";
                     let cardType = item.type || "white";
                     let isLab = false;
@@ -755,7 +755,7 @@
                         const lab = item.labs[0];
                         if (lab) {
                             cardSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
-                            cardRoom = lab.room || "N/A";
+                            cardRoom = lab.room || "A218";
                             cardFaculty = lab.faculty || "Staff";
                         }
                     }
@@ -866,7 +866,7 @@
                 const endFormatted = formatTime(times.end);
 
                 let cardSubject = item.subject || "";
-                let cardRoom = item.room || "";
+                let cardRoom = item.room || "A218";
                 let cardFaculty = item.faculty || "Staff";
                 let cardType = item.type || "white";
                 let isLab = false;
@@ -876,7 +876,7 @@
                     const lab = item.labs[0];
                     if (lab) {
                         cardSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
-                        cardRoom = lab.room || "N/A";
+                        cardRoom = lab.room || "A218";
                         cardFaculty = lab.faculty || "Staff";
                     }
                 }
@@ -1149,7 +1149,7 @@
                 const endFormatted = formatTime(times.end);
                 
                 let ongoingSubject = ongoingItem.subject || "";
-                let ongoingRoom = ongoingItem.room || "N/A";
+                let ongoingRoom = ongoingItem.room || "A218";
                 let ongoingFaculty = ongoingItem.faculty || "Staff";
                 let isLab = false;
 
@@ -1158,7 +1158,7 @@
                     const lab = ongoingItem.labs[0];
                     if (lab) {
                         ongoingSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
-                        ongoingRoom = lab.room || "N/A";
+                        ongoingRoom = lab.room || "A218";
                         ongoingFaculty = lab.faculty || "Staff";
                     }
                 }
@@ -1210,14 +1210,14 @@
                 const startFormatted = formatTime(times.start);
 
                 let upcomingSubject = upcomingItem.subject || "";
-                let upcomingRoom = upcomingItem.room || "N/A";
+                let upcomingRoom = upcomingItem.room || "A218";
                 let upcomingFaculty = upcomingItem.faculty || "Staff";
 
                 if (upcomingItem.isSplit) {
                     const lab = upcomingItem.labs[0];
                     if (lab) {
                         upcomingSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
-                        upcomingRoom = lab.room || "N/A";
+                        upcomingRoom = lab.room || "A218";
                         upcomingFaculty = lab.faculty || "Staff";
                     }
                 }
@@ -1851,13 +1851,13 @@
             
             if (nextSlot) {
                 let cardSubject = nextSlot.subject || "";
-                let cardRoom = nextSlot.room || "N/A";
+                let cardRoom = nextSlot.room || "A218";
                 
                 if (nextSlot.isSplit) {
                     const lab = nextSlot.labs[0];
                     if (lab) {
                         cardSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
-                        cardRoom = lab.room || "N/A";
+                        cardRoom = lab.room || "A218";
                     }
                 }
                 
@@ -1874,12 +1874,12 @@
                 
                 if (foundItem) {
                     let cardSubject = foundItem.subject || "";
-                    let cardRoom = foundItem.room || "N/A";
+                    let cardRoom = foundItem.room || "A218";
                     if (foundItem.isSplit) {
                         const lab = foundItem.labs[0];
                         if (lab) {
                             cardSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
-                            cardRoom = lab.room || "N/A";
+                            cardRoom = lab.room || "A218";
                         }
                     }
                     subjectEl.innerText = cardSubject;
