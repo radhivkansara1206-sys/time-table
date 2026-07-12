@@ -339,13 +339,58 @@
         }
 
         /**
+         * Authoritative function to update the installation UI state.
+         * States:
+         * - 'hidden': Completely hides the button.
+         * - 'installable': Shows the "Install" button.
+         * - 'installing': Shows "Installing..." and disables the button.
+         * - 'installed': Shows "Installed ✓" (in browser) or hides the button (in standalone mode).
+         */
+        async function updateInstallUI(state) {
+            if (!installBtn) return;
+
+            // Reset dynamic classes and attributes
+            installBtn.classList.remove('installed');
+            installBtn.disabled = false;
+
+            if (state === 'hidden') {
+                installBtn.hidden = true;
+            } else if (state === 'installable') {
+                installBtn.hidden = false;
+                installBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Install
+                `;
+            } else if (state === 'installing') {
+                installBtn.hidden = false;
+                installBtn.disabled = true;
+                installBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="animate-spin"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="31.4" stroke-dashoffset="10"></circle></svg>
+                    Installing...
+                `;
+            } else if (state === 'installed') {
+                if (isRunningAsInstalledApp()) {
+                    installBtn.hidden = true;
+                } else {
+                    installBtn.hidden = false;
+                    installBtn.disabled = true;
+                    installBtn.classList.add('installed');
+                    installBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Installed ✓
+                    `;
+                }
+            }
+        }
+
+        /**
          * Hides the install button and clears the deferred prompt.
          * This is the single authoritative function for all "installed" outcomes.
          */
         function onInstallComplete() {
             deferredPrompt = null;
-            if (installBtn) installBtn.hidden = true;
             markAsInstalled();
+            updateInstallUI('installed');
             showInstallToast();
         }
 
@@ -377,24 +422,60 @@
         }
 
         /**
-         * On page load: immediately determine the correct install button
-         * visibility without waiting for any async events.
-         * This prevents the button from flickering visible then hidden.
+         * On page load: determine correct install button state.
+         * Resolves standalone mode and queries the navigator for installed related apps.
          */
-        function initInstallButtonState() {
+        async function initInstallButtonState() {
             if (!installBtn) return;
 
-            // If already running as installed app OR we have a local record
-            // of a previous installation, keep the button hidden permanently.
-            if (isRunningAsInstalledApp() || hasInstalledRecord()) {
-                installBtn.hidden = true;
+            // Start by hiding it
+            await updateInstallUI('hidden');
+
+            // Visual testing parameter override
+            const urlParams = new URLSearchParams(window.location.search);
+            const pwaTestParam = urlParams.get('test_pwa');
+            if (pwaTestParam) {
+                if (pwaTestParam === 'installed') {
+                    await updateInstallUI('installed');
+                    showInstallToast();
+                    return;
+                } else if (pwaTestParam === 'installing') {
+                    await updateInstallUI('installing');
+                    return;
+                } else if (pwaTestParam === 'installable') {
+                    await updateInstallUI('installable');
+                    return;
+                } else if (pwaTestParam === 'hidden') {
+                    await updateInstallUI('hidden');
+                    return;
+                }
+            }
+
+            if (isRunningAsInstalledApp()) {
                 deferredPrompt = null;
                 return;
             }
 
-            // Otherwise keep it hidden by default — it will only become
-            // visible once beforeinstallprompt fires and confirms eligibility.
-            installBtn.hidden = true;
+            // Check if already installed on device (supported on Chromium)
+            if ('getInstalledRelatedApps' in navigator) {
+                try {
+                    const relatedApps = await navigator.getInstalledRelatedApps();
+                    if (relatedApps && relatedApps.length > 0) {
+                        await updateInstallUI('installed');
+                        deferredPrompt = null;
+                        return;
+                    }
+                } catch (err) {
+                    console.warn('Error calling getInstalledRelatedApps:', err);
+                }
+            }
+
+            // Fallback to localStorage check
+            if (hasInstalledRecord()) {
+                await updateInstallUI('installed');
+                deferredPrompt = null;
+                return;
+            }
         }
 
         // Run immediately — before any async events fire.
@@ -402,33 +483,38 @@
 
         /**
          * beforeinstallprompt — browser signals the app can be installed.
-         * Only show the install button if the app is NOT already installed.
+         * If we receive this event, it means the app is not currently installed
+         * on the system (or was uninstalled).
          */
         window.addEventListener('beforeinstallprompt', (e) => {
             // Always prevent the default mini-infobar prompt.
             e.preventDefault();
 
-            // If the user already installed the app (detected via standalone
-            // mode OR our localStorage record), discard the prompt silently.
-            if (isRunningAsInstalledApp() || hasInstalledRecord()) {
+            // If we are already running inside the installed app window, don't show the button.
+            if (isRunningAsInstalledApp()) {
                 return;
             }
 
-            // Store the prompt for later use when the button is clicked.
+            // Since beforeinstallprompt fired, the app is not installed on this system.
+            // Clear any stale local record.
+            try {
+                localStorage.removeItem(INSTALLED_KEY);
+            } catch (_) {}
+
+            // Store the prompt for later use.
             deferredPrompt = e;
-            if (installBtn) installBtn.hidden = false;
+            updateInstallUI('installable');
         });
 
         /**
          * Install button click handler.
-         * Shows the native install prompt and handles the outcome.
          */
         if (installBtn) {
             installBtn.addEventListener('click', async () => {
                 if (!deferredPrompt) return;
 
-                // Immediately disable button to prevent duplicate prompts.
-                installBtn.disabled = true;
+                // Move UI to installing transition state
+                await updateInstallUI('installing');
 
                 try {
                     // Trigger the native browser install prompt.
@@ -439,32 +525,25 @@
 
                     if (outcome === 'accepted') {
                         // User accepted: clean up immediately.
-                        // (appinstalled will also fire, providing a safety net.)
                         onInstallComplete();
                     } else {
-                        // User dismissed: restore button to allow a retry.
-                        // The spec says a dismissed prompt cannot be re-used,
-                        // so we must null it out — the browser will fire a new
-                        // beforeinstallprompt if appropriate.
+                        // User dismissed: restore button to allow a retry if a new event fires.
+                        // The prompt is spent, so null it out.
                         deferredPrompt = null;
-                        installBtn.disabled = false;
-                        installBtn.hidden = true;
+                        await updateInstallUI('hidden');
                     }
                 } catch (err) {
-                    // Safety net: if prompt() fails (e.g., called on a spent
-                    // event object), hide the button gracefully.
                     console.warn('PWA install prompt error:', err);
                     deferredPrompt = null;
-                    installBtn.disabled = false;
-                    installBtn.hidden = true;
+                    await updateInstallUI('hidden');
                 }
             });
         }
 
         /**
          * appinstalled — fires when the OS confirms the app was installed.
-         * This is the definitive signal and acts as a safety net in case
-         * userChoice resolved before the OS fully committed the install.
+         * Acts as a safety net if userChoice resolves early or if installed
+         * via browser native menu/bar.
          */
         window.addEventListener('appinstalled', () => {
             onInstallComplete();
@@ -480,8 +559,11 @@
                 if (e.matches) {
                     // App just entered standalone mode.
                     deferredPrompt = null;
-                    if (installBtn) installBtn.hidden = true;
+                    updateInstallUI('hidden');
                     markAsInstalled();
+                } else {
+                    // App exited standalone mode (unlikely, but fallback)
+                    initInstallButtonState();
                 }
             });
         }

@@ -44,6 +44,11 @@
     box-sizing: border-box;
 }
 
+/* Ensure [hidden] attribute works correctly, overriding class displays */
+[hidden] {
+    display: none !important;
+}
+
 body {
     font-family: var(--font-body);
     background-color: var(--bg-page);
@@ -774,4 +779,24 @@ td.bg-yellow { border-left: 2px solid var(--color-accent); background: linear-gr
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+/* Spinner animation for PWA installing state */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.animate-spin {
+    animation: spin 1s linear infinite;
+    transform-origin: center;
+}
+
+/* Installed button style (neon emerald) */
+.tech-button.installed {
+    background-color: rgba(16, 185, 129, 0.1) !important; /* Emerald 10% */
+    color: #10B981 !important; /* Emerald 500 */
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    cursor: default;
+    pointer-events: none;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
 }
