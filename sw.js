@@ -1,4 +1,4 @@
-const CACHE_NAME = 'schedule-v24';
+const CACHE_NAME = 'schedule-v30';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

@@ -24,6 +24,14 @@
             
             <!-- Controls Toolbar -->
             <div class="header-controls">
+                <button id="theme-toggle-btn" class="tech-button secondary" aria-label="Toggle Theme">
+                    <svg class="theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="theme-icon-moon" style="display: none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+                <button id="settings-btn" class="tech-button secondary" aria-label="Open Settings">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Settings
+                </button>
                 <button id="install-btn" class="tech-button secondary" hidden aria-label="Install App">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     Install
@@ -38,11 +46,14 @@
             <div id="break-badge-container" class="break-badge-container"></div>
         </header>
 
+        <!-- Live Lecture Dashboard -->
+        <section class="live-dashboard-section" id="live-tracker-panel" aria-label="Live Tracking Panel">
+            <!-- Dynamically populated live and upcoming lectures -->
+        </section>
+
         <!-- Desktop Grid Wrapper (Hidden on mobile) -->
         <section class="table-wrapper" id="desktop-grid-section" aria-label="Timetable Grid View">
-            <table id="timetable-grid">
-                <!-- Dynamically generated table content -->
-            </table>
+             <!-- Dynamically generated day columns content -->
         </section>
 
         <!-- Mobile Agenda Wrapper (Hidden on desktop) -->
@@ -126,39 +137,41 @@
             { id: 8, start: "4:10", end: "5:00" }
         ];
 
+        // Augmenting schedule database with stream and faculty details for Phase 11 & 12
+        // Augmenting schedule database with stream and faculty details for Phase 11 & 12
         const SCHEDULE = {
             "Monday": {
-                1: { subject: "Cyber Security", type: "blue" },
-                2: { subject: "Programming with Python", type: "blue" },
-                3: { subject: "Web Development", type: "blue" },
-                4: { subject: "Software Engineering", type: "red" },
+                1: { subject: "Cyber Security", type: "blue", stream: "Cyber Security", faculty: "Mr. Kush Patel" },
+                2: { subject: "Programming with Python", type: "blue", faculty: "Mr. Pravin Savariya" },
+                3: { subject: "Web Development", type: "blue", faculty: "Mr. Harshal Makwana" },
+                4: { subject: "Software Engineering", type: "red", faculty: "Ms. Sushama Sainwar" },
                 5: { 
                     isSplit: true, 
                     rowspan: 2, 
                     type: "yellow",
                     labs: [
-                        { batch: "1A08", sub: "SE", room: "D303A" },
-                        { batch: "1B08", sub: "PP", room: "D203E" },
-                        { batch: "1C08", sub: "DAA", room: "D303E" },
-                        { batch: "1D08", sub: "WD", room: "A313" }
+                        { batch: "1A08", sub: "SE", room: "D303A", faculty: "Mr. Sanjay Patel" },
+                        { batch: "1B08", sub: "PP", room: "D203E", faculty: "Mr. Pravin Savariya" },
+                        { batch: "1C08", sub: "DAA", room: "D303E", faculty: "Dr. Malay Bhatt" },
+                        { batch: "1D08", sub: "WD", room: "A313", faculty: "Mr. Harshal Makwana" }
                     ] 
                 },
                 6: null,
-                7: { subject: "Design and Analysis of Algorithms", type: "red" },
-                8: { subject: "Open Elective", type: "white" }
+                7: { subject: "Design and Analysis of Algorithms", type: "red", faculty: "Dr. Malay Bhatt" },
+                8: { subject: "Open Elective", type: "white", faculty: "Staff" }
             },
             "Tuesday": {
-                1: { subject: "Software Engineering", type: "red" },
-                2: { subject: "Design and Analysis of Algorithms", type: "red" },
+                1: { subject: "Software Engineering", type: "red", faculty: "Ms. Sushama Sainwar" },
+                2: { subject: "Design and Analysis of Algorithms", type: "red", faculty: "Dr. Malay Bhatt" },
                 3: {
                     isSplit: true,
                     rowspan: 2,
                     type: "yellow",
                     labs: [
-                        { batch: "1A08", sub: "PP", room: "D303B" },
-                        { batch: "1B08", sub: "DAA", room: "D303E" },
-                        { batch: "1C08", sub: "WD", room: "A125" },
-                        { batch: "1D08", sub: "SE", room: "D303A" }
+                        { batch: "1A08", sub: "PP", room: "D303B", faculty: "Mr. Pravin Savariya" },
+                        { batch: "1B08", sub: "DAA", room: "D303E", faculty: "Dr. Malay Bhatt" },
+                        { batch: "1C08", sub: "WD", room: "A125", faculty: "Mr. Kush Patel" },
+                        { batch: "1D08", sub: "SE", room: "D303A", faculty: "Ms. Sushama Sainwar" }
                     ]
                 },
                 4: null,
@@ -167,91 +180,78 @@
                     rowspan: 2,
                     type: "yellow",
                     labs: [
-                        { batch: "1A08", sub: "DAA", room: "D303E" },
-                        { batch: "1B08", sub: "WD", room: "A313" },
-                        { batch: "1C08", sub: "SE", room: "D303A" },
-                        { batch: "1D08", sub: "PP", room: "D203E" }
+                        { batch: "1A08", sub: "DAA", room: "D303E", faculty: "Dr. Malay Bhatt" },
+                        { batch: "1B08", sub: "WD", room: "A313", faculty: "Mr. Harshal Makwana" },
+                        { batch: "1C08", sub: "SE", room: "D303A", faculty: "Mr. Sanjay Patel" },
+                        { batch: "1D08", sub: "PP", room: "D203E", faculty: "Mr. Pravin Savariya" }
                     ]
                 },
                 6: null,
-                7: { subject: "Cyber Security", room: "A323", type: "blue" },
-                8: { subject: "Minor Degree", type: "white" }
+                7: { subject: "Cyber Security", room: "A323", type: "blue", stream: "Cyber Security", faculty: "Mr. Kush Patel" },
+                8: null
             },
             "Wednesday": {
-                1: { subject: "", type: "white" },
-                2: { subject: "Software Engineering", type: "red" },
-                3: { subject: "Design and Analysis of Algorithms", type: "red" },
-                4: { subject: "", type: "white" },
+                1: null,
+                2: { subject: "Software Engineering", type: "red", faculty: "Ms. Sushama Sainwar" },
+                3: { subject: "Design and Analysis of Algorithms", type: "red", faculty: "Dr. Malay Bhatt" },
+                4: null,
                 5: {
                     isSplit: true,
                     rowspan: 2,
                     type: "yellow",
                     labs: [
-                        { batch: "1B08", sub: "CYBER", room: "D203E" },
-                        { batch: "1B08", sub: "AI", room: "D203B" },
-                        { batch: "1A08", sub: "AI", room: "D203A" }
+                        { batch: "1B08", sub: "CYBER", room: "D203E", faculty: "Mr. Kush Patel", stream: "Cyber Security" },
+                        { batch: "1B08", sub: "AI", room: "D203B", faculty: "Dr. Hetal Chudasama", stream: "AI" },
+                        { batch: "1A08", sub: "AI", room: "D203A", faculty: "Mr. Sanjay Patel", stream: "AI" }
                     ]
                 },
                 6: null,
-                7: { subject: "Artificial Intelligence", type: "blue" },
-                8: { subject: "Open Elective", type: "white" }
+                7: { subject: "Artificial Intelligence", type: "blue", stream: "AI", faculty: "Mr. Sanjay Patel" },
+                8: { subject: "Open Elective", type: "white", faculty: "Staff" }
             },
             "Thursday": {
-                1: { subject: "", type: "white" },
-                2: { subject: "Programming with Python", type: "blue" },
-                3: { subject: "Web Development", type: "blue" },
-                4: { subject: "Artificial Intelligence", type: "blue" },
+                1: null,
+                2: { subject: "Programming with Python", type: "blue", faculty: "Mr. Pravin Savariya" },
+                3: { subject: "Web Development", type: "blue", faculty: "Mr. Harshal Makwana" },
+                4: { subject: "Artificial Intelligence", type: "blue", stream: "AI", faculty: "Mr. Sanjay Patel" },
                 5: {
                     isSplit: true,
                     rowspan: 2,
                     type: "yellow",
                     labs: [
-                        { batch: "1A08", sub: "CYBER", room: "D203E" },
-                        { batch: "1C08", sub: "AI", room: "D203A" }
+                        { batch: "1A08", sub: "CYBER", room: "D203E", faculty: "Mr. Kush Patel", stream: "Cyber Security" },
+                        { batch: "1C08", sub: "AI", room: "D203A", faculty: "Mr. Sanjay Patel", stream: "AI" }
                     ]
                 },
                 6: null,
-                7: { subject: "Artificial Intelligence", type: "blue" },
-                8: { subject: "Minor Degree", type: "white" }
+                7: { subject: "Artificial Intelligence", type: "blue", stream: "AI", faculty: "Mr. Sanjay Patel" },
+                8: null
             },
             "Friday": {
-                1: { subject: "Programming with Python", type: "blue" },
-                2: { subject: "Design and Analysis of Algorithms", type: "red" },
-                3: { subject: "Web Development", type: "blue" },
-                4: { subject: "Cyber Security", type: "red" },
+                1: { subject: "Programming with Python", type: "blue", faculty: "Mr. Pravin Savariya" },
+                2: { subject: "Design and Analysis of Algorithms", type: "red", faculty: "Dr. Malay Bhatt" },
+                3: { subject: "Web Development", type: "blue", faculty: "Mr. Harshal Makwana" },
+                4: { subject: "Cyber Security", type: "red", stream: "Cyber Security", faculty: "Mr. Kush Patel" },
                 5: {
                     isSplit: true,
                     rowspan: 2,
                     type: "yellow",
                     labs: [
-                        { batch: "1A08", sub: "WD", room: "A313" },
-                        { batch: "1B08", sub: "SE", room: "D303A" },
-                        { batch: "1C08", sub: "PP", room: "D203E" },
-                        { batch: "1D08", sub: "DAA", room: "D303E" }
+                        { batch: "1A08", sub: "WD", room: "A313", faculty: "Mr. Harshal Makwana" },
+                        { batch: "1B08", sub: "SE", room: "D303A", faculty: "Ms. Sushama Sainwar" },
+                        { batch: "1C08", sub: "PP", room: "D203E", faculty: "Mr. Pravin Savariya" },
+                        { batch: "1D08", sub: "DAA", room: "D303E", faculty: "Dr. Malay Bhatt" }
                     ]
                 },
                 6: null,
-                7: {
-                    isCustomFridaySplit: true,
-                    rowspan: 2,
-                    type: "white",
-                    customHtml: `
-                        <table class="nested-table friday-split">
-                            <tr>
-                                <td rowspan="2" class="bg-white">Open Elective</td>
-                                <td class="bg-white"></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-yellow">OE Lab</td>
-                            </tr>
-                        </table>
-                    `,
+                7: { subject: "Open Elective", type: "white", faculty: "Staff" },
+                8: {
+                    isSplit: true,
+                    type: "yellow",
                     labs: [
-                        { batch: "All Batches", sub: "Open Elective", room: "N/A" },
-                        { batch: "OE Lab Group", sub: "OE Lab", room: "N/A" }
+                        { batch: "1D08", sub: "OE Lab", room: "OE Lab", faculty: "Staff" }
                     ]
-                },
-                8: null
+                }
             }
         };
 
@@ -296,40 +296,24 @@
 
         // =================================================================
         // PWA INSTALL STATE MANAGEMENT
-        // Handles the full install lifecycle correctly across browsers,
-        // page reloads, and standalone re-launches.
         // =================================================================
 
         let deferredPrompt = null;
         const installBtn = document.getElementById('install-btn');
         const INSTALLED_KEY = 'pwa_installed';
 
-        /**
-         * Returns true if the app is currently running as an installed PWA
-         * (standalone window), using two reliable cross-browser signals.
-         */
         function isRunningAsInstalledApp() {
-            // Standard display-mode check (Chrome, Edge, Firefox, Samsung)
             const standaloneMediaQuery = window.matchMedia('(display-mode: standalone)');
-            // Legacy iOS Safari check
             const iosStandalone = ('standalone' in navigator) && navigator.standalone === true;
             return standaloneMediaQuery.matches || iosStandalone;
         }
 
-        /**
-         * Marks the app as installed in localStorage so the install
-         * button stays hidden across future browser-tab visits.
-         */
         function markAsInstalled() {
             try {
                 localStorage.setItem(INSTALLED_KEY, 'true');
-            } catch (_) { /* localStorage may be unavailable in private mode */ }
+            } catch (_) {}
         }
 
-        /**
-         * Returns true if the user has previously installed the app,
-         * based on the persisted localStorage flag.
-         */
         function hasInstalledRecord() {
             try {
                 return localStorage.getItem(INSTALLED_KEY) === 'true';
@@ -338,18 +322,8 @@
             }
         }
 
-        /**
-         * Authoritative function to update the installation UI state.
-         * States:
-         * - 'hidden': Completely hides the button.
-         * - 'installable': Shows the "Install" button.
-         * - 'installing': Shows "Installing..." and disables the button.
-         * - 'installed': Shows "Installed ✓" (in browser) or hides the button (in standalone mode).
-         */
         async function updateInstallUI(state) {
             if (!installBtn) return;
-
-            // Reset dynamic classes and attributes
             installBtn.classList.remove('installed');
             installBtn.disabled = false;
 
@@ -383,10 +357,6 @@
             }
         }
 
-        /**
-         * Hides the install button and clears the deferred prompt.
-         * This is the single authoritative function for all "installed" outcomes.
-         */
         function onInstallComplete() {
             deferredPrompt = null;
             markAsInstalled();
@@ -394,11 +364,7 @@
             showInstallToast();
         }
 
-        /**
-         * Shows a brief success toast message after installation.
-         */
         function showInstallToast() {
-            // Remove any existing toast first
             const existingToast = document.getElementById('install-toast');
             if (existingToast) existingToast.remove();
 
@@ -409,29 +375,20 @@
             toast.textContent = '✓ App installed successfully!';
             document.body.appendChild(toast);
 
-            // Animate in
             requestAnimationFrame(() => {
                 toast.classList.add('toast-visible');
             });
 
-            // Auto-dismiss after 3.5 seconds
             setTimeout(() => {
                 toast.classList.remove('toast-visible');
                 setTimeout(() => toast.remove(), 400);
             }, 3500);
         }
 
-        /**
-         * On page load: determine correct install button state.
-         * Resolves standalone mode and queries the navigator for installed related apps.
-         */
         async function initInstallButtonState() {
             if (!installBtn) return;
-
-            // Start by hiding it
             await updateInstallUI('hidden');
 
-            // Visual testing parameter override
             const urlParams = new URLSearchParams(window.location.search);
             const pwaTestParam = urlParams.get('test_pwa');
             if (pwaTestParam) {
@@ -456,7 +413,6 @@
                 return;
             }
 
-            // Check if already installed on device (supported on Chromium)
             if ('getInstalledRelatedApps' in navigator) {
                 try {
                     const relatedApps = await navigator.getInstalledRelatedApps();
@@ -470,7 +426,6 @@
                 }
             }
 
-            // Fallback to localStorage check
             if (hasInstalledRecord()) {
                 await updateInstallUI('installed');
                 deferredPrompt = null;
@@ -478,57 +433,28 @@
             }
         }
 
-        // Run immediately — before any async events fire.
         initInstallButtonState();
 
-        /**
-         * beforeinstallprompt — browser signals the app can be installed.
-         * If we receive this event, it means the app is not currently installed
-         * on the system (or was uninstalled).
-         */
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Always prevent the default mini-infobar prompt.
             e.preventDefault();
-
-            // If we are already running inside the installed app window, don't show the button.
-            if (isRunningAsInstalledApp()) {
-                return;
-            }
-
-            // Since beforeinstallprompt fired, the app is not installed on this system.
-            // Clear any stale local record.
+            if (isRunningAsInstalledApp()) return;
             try {
                 localStorage.removeItem(INSTALLED_KEY);
             } catch (_) {}
-
-            // Store the prompt for later use.
             deferredPrompt = e;
             updateInstallUI('installable');
         });
 
-        /**
-         * Install button click handler.
-         */
         if (installBtn) {
             installBtn.addEventListener('click', async () => {
                 if (!deferredPrompt) return;
-
-                // Move UI to installing transition state
                 await updateInstallUI('installing');
-
                 try {
-                    // Trigger the native browser install prompt.
                     deferredPrompt.prompt();
-
-                    // Wait for the user's decision.
                     const { outcome } = await deferredPrompt.userChoice;
-
                     if (outcome === 'accepted') {
-                        // User accepted: clean up immediately.
                         onInstallComplete();
                     } else {
-                        // User dismissed: restore button to allow a retry if a new event fires.
-                        // The prompt is spent, so null it out.
                         deferredPrompt = null;
                         await updateInstallUI('hidden');
                     }
@@ -540,127 +466,345 @@
             });
         }
 
-        /**
-         * appinstalled — fires when the OS confirms the app was installed.
-         * Acts as a safety net if userChoice resolves early or if installed
-         * via browser native menu/bar.
-         */
         window.addEventListener('appinstalled', () => {
             onInstallComplete();
         });
 
-        /**
-         * display-mode change listener — detects when the user switches
-         * from browser tab to standalone window (or vice versa) without
-         * a page reload. Hides the install button in standalone context.
-         */
         if (window.matchMedia) {
             window.matchMedia('(display-mode: standalone)').addEventListener('change', (e) => {
                 if (e.matches) {
-                    // App just entered standalone mode.
                     deferredPrompt = null;
                     updateInstallUI('hidden');
                     markAsInstalled();
                 } else {
-                    // App exited standalone mode (unlikely, but fallback)
                     initInstallButtonState();
                 }
             });
         }
 
-        // Render dynamic desktop grid timetable
-        function renderTimetableGrid() {
-            const table = document.getElementById('timetable-grid');
-            if (!table) return;
+        // =================================================================
+        // TIME UTILITIES & MOCKING CONFIG
+        // =================================================================
 
-            let theadHtml = `
-                <thead>
-                    <tr>
-                        <th class="col-time">Time</th>
-                        <th class="col-mon">Monday</th>
-                        <th class="col-tue">Tuesday</th>
-                        <th class="col-wed">Wednesday</th>
-                        <th class="col-thu">Thursday</th>
-                        <th class="col-fri">Friday</th>
-                    </tr>
-                </thead>
-            `;
+        const urlParams = new URLSearchParams(window.location.search);
+        let mockTime = urlParams.get('mock_time') || null;
+        let mockDay = urlParams.get('mock_day') || null;
 
-            let tbodyHtml = '<tbody>';
-            const rowspanCounters = { "Monday": 0, "Tuesday": 0, "Wednesday": 0, "Thursday": 0, "Friday": 0 };
+        function parseTimeToMinutes(timeStr) {
+            if (!timeStr) return 0;
+            let [h, m] = timeStr.split(':').map(Number);
+            if (h <= 5 || h === 12) {
+                if (h !== 12) h += 12;
+            }
+            return h * 60 + m;
+        }
 
-            TIME_SLOTS.forEach(slot => {
-                if (slot.isBreak) {
-                    tbodyHtml += `
-                        <tr class="break-row">
-                            <td colspan="6" class="break-text">${slot.label}</td>
-                        </tr>
-                    `;
-                    return;
-                }
+        function formatTime(timeStr) {
+            if (!timeStr) return "";
+            let [h, m] = timeStr.split(':').map(Number);
+            const ampm = (h >= 9 && h < 12) ? 'AM' : 'PM';
+            return `${h}:${String(m).padStart(2, '0')} ${ampm}`;
+        }
 
-                tbodyHtml += '<tr>';
-                tbodyHtml += `<td class="time" scope="row">${slot.start}-${slot.end}</td>`;
+        function getSystemTime() {
+            if (mockTime) return parseTimeToMinutes(mockTime);
+            const now = new Date();
+            return now.getHours() * 60 + now.getMinutes();
+        }
 
-                DAYS.forEach(day => {
-                    if (rowspanCounters[day] > 0) {
-                        rowspanCounters[day]--;
-                        return; 
-                    }
+        function getSystemDay() {
+            if (mockDay) return mockDay;
+            const dayIndex = new Date().getDay(); // 0=Sun, 1=Mon, 5=Fri, 6=Sat
+            return DAYS[dayIndex - 1] || "Monday";
+        }
 
-                    const item = SCHEDULE[day][slot.id];
+        function getSystemDayIndex() {
+            if (mockDay) return DAYS.indexOf(mockDay) + 1;
+            return new Date().getDay();
+        }
+
+        function getPeriodTimes(slotId, rowspan = 1) {
+            const slotObj = TIME_SLOTS.find(s => s.id === slotId);
+            if (!slotObj) return null;
+            if (slotObj.isBreak) {
+                return { start: "12:40", end: "1:25", isBreak: true, label: slotObj.label };
+            }
+            const startStr = slotObj.start;
+            let endStr = slotObj.end;
+            if (rowspan > 1) {
+                const endSlotId = Number(slotId) + rowspan - 1;
+                const endSlotObj = TIME_SLOTS.find(s => s.id === endSlotId);
+                if (endSlotObj) endStr = endSlotObj.end;
+            }
+            return { start: startStr, end: endStr, isBreak: false };
+        }
+
+        // =================================================================
+        // PERSONALIZATION & FILTERING ENGINE (Phases 3 & 4)
+        // =================================================================
+
+        function matchesLab(lab, stream, mainBatch, electiveBatch) {
+            // "All Batches" and "OE Lab Group" are visible to everyone
+            if (lab.batch === "All Batches" || lab.batch === "OE Lab Group") {
+                return true;
+            }
+            // If the lab has a stream property, it's an elective lab (validate against elective batch)
+            if (lab.stream) {
+                if (lab.stream !== stream) return false;
+                return lab.batch.toUpperCase() === electiveBatch.toUpperCase();
+            }
+            // Otherwise it's a main lab (validate against main batch)
+            return lab.batch.toUpperCase() === mainBatch.toUpperCase();
+        }
+
+        const OPEN_ELECTIVES = {
+            "Sustainability Engineering": {
+                code: "202020521",
+                faculty: "Prof. Mayuri Prajapati / Dr. Sophia Varghese",
+                room: "A222 / A221",
+                hasLab: false
+            },
+            "Energy Systems": {
+                code: "202050522",
+                faculty: "Prof. Jasmin James",
+                room: "A118",
+                hasLab: false
+            },
+            "Sensor & Automation": {
+                code: "202090521",
+                faculty: "Dr. Geetali Saha",
+                room: "F401",
+                hasLab: true,
+                labFaculty: "A-GS / B-RRP(EC)",
+                labRoom: "D209 / D207"
+            },
+            "Non-Conventional Energy Sources": {
+                code: "202090521",
+                faculty: "Prof. Sanjiv Rajput",
+                room: "A201/A204",
+                hasLab: false
+            },
+            "Project Management": {
+                code: "202090522",
+                faculty: "Dr. Amlan Das / Dr. Neeraj Chavda",
+                room: "A203 / B204",
+                hasLab: false
+            }
+        };
+
+        function getFilteredSchedule(stream, mainBatch, electiveBatch, openElective) {
+            const filtered = {};
+            DAYS.forEach(day => {
+                filtered[day] = {};
+                const daySchedule = SCHEDULE[day] || {};
+                
+                TIME_SLOTS.forEach(slot => {
+                    if (slot.isBreak) return;
+                    
+                    const item = daySchedule[slot.id];
                     if (!item) {
-                        tbodyHtml += '<td class="bg-white"></td>';
+                        filtered[day][slot.id] = null;
                         return;
                     }
 
-                    const rowspanAttr = item.rowspan ? ` rowspan="${item.rowspan}"` : '';
-                    if (item.rowspan) {
-                        rowspanCounters[day] = item.rowspan - 1;
+                    // Deep copy
+                    const itemCopy = JSON.parse(JSON.stringify(item));
+
+                    // Check for Open Elective placeholder
+                    if (itemCopy.subject === "Open Elective") {
+                        const oeData = OPEN_ELECTIVES[openElective];
+                        if (oeData) {
+                            itemCopy.subject = openElective;
+                            itemCopy.faculty = oeData.faculty;
+                            // For Non-Conventional, room is A201 on Mon/Wed, and A204 on Fri
+                            if (openElective === "Non-Conventional Energy Sources") {
+                                if (day === "Friday") {
+                                    itemCopy.room = "A204";
+                                } else {
+                                    itemCopy.room = "A201";
+                                }
+                            } else {
+                                itemCopy.room = oeData.room;
+                            }
+                        }
                     }
 
-                    if (item.isSplit) {
-                        const nestedCells = item.labs.map(lab => `
-                            <td class="bg-${item.type}">
-                                <div class="lab-cell-content">
-                                    <div class="batch-num">${lab.batch}</div>
-                                    <div class="subject-short">${lab.sub}</div>
-                                    <div class="room-num">${lab.room || ''}</div>
-                                </div>
-                            </td>
-                        `).join('');
-                        
-                        tbodyHtml += `
-                            <td${rowspanAttr} class="split-cell bg-${item.type}">
-                                <table class="nested-table">
-                                    <tr>${nestedCells}</tr>
-                                </table>
-                            </td>
-                        `;
-                    } else if (item.isCustomFridaySplit) {
-                        tbodyHtml += `
-                            <td${rowspanAttr} class="split-cell">
-                                ${item.customHtml}
-                            </td>
-                        `;
+                    if (itemCopy.isSplit) {
+                        // Check for Friday Slot 8 Open Elective Lab
+                        let hasOELab = itemCopy.labs.some(l => l.sub === "OE Lab");
+                        if (hasOELab) {
+                            const oeData = OPEN_ELECTIVES[openElective];
+                            if (oeData && oeData.hasLab) {
+                                itemCopy.labs = itemCopy.labs.map(l => {
+                                    if (l.sub === "OE Lab") {
+                                        return {
+                                            batch: l.batch,
+                                            sub: openElective + " Lab",
+                                            room: oeData.labRoom,
+                                            faculty: oeData.labFaculty
+                                        };
+                                    }
+                                    return l;
+                                });
+                            } else {
+                                // Other electives do not have a lab, so this slot is free/null
+                                filtered[day][slot.id] = null;
+                                return;
+                            }
+                        }
+
+                        // Filter labs
+                        const matchingLabs = itemCopy.labs.filter(lab => matchesLab(lab, stream, mainBatch, electiveBatch));
+                        if (matchingLabs.length > 0) {
+                            itemCopy.labs = matchingLabs;
+                            filtered[day][slot.id] = itemCopy;
+                        } else {
+                            filtered[day][slot.id] = null;
+                        }
                     } else {
-                        tbodyHtml += `
-                            <td class="bg-${item.type}">
-                                <div class="subject-name">${item.subject}</div>
-                                ${item.room ? `<div class="room-num">${item.room}</div>` : ''}
-                            </td>
-                        `;
+                        // Lecture: Filter by stream
+                        if (itemCopy.stream && itemCopy.stream !== stream && itemCopy.stream !== "Common") {
+                            filtered[day][slot.id] = null;
+                        } else {
+                            filtered[day][slot.id] = itemCopy;
+                        }
                     }
                 });
-
-                tbodyHtml += '</tr>';
             });
-
-            tbodyHtml += '</tbody>';
-            table.innerHTML = theadHtml + tbodyHtml;
+            return filtered;
         }
 
-        // Render dynamic mobile vertical agenda timeline
+        // =================================================================
+        // DYNAMIC RENDERING ENGINE (Desktop Grid Columns & Mobile Timeline)
+        // =================================================================
+
+        function renderTimetableGrid() {
+            const container = document.getElementById('desktop-grid-section');
+            if (!container) return;
+
+            const stream = localStorage.getItem('academic_stream');
+            const mainBatch = localStorage.getItem('academic_main_batch');
+            const electiveBatch = localStorage.getItem('academic_elective_batch');
+            const openElective = localStorage.getItem('academic_open_elective');
+
+            if (!stream || !mainBatch || !electiveBatch || !openElective) {
+                container.innerHTML = `
+                    <div class="empty-state-card">
+                        <p>Complete onboarding details to view your timetable.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const filteredSchedule = getFilteredSchedule(stream, mainBatch, electiveBatch, openElective);
+            let html = '<div class="timetable-columns-container">';
+
+            DAYS.forEach(day => {
+                const daySchedule = filteredSchedule[day] || {};
+                html += `
+                    <div class="day-column" data-day="${day}">
+                        <div class="day-column-header">
+                            <h3>${day}</h3>
+                        </div>
+                        <div class="day-column-content">
+                `;
+
+                let cardsRendered = 0;
+
+                TIME_SLOTS.forEach(slot => {
+                    if (slot.isBreak) {
+                        html += `
+                            <div class="column-break-card">
+                                <span class="break-label">LUNCH BREAK</span>
+                                <span class="break-time">12:40 PM - 1:25 PM</span>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    // Check if covered by rowspan
+                    let isCovered = false;
+                    for (let prevId = 1; prevId < slot.id; prevId++) {
+                        const prevItem = daySchedule[prevId];
+                        if (prevItem && prevItem.rowspan && (prevId + prevItem.rowspan > slot.id)) {
+                            isCovered = true;
+                            break;
+                        }
+                    }
+                    if (isCovered) return;
+
+                    const item = daySchedule[slot.id];
+                    if (!item || (!item.subject && !item.isSplit && !item.isCustomFridaySplit)) {
+                        // Collapse empty timetable slot spaces naturally
+                        return;
+                    }
+
+                    const times = getPeriodTimes(slot.id, item.rowspan || 1);
+                    const startFormatted = formatTime(times.start);
+                    const endFormatted = formatTime(times.end);
+
+                    let cardSubject = item.subject || "";
+                    let cardRoom = item.room || "";
+                    let cardFaculty = item.faculty || "Staff";
+                    let cardType = item.type || "white";
+                    let isLab = false;
+
+                    if (item.isSplit) {
+                        isLab = true;
+                        // Since we filtered by batch/stream, we take the matching lab
+                        const lab = item.labs[0];
+                        if (lab) {
+                            cardSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
+                            cardRoom = lab.room || "N/A";
+                            cardFaculty = lab.faculty || "Staff";
+                        }
+                    }
+
+                    html += `
+                        <div class="class-card type-${cardType}" 
+                             data-day="${day}" 
+                             data-start="${times.start}" 
+                             data-end="${times.end}" 
+                             tabindex="0">
+                            <div class="card-time-badge">${startFormatted} - ${endFormatted}</div>
+                            <div class="card-title-container">
+                                <h4 class="card-subject-title">${cardSubject}</h4>
+                            </div>
+                            <div class="card-details-row">
+                                ${cardRoom ? `
+                                <span class="card-room-badge">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    Room ${cardRoom}
+                                </span>` : ''}
+                                <span class="card-faculty-badge">
+                                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    ${cardFaculty}
+                                </span>
+                            </div>
+                            ${isLab ? `<span class="card-lab-tag">Lab</span>` : ''}
+                        </div>
+                    `;
+                    cardsRendered++;
+                });
+
+                if (cardsRendered === 0) {
+                    html += `
+                        <div class="no-classes-card">
+                            <p>No classes scheduled</p>
+                        </div>
+                    `;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
         let currentSelectedDay = DAYS[new Date().getDay() - 1] || "Monday";
         if (new Date().getDay() === 0 || new Date().getDay() === 6) {
             currentSelectedDay = "Monday"; // Weekend fallback
@@ -670,124 +814,115 @@
             const timelineContainer = document.getElementById('mobile-timeline');
             if (!timelineContainer) return;
 
-            const daySchedule = SCHEDULE[currentSelectedDay];
-            let timelineHtml = '';
+            const stream = localStorage.getItem('academic_stream');
+            const mainBatch = localStorage.getItem('academic_main_batch');
+            const electiveBatch = localStorage.getItem('academic_elective_batch');
+            const openElective = localStorage.getItem('academic_open_elective');
 
-            const now = new Date();
-            const currentMins = now.getHours() * 60 + now.getMinutes();
+            if (!stream || !mainBatch || !electiveBatch || !openElective) {
+                timelineContainer.innerHTML = `
+                    <div class="empty-state-card">
+                        <p>Complete onboarding details to view your schedule timeline.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const filteredSchedule = getFilteredSchedule(stream, mainBatch, electiveBatch, openElective);
+            const daySchedule = filteredSchedule[currentSelectedDay] || {};
+            let timelineHtml = '';
+            let cardsRendered = 0;
 
             TIME_SLOTS.forEach(slot => {
                 if (slot.isBreak) {
                     timelineHtml += `
                         <div class="timeline-break-card" role="note">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="break-icon"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            <span class="break-text">${slot.label} (12:40 PM - 1:25 PM)</span>
+                            <span class="break-text">Lunch Break (12:40 PM - 1:25 PM)</span>
                         </div>
                     `;
                     return;
                 }
 
-                const parseTime = (t) => {
-                    let [h, m] = t.split(':').map(Number);
-                    if (h < 6) h += 12; // Convert PM
-                    return h * 60 + m;
-                };
-                const startMins = parseTime(slot.start);
-                const endMins = parseTime(slot.end);
-                
-                const isCurrentDaySelected = (now.getDay() - 1 === DAYS.indexOf(currentSelectedDay));
-                const isActive = isCurrentDaySelected && (currentMins >= startMins && currentMins <= endMins);
+                // Check covered
+                let isCovered = false;
+                for (let prevId = 1; prevId < slot.id; prevId++) {
+                    const prevItem = daySchedule[prevId];
+                    if (prevItem && prevItem.rowspan && (prevId + prevItem.rowspan > slot.id)) {
+                        isCovered = true;
+                        break;
+                    }
+                }
+                if (isCovered) return;
 
-                let item = daySchedule[slot.id];
-                let isSpannedRef = false;
-                
-                if (item === null) {
-                    for (let id = slot.id - 1; id >= 1; id--) {
-                        const parentItem = daySchedule[id];
-                        if (parentItem && parentItem.rowspan && (id + parentItem.rowspan > slot.id)) {
-                            item = parentItem;
-                            isSpannedRef = true;
-                            break;
-                        }
+                const item = daySchedule[slot.id];
+                if (!item || (!item.subject && !item.isSplit && !item.isCustomFridaySplit)) {
+                    // Hide empty slot spaces completely
+                    return;
+                }
+
+                const times = getPeriodTimes(slot.id, item.rowspan || 1);
+                const startFormatted = formatTime(times.start);
+                const endFormatted = formatTime(times.end);
+
+                let cardSubject = item.subject || "";
+                let cardRoom = item.room || "";
+                let cardFaculty = item.faculty || "Staff";
+                let cardType = item.type || "white";
+                let isLab = false;
+
+                if (item.isSplit) {
+                    isLab = true;
+                    const lab = item.labs[0];
+                    if (lab) {
+                        cardSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
+                        cardRoom = lab.room || "N/A";
+                        cardFaculty = lab.faculty || "Staff";
                     }
                 }
 
-                if (!item || (!item.subject && !item.isSplit && !item.isCustomFridaySplit)) {
-                    timelineHtml += `
-                        <div class="timeline-card empty ${isActive ? 'active' : ''}">
-                            <div class="card-time">${slot.start} - ${slot.end}</div>
-                            <div class="card-body">
-                                <h3>Free Period</h3>
-                                <p class="room-num">No scheduled classes</p>
-                            </div>
-                        </div>
-                    `;
-                    return;
-                }
-
-                const activeClass = isActive ? 'active' : '';
-                const badgeHtml = isSpannedRef ? '<span class="status-badge continued">Continued</span>' : 
-                                  (isActive ? '<span class="status-badge live"><span class="pulse"></span> Live Now</span>' : '');
-
-                let cardContentHtml = '';
-
-                if (item.isSplit) {
-                    cardContentHtml = `
-                        <div class="card-content-header">
-                            <h3>Practical Labs</h3>
-                            ${badgeHtml}
-                        </div>
-                        <div class="lab-grid">
-                            ${item.labs.map(lab => `
-                                <div class="lab-badge type-${item.type}">
-                                    <span class="lab-batch">${lab.batch}</span>
-                                    <div class="lab-details">
-                                        <span class="lab-subject">${lab.sub}</span>
-                                        <span class="lab-room">Room ${lab.room || 'N/A'}</span>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                } else if (item.isCustomFridaySplit) {
-                    cardContentHtml = `
-                        <div class="card-content-header">
-                            <h3>Electives / Lab Split</h3>
-                            ${badgeHtml}
-                        </div>
-                        <div class="lab-grid">
-                            ${item.labs.map(lab => `
-                                <div class="lab-badge type-white">
-                                    <span class="lab-batch">${lab.batch}</span>
-                                    <div class="lab-details">
-                                        <span class="lab-subject">${lab.sub}</span>
-                                        <span class="lab-room">N/A</span>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                } else {
-                    cardContentHtml = `
-                        <div class="card-content-header">
-                            <h3>${item.subject}</h3>
-                            ${badgeHtml}
-                        </div>
-                        ${item.room ? `<p class="room-num">Room ${item.room}</p>` : ''}
-                    `;
-                }
-
                 timelineHtml += `
-                    <div class="timeline-card type-${item.type} ${activeClass}" tabindex="0">
-                        <div class="card-time">${slot.start} - ${slot.end}</div>
+                    <div class="timeline-card type-${cardType}" 
+                         data-day="${currentSelectedDay}" 
+                         data-start="${times.start}" 
+                         data-end="${times.end}" 
+                         tabindex="0">
+                        <div class="card-time">${startFormatted} - ${endFormatted}</div>
                         <div class="card-body">
-                            ${cardContentHtml}
+                            <div class="card-content-header">
+                                <h3>${cardSubject}</h3>
+                            </div>
+                            <div class="card-details-row" style="margin-top: 8px; display: flex; gap: 12px; color: var(--text-muted); font-size: 0.8rem;">
+                                ${cardRoom ? `
+                                <span style="display: inline-flex; align-items: center; gap: 4px;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    Room ${cardRoom}
+                                </span>` : ''}
+                                <span style="display: inline-flex; align-items: center; gap: 4px;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    ${cardFaculty}
+                                </span>
+                            </div>
+                            ${isLab ? `<span class="card-lab-tag" style="margin-top: 8px;">Lab</span>` : ''}
                         </div>
                     </div>
                 `;
+                cardsRendered++;
             });
 
+            if (cardsRendered === 0) {
+                timelineHtml = `
+                    <div class="timeline-card empty">
+                        <div class="card-body" style="text-align: center; padding: 20px;">
+                            <h3 style="color: var(--text-muted);">No classes scheduled</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Enjoy your free day!</p>
+                        </div>
+                    </div>
+                `;
+            }
+
             timelineContainer.innerHTML = timelineHtml;
+            updateCardStates();
         }
 
         function setupDaySelector() {
@@ -804,7 +939,6 @@
                     renderMobileTimeline();
                 });
                 
-                // Allow keyboard arrow keys traversal
                 tab.addEventListener('keydown', (e) => {
                     let targetTab = null;
                     if (e.key === 'ArrowRight' || e.key === 'Right') {
@@ -820,7 +954,6 @@
                 });
             });
             
-            // Set initial tab based on current selected day
             tabs.forEach(tab => {
                 if (tab.getAttribute('data-day') === currentSelectedDay) {
                     tab.classList.add('active');
@@ -832,78 +965,697 @@
             });
         }
 
-        // Highlight active classes on 2D table grid (Desktop/Tablet)
-        function highlightCurrent() {
-            document.querySelectorAll('.highlight-day').forEach(el => el.classList.remove('highlight-day'));
-            document.querySelectorAll('.highlight-lecture').forEach(el => el.classList.remove('highlight-lecture'));
+        // =================================================================
+        // SMART LIVE LECTURE TRACKING & STATES ENGINE (Phases 5, 6, 7 & 10)
+        // =================================================================
 
-            const now = new Date();
-            const currentDay = now.getDay(); // 1=Mon, 5=Fri
-            const currentMins = now.getHours() * 60 + now.getMinutes();
+        function updateCardStates() {
+            const currentMins = getSystemTime();
+            const dayIndex = getSystemDayIndex();
+            const isWeekend = (dayIndex === 0 || dayIndex === 6);
+            const currentDayName = DAYS[dayIndex - 1] || "Monday";
 
-            // Highlight the day column header
-            if (currentDay >= 1 && currentDay <= 5) {
-                const headers = document.querySelectorAll('thead th');
-                if (headers[currentDay]) headers[currentDay].classList.add('highlight-day');
-            }
+            const cards = document.querySelectorAll('.class-card, .timeline-card');
+            cards.forEach(card => {
+                const day = card.getAttribute('data-day');
+                const startStr = card.getAttribute('data-start');
+                const endStr = card.getAttribute('data-end');
+                if (!day || !startStr || !endStr) return;
 
-            // Build rowspan-aware matrix matching tr layout
-            const matrix = [];
-            const trs = document.querySelectorAll('tbody tr');
+                const startMins = parseTimeToMinutes(startStr);
+                const endMins = parseTimeToMinutes(endStr);
 
-            trs.forEach((tr, rIdx) => {
-                matrix[rIdx] = matrix[rIdx] || [];
-                let cIdx = 0;
-                Array.from(tr.children).forEach(td => {
-                    while (matrix[rIdx][cIdx]) cIdx++;
+                card.classList.remove('live-card-highlight', 'completed-card');
+                const badge = card.querySelector('.card-live-badge');
+                if (badge) badge.remove();
+                
+                const completedBadge = card.querySelector('.card-completed-badge');
+                if (completedBadge) completedBadge.remove();
 
-                    const rowspan = parseInt(td.getAttribute('rowspan') || 1);
-                    const colspan = parseInt(td.getAttribute('colspan') || 1);
+                const dayIdx = DAYS.indexOf(day);
+                const currentDayIdx = DAYS.indexOf(currentDayName);
 
-                    for (let r = 0; r < rowspan; r++) {
-                        for (let c = 0; c < colspan; c++) {
-                            matrix[rIdx + r] = matrix[rIdx + r] || [];
-                            matrix[rIdx + r][cIdx + c] = td;
+                if (isWeekend) {
+                    // No live updates on weekend
+                    return;
+                }
+
+                if (day === currentDayName) {
+                    if (currentMins >= startMins && currentMins < endMins) {
+                        card.classList.add('live-card-highlight');
+                        const titleContainer = card.querySelector('.card-title-container, .card-content-header');
+                        if (titleContainer) {
+                            const liveBadge = document.createElement('span');
+                            liveBadge.className = 'card-live-badge status-badge live';
+                            liveBadge.innerHTML = '<span class="pulse"></span> Live Now';
+                            titleContainer.appendChild(liveBadge);
+                        }
+                    } else if (currentMins >= endMins) {
+                        card.classList.add('completed-card');
+                        const titleContainer = card.querySelector('.card-title-container, .card-content-header');
+                        if (titleContainer) {
+                            const compBadge = document.createElement('span');
+                            compBadge.className = 'card-completed-badge status-badge completed';
+                            compBadge.innerHTML = '✓ Completed';
+                            titleContainer.appendChild(compBadge);
                         }
                     }
-                });
-            });
-
-            // Find correct time cell to highlight
-            trs.forEach((tr, rIdx) => {
-                if (tr.classList.contains('break-row')) return;
-                const timeCell = tr.querySelector('.time');
-                if (!timeCell) return;
-
-                const timeText = timeCell.innerText;
-                const [startStr, endStr] = timeText.split('-');
-
-                const parseTime = (t) => {
-                    let [h, m] = t.split(':').map(Number);
-                    if (h < 6) h += 12; // Convert PM
-                    return h * 60 + m;
-                };
-
-                const startMins = parseTime(startStr);
-                const endMins = parseTime(endStr);
-
-                if (currentMins >= startMins && currentMins <= endMins) {
-                    timeCell.classList.add('highlight-day');
-
-                    if (currentDay >= 1 && currentDay <= 5) {
-                        const activeCell = matrix[rIdx][currentDay];
-                        if (activeCell && activeCell !== timeCell && activeCell.innerText.trim() !== '') {
-                            activeCell.classList.add('highlight-lecture');
-                        }
+                } else if (dayIdx < currentDayIdx) {
+                    card.classList.add('completed-card');
+                    const titleContainer = card.querySelector('.card-title-container, .card-content-header');
+                    if (titleContainer) {
+                        const compBadge = document.createElement('span');
+                        compBadge.className = 'card-completed-badge status-badge completed';
+                        compBadge.innerHTML = '✓ Completed';
+                        titleContainer.appendChild(compBadge);
                     }
                 }
             });
-            
-            // Re-render mobile timeline view to refresh its status highlights
-            renderMobileTimeline();
         }
 
-        // Save layout canvas export
+        function updateLiveLectureTracker() {
+            const liveContainer = document.getElementById('live-tracker-panel');
+            if (!liveContainer) return;
+
+            const stream = localStorage.getItem('academic_stream');
+            const mainBatch = localStorage.getItem('academic_main_batch');
+            const electiveBatch = localStorage.getItem('academic_elective_batch');
+            const openElective = localStorage.getItem('academic_open_elective');
+            if (!stream || !mainBatch || !electiveBatch || !openElective) {
+                liveContainer.innerHTML = '';
+                return;
+            }
+
+            const currentMins = getSystemTime();
+            const dayIndex = getSystemDayIndex();
+            const isWeekend = (dayIndex === 0 || dayIndex === 6);
+            const currentDay = DAYS[dayIndex - 1] || "Monday";
+
+            const filteredSchedule = getFilteredSchedule(stream, mainBatch, electiveBatch, openElective);
+            const daySchedule = filteredSchedule[currentDay] || {};
+
+            let ongoingItem = null;
+            let ongoingSlot = null;
+
+            let upcomingItem = null;
+            let upcomingSlot = null;
+            let upcomingDay = null;
+
+            // 1. Check for ongoing lecture today
+            if (!isWeekend) {
+                TIME_SLOTS.forEach(slot => {
+                    const times = getPeriodTimes(slot.id, 1);
+                    if (!times) return;
+                    
+                    const startMins = parseTimeToMinutes(times.start);
+                    
+                    let item = null;
+                    if (slot.isBreak) {
+                        item = { subject: "Lunch Break", isBreak: true, room: "Cafeteria", faculty: "N/A" };
+                    } else {
+                        item = daySchedule[slot.id];
+                    }
+
+                    if (item) {
+                        const actualTimes = getPeriodTimes(slot.id, item.rowspan || 1);
+                        const actualEndMins = parseTimeToMinutes(actualTimes.end);
+                        
+                        if (currentMins >= startMins && currentMins < actualEndMins) {
+                            ongoingItem = item;
+                            ongoingSlot = slot;
+                            ongoingSlot.actualEndMins = actualEndMins;
+                            ongoingSlot.actualStartMins = startMins;
+                        }
+                    }
+                });
+            }
+
+            // 2. Find next lecture today
+            if (!isWeekend) {
+                let minDiff = Infinity;
+                TIME_SLOTS.forEach(slot => {
+                    if (slot.isBreak) return;
+                    const item = daySchedule[slot.id];
+                    if (item) {
+                        const times = getPeriodTimes(slot.id, 1);
+                        const startMins = parseTimeToMinutes(times.start);
+                        const diff = startMins - currentMins;
+                        if (diff > 0 && diff < minDiff) {
+                            minDiff = diff;
+                            upcomingItem = item;
+                            upcomingSlot = slot;
+                            upcomingDay = currentDay;
+                        }
+                    }
+                });
+            }
+
+            // If no upcoming class today, scan subsequent week days
+            if (!upcomingItem) {
+                let currentDayIdx = isWeekend ? 0 : DAYS.indexOf(currentDay);
+                for (let i = 1; i <= 7; i++) {
+                    const nextDayIdx = (currentDayIdx + i) % 7;
+                    const nextDayName = DAYS[nextDayIdx - 1];
+                    if (!nextDayName) continue; // Skip weekend days
+
+                    const nextDaySchedule = filteredSchedule[nextDayName];
+                    if (nextDaySchedule) {
+                        let firstSlot = null;
+                        let firstItem = null;
+                        TIME_SLOTS.forEach(slot => {
+                            if (slot.isBreak) return;
+                            const item = nextDaySchedule[slot.id];
+                            if (item && !firstItem) {
+                                firstItem = item;
+                                firstSlot = slot;
+                            }
+                        });
+
+                        if (firstItem) {
+                            upcomingItem = firstItem;
+                            upcomingSlot = firstSlot;
+                            upcomingDay = nextDayName;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 3. Render Ongoing Lecture
+            let ongoingHtml = '';
+            if (ongoingItem) {
+                const times = getPeriodTimes(ongoingSlot.id, ongoingItem.rowspan || 1);
+                const startFormatted = formatTime(times.start);
+                const endFormatted = formatTime(times.end);
+                
+                let ongoingSubject = ongoingItem.subject || "";
+                let ongoingRoom = ongoingItem.room || "N/A";
+                let ongoingFaculty = ongoingItem.faculty || "Staff";
+                let isLab = false;
+
+                if (ongoingItem.isSplit) {
+                    isLab = true;
+                    const lab = ongoingItem.labs[0];
+                    if (lab) {
+                        ongoingSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
+                        ongoingRoom = lab.room || "N/A";
+                        ongoingFaculty = lab.faculty || "Staff";
+                    }
+                }
+
+                ongoingHtml = `
+                    <div class="live-card active-live">
+                        <div class="live-indicator">
+                            <span class="live-dot pulse"></span>
+                            <span class="live-text">🟢 LIVE NOW</span>
+                        </div>
+                        <div class="live-card-body">
+                            <h3 class="live-subject">${ongoingSubject}</h3>
+                            <div class="live-meta">
+                                <div class="meta-item">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    <span>Room ${ongoingRoom}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    <span>${ongoingFaculty}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    <span>${startFormatted} - ${endFormatted}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                ongoingHtml = `
+                    <div class="live-card idle-live">
+                        <div class="live-indicator">
+                            <span class="idle-dot"></span>
+                            <span class="live-text muted">No ongoing lecture right now</span>
+                        </div>
+                        <div class="live-card-body">
+                            <h3 class="live-subject muted">Enjoy your break!</h3>
+                            <p class="live-subtitle">No classes are currently scheduled at this time.</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 4. Render Upcoming Lecture
+            let upcomingHtml = '';
+            if (upcomingItem) {
+                const times = getPeriodTimes(upcomingSlot.id, upcomingItem.rowspan || 1);
+                const startFormatted = formatTime(times.start);
+
+                let upcomingSubject = upcomingItem.subject || "";
+                let upcomingRoom = upcomingItem.room || "N/A";
+                let upcomingFaculty = upcomingItem.faculty || "Staff";
+
+                if (upcomingItem.isSplit) {
+                    const lab = upcomingItem.labs[0];
+                    if (lab) {
+                        upcomingSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
+                        upcomingRoom = lab.room || "N/A";
+                        upcomingFaculty = lab.faculty || "Staff";
+                    }
+                }
+
+                let countdownText = '';
+                if (upcomingDay === currentDay && !isWeekend) {
+                    const startMins = parseTimeToMinutes(times.start);
+                    const diffMins = startMins - currentMins;
+                    if (diffMins > 0) {
+                        if (diffMins < 60) {
+                            countdownText = `Starts in ${diffMins} min${diffMins > 1 ? 's' : ''}`;
+                        } else {
+                            const hrs = Math.floor(diffMins / 60);
+                            const mins = diffMins % 60;
+                            countdownText = `Starts in ${hrs}h ${mins}m`;
+                        }
+                    } else {
+                        countdownText = `Starts today at ${startFormatted}`;
+                    }
+                } else {
+                    countdownText = `Starts ${upcomingDay} at ${startFormatted}`;
+                }
+
+                upcomingHtml = `
+                    <div class="upcoming-card">
+                        <div class="upcoming-indicator">
+                            <span>Next Lecture</span>
+                            <span class="countdown-badge">${countdownText}</span>
+                        </div>
+                        <div class="upcoming-card-body">
+                            <h3 class="upcoming-subject">${upcomingSubject}</h3>
+                            <div class="upcoming-meta">
+                                <div class="meta-item">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    <span>Room ${upcomingRoom}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    <span>${upcomingFaculty}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                upcomingHtml = `
+                    <div class="upcoming-card idle-upcoming">
+                        <div class="upcoming-indicator">
+                            <span>Next Lecture</span>
+                        </div>
+                        <div class="upcoming-card-body">
+                            <h3 class="upcoming-subject muted">No upcoming lectures</h3>
+                        </div>
+                    </div>
+                `;
+            }
+
+            liveContainer.innerHTML = `
+                <div class="live-dashboard">
+                    ${ongoingHtml}
+                    ${upcomingHtml}
+                </div>
+            `;
+
+            updateCardStates();
+        }
+
+        // =================================================================
+        // ONBOARDING & SETTINGS CONTROLLERS
+        // =================================================================
+
+        let selectedStream = "";
+
+        const populateElectiveDropdown = (stream, selectElement, currentValue = "") => {
+            // Clear existing options except the first placeholder
+            selectElement.innerHTML = '<option value="" disabled selected>Select Elective Labs Batch</option>';
+            
+            const options = (stream === 'AI') ? ['1A08', '1B08', '1C08'] : ['1A08', '1B08'];
+            options.forEach(opt => {
+                const optionEl = document.createElement('option');
+                optionEl.value = opt;
+                optionEl.innerText = opt;
+                if (opt === currentValue) {
+                    optionEl.selected = true;
+                }
+                selectElement.appendChild(optionEl);
+            });
+        };
+
+        function setupOnboardingHandlers() {
+            const obNextBtn = document.getElementById('ob-next-btn');
+            const obBackBtn = document.getElementById('ob-back-btn');
+            const obStep2NextBtn = document.getElementById('ob-step-2-next-btn');
+            const obOEBackBtn = document.getElementById('ob-oe-back-btn');
+            const obFinishBtn = document.getElementById('ob-finish-btn');
+            
+            const obStep1 = document.getElementById('ob-step-1');
+            const obStep2 = document.getElementById('ob-step-2');
+            const obStep3 = document.getElementById('ob-step-3');
+            
+            const obMainBatchSelect = document.getElementById('ob-main-batch-select');
+            const obMainBatchError = document.getElementById('ob-main-batch-error');
+            const obElectiveBatchSelect = document.getElementById('ob-elective-batch-select');
+            const obElectiveBatchError = document.getElementById('ob-elective-batch-error');
+            const obOESelect = document.getElementById('ob-oe-select');
+            const obOEError = document.getElementById('ob-oe-error');
+            
+            const aiCard = document.getElementById('ob-stream-ai');
+            const cyberCard = document.getElementById('ob-stream-cyber');
+            
+            const selectStream = (streamName, activeCard, inactiveCard) => {
+                selectedStream = streamName;
+                activeCard.classList.add('selected');
+                activeCard.setAttribute('aria-checked', 'true');
+                inactiveCard.classList.remove('selected');
+                inactiveCard.setAttribute('aria-checked', 'false');
+                obNextBtn.disabled = false;
+                
+                // Populate the elective dropdown based on stream selection
+                populateElectiveDropdown(selectedStream, obElectiveBatchSelect);
+            };
+            
+            aiCard.addEventListener('click', () => selectStream('AI', aiCard, cyberCard));
+            cyberCard.addEventListener('click', () => selectStream('Cyber Security', cyberCard, aiCard));
+            
+            aiCard.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    selectStream('AI', aiCard, cyberCard);
+                    e.preventDefault();
+                }
+            });
+            cyberCard.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    selectStream('Cyber Security', cyberCard, aiCard);
+                    e.preventDefault();
+                }
+            });
+            
+            obNextBtn.addEventListener('click', () => {
+                obStep1.style.display = 'none';
+                obStep2.style.display = 'block';
+                obMainBatchSelect.focus();
+            });
+            
+            obBackBtn.addEventListener('click', () => {
+                obStep2.style.display = 'none';
+                obStep1.style.display = 'block';
+            });
+            
+            obStep2NextBtn.addEventListener('click', () => {
+                const mainBatch = obMainBatchSelect.value;
+                const electiveBatch = obElectiveBatchSelect.value;
+                
+                let hasError = false;
+                
+                // Validate Main Batch
+                if (!mainBatch) {
+                    obMainBatchError.innerText = "Please select a main batch.";
+                    obMainBatchSelect.classList.add('input-error');
+                    hasError = true;
+                } else {
+                    obMainBatchError.innerText = "";
+                    obMainBatchSelect.classList.remove('input-error');
+                }
+                
+                // Validate Elective Batch
+                if (!electiveBatch) {
+                    obElectiveBatchError.innerText = "Please select an elective batch.";
+                    obElectiveBatchSelect.classList.add('input-error');
+                    hasError = true;
+                } else {
+                    obElectiveBatchError.innerText = "";
+                    obElectiveBatchSelect.classList.remove('input-error');
+                }
+                
+                if (hasError) return;
+                
+                obStep2.style.display = 'none';
+                obStep3.style.display = 'block';
+                obOESelect.focus();
+            });
+            
+            obOEBackBtn.addEventListener('click', () => {
+                obStep3.style.display = 'none';
+                obStep2.style.display = 'block';
+            });
+            
+            obFinishBtn.addEventListener('click', () => {
+                const mainBatch = obMainBatchSelect.value;
+                const electiveBatch = obElectiveBatchSelect.value;
+                const openElective = obOESelect.value;
+                
+                if (!openElective) {
+                    obOEError.innerText = "Please select your open elective subject.";
+                    obOESelect.classList.add('input-error');
+                    return;
+                } else {
+                    obOEError.innerText = "";
+                    obOESelect.classList.remove('input-error');
+                }
+                
+                localStorage.setItem('academic_stream', selectedStream);
+                localStorage.setItem('academic_main_batch', mainBatch);
+                localStorage.setItem('academic_elective_batch', electiveBatch);
+                localStorage.setItem('academic_open_elective', openElective);
+                
+                const onboardingOverlay = document.getElementById('onboarding-overlay');
+                onboardingOverlay.classList.remove('active');
+                setTimeout(() => onboardingOverlay.style.display = 'none', 300);
+                
+                renderTimetableGrid();
+                renderMobileTimeline();
+                updateLiveLectureTracker();
+            });
+            
+            obMainBatchSelect.addEventListener('change', () => {
+                obMainBatchSelect.classList.remove('input-error');
+                obMainBatchError.innerText = "";
+            });
+            
+            obElectiveBatchSelect.addEventListener('change', () => {
+                obElectiveBatchSelect.classList.remove('input-error');
+                obElectiveBatchError.innerText = "";
+            });
+            
+            obOESelect.addEventListener('change', () => {
+                obOESelect.classList.remove('input-error');
+                obOEError.innerText = "";
+            });
+        }
+ 
+        function setupSettingsHandlers() {
+            const settingsBtn = document.getElementById('settings-btn');
+            const settingsOverlay = document.getElementById('settings-overlay');
+            const settingsCancelBtn = document.getElementById('settings-cancel-btn');
+            const settingsSaveBtn = document.getElementById('settings-save-btn');
+            
+            const settingsMainBatchSelect = document.getElementById('settings-main-batch-select');
+            const settingsMainBatchError = document.getElementById('settings-main-batch-error');
+            const settingsElectiveBatchSelect = document.getElementById('settings-elective-batch-select');
+            const settingsElectiveBatchError = document.getElementById('settings-elective-batch-error');
+            const settingsOESelect = document.getElementById('settings-oe-select');
+            const settingsOEError = document.getElementById('settings-oe-error');
+            
+            const setStreamAi = document.getElementById('set-stream-ai');
+            const setStreamCyber = document.getElementById('set-stream-cyber');
+            
+            const handleStreamChange = () => {
+                const currentStream = setStreamAi.checked ? 'AI' : 'Cyber Security';
+                const currentElectiveVal = settingsElectiveBatchSelect.value;
+                populateElectiveDropdown(currentStream, settingsElectiveBatchSelect, currentElectiveVal);
+            };
+            
+            setStreamAi.addEventListener('change', handleStreamChange);
+            setStreamCyber.addEventListener('change', handleStreamChange);
+            
+            settingsBtn.addEventListener('click', () => {
+                const stream = localStorage.getItem('academic_stream') || 'AI';
+                const mainBatch = localStorage.getItem('academic_main_batch') || '';
+                const electiveBatch = localStorage.getItem('academic_elective_batch') || '';
+                const openElective = localStorage.getItem('academic_open_elective') || '';
+                
+                if (stream === 'AI') {
+                    setStreamAi.checked = true;
+                } else {
+                    setStreamCyber.checked = true;
+                }
+                
+                settingsMainBatchSelect.value = mainBatch;
+                settingsMainBatchError.innerText = "";
+                settingsMainBatchSelect.classList.remove('input-error');
+                
+                populateElectiveDropdown(stream, settingsElectiveBatchSelect, electiveBatch);
+                settingsElectiveBatchError.innerText = "";
+                settingsElectiveBatchSelect.classList.remove('input-error');
+                
+                settingsOESelect.value = openElective;
+                settingsOEError.innerText = "";
+                settingsOESelect.classList.remove('input-error');
+                
+                settingsOverlay.style.display = 'flex';
+                settingsOverlay.offsetWidth;
+                settingsOverlay.classList.add('active');
+                settingsMainBatchSelect.focus();
+                trapFocus(settingsOverlay);
+            });
+            
+            const closeSettings = () => {
+                settingsOverlay.classList.remove('active');
+                setTimeout(() => {
+                    settingsOverlay.style.display = 'none';
+                }, 300);
+            };
+            
+            settingsCancelBtn.addEventListener('click', closeSettings);
+            
+            settingsSaveBtn.addEventListener('click', () => {
+                const stream = setStreamAi.checked ? 'AI' : 'Cyber Security';
+                const mainBatch = settingsMainBatchSelect.value;
+                const electiveBatch = settingsElectiveBatchSelect.value;
+                const openElective = settingsOESelect.value;
+                
+                let hasError = false;
+                
+                // Validate Main Batch
+                if (!mainBatch) {
+                    settingsMainBatchError.innerText = "Please select a main batch.";
+                    settingsMainBatchSelect.classList.add('input-error');
+                    hasError = true;
+                } else {
+                    settingsMainBatchError.innerText = "";
+                    settingsMainBatchSelect.classList.remove('input-error');
+                }
+                
+                // Validate Elective Batch
+                if (!electiveBatch) {
+                    settingsElectiveBatchError.innerText = "Please select an elective batch.";
+                    settingsElectiveBatchSelect.classList.add('input-error');
+                    hasError = true;
+                } else {
+                    settingsElectiveBatchError.innerText = "";
+                    settingsElectiveBatchSelect.classList.remove('input-error');
+                }
+                
+                // Validate Open Elective
+                if (!openElective) {
+                    settingsOEError.innerText = "Please select your open elective subject.";
+                    settingsOESelect.classList.add('input-error');
+                    hasError = true;
+                } else {
+                    settingsOEError.innerText = "";
+                    settingsOESelect.classList.remove('input-error');
+                }
+                
+                if (hasError) return;
+                
+                localStorage.setItem('academic_stream', stream);
+                localStorage.setItem('academic_main_batch', mainBatch);
+                localStorage.setItem('academic_elective_batch', electiveBatch);
+                localStorage.setItem('academic_open_elective', openElective);
+                
+                closeSettings();
+                
+                renderTimetableGrid();
+                renderMobileTimeline();
+                updateLiveLectureTracker();
+            });
+            
+            settingsMainBatchSelect.addEventListener('change', () => {
+                settingsMainBatchSelect.classList.remove('input-error');
+                settingsMainBatchError.innerText = "";
+            });
+            
+            settingsElectiveBatchSelect.addEventListener('change', () => {
+                settingsElectiveBatchSelect.classList.remove('input-error');
+                settingsElectiveBatchError.innerText = "";
+            });
+            
+            settingsOESelect.addEventListener('change', () => {
+                settingsOESelect.classList.remove('input-error');
+                settingsOEError.innerText = "";
+            });
+            
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && settingsOverlay.classList.contains('active')) {
+                    closeSettings();
+                }
+            });
+        }
+
+        function setupThemeToggle() {
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const sunIcon = themeToggleBtn.querySelector('.theme-icon-sun');
+            const moonIcon = themeToggleBtn.querySelector('.theme-icon-moon');
+            
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            
+            const updateThemeIcons = (theme) => {
+                if (theme === 'dark') {
+                    sunIcon.style.display = 'inline-block';
+                    moonIcon.style.display = 'none';
+                } else {
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'inline-block';
+                }
+            };
+            
+            updateThemeIcons(currentTheme);
+            
+            themeToggleBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const target = current === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', target);
+                localStorage.setItem('theme', target);
+                updateThemeIcons(target);
+            });
+        }
+
+        function initAcademicProfile() {
+            const onboardingOverlay = document.getElementById('onboarding-overlay');
+            const stream = localStorage.getItem('academic_stream');
+            const mainBatch = localStorage.getItem('academic_main_batch');
+            const electiveBatch = localStorage.getItem('academic_elective_batch');
+            const openElective = localStorage.getItem('academic_open_elective');
+            
+            if (!stream || !mainBatch || !electiveBatch || !openElective) {
+                // Fallback / migration for old users who have 'academic_batch'
+                const oldBatch = localStorage.getItem('academic_batch');
+                if (oldBatch) {
+                    localStorage.setItem('academic_main_batch', oldBatch);
+                    localStorage.setItem('academic_elective_batch', oldBatch);
+                    localStorage.removeItem('academic_batch');
+                }
+                
+                // If they completed batches but miss elective, give fallback so we don't block
+                if (localStorage.getItem('academic_stream') && localStorage.getItem('academic_main_batch')) {
+                    localStorage.setItem('academic_open_elective', 'Sustainability Engineering');
+                    initAcademicProfile();
+                    return;
+                }
+                
+                onboardingOverlay.classList.add('active');
+                setupOnboardingHandlers();
+            } else {
+                onboardingOverlay.classList.remove('active');
+                onboardingOverlay.style.display = 'none';
+            }
+            
+            setupSettingsHandlers();
+            setupThemeToggle();
+        }
+
+        // =================================================================
+        // EXPORT HANDLER
+        // =================================================================
+
         const downloadBtn = document.getElementById('download-btn');
         if (downloadBtn) {
             downloadBtn.addEventListener('click', () => {
@@ -911,7 +1663,6 @@
                 let targetEl = document.querySelector('.table-wrapper');
                 
                 if (isMobile) {
-                    // On mobile, temporarily display the table off-screen for rendering
                     targetEl.style.display = 'block';
                     targetEl.style.position = 'absolute';
                     targetEl.style.left = '-9999px';
@@ -922,7 +1673,7 @@
 
                 html2canvas(targetEl, {
                     scale: 2.5,
-                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-card').trim() || '#111111',
+                    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-card').trim() || '#0A0A0A',
                     windowWidth: 1200,
                     width: 1200
                 }).then(canvas => {
@@ -941,7 +1692,10 @@
             });
         }
 
-        // --- Break Time Tech Modal System ---
+        // =================================================================
+        // BREAK TIME TECH MODAL SYSTEM
+        // =================================================================
+
         const breakOverlay = document.getElementById('break-overlay');
         const breakCanvas = document.getElementById('break-canvas');
         const breakCtx = breakCanvas ? breakCanvas.getContext('2d') : null;
@@ -955,7 +1709,6 @@
         let breakStartTime = null;
         let breakEndTime = null;
 
-        // Clean, tech-style particles (soft glowing orbs)
         const techColors = ['#FF3366', '#00C3FF', '#8A2BE2', '#00E5FF', '#FFFFFF'];
 
         class TechParticle {
@@ -1079,27 +1832,67 @@
             const roomEl = document.getElementById('break-next-lecture-room');
             if (!subjectEl || !roomEl) return;
 
-            const now = new Date();
-            const currentDay = DAYS[now.getDay() - 1] || "Monday";
-            const nextSlot = SCHEDULE[currentDay][5]; // Slot 5 starts at 1:25 PM
+            const stream = localStorage.getItem('academic_stream');
+            const mainBatch = localStorage.getItem('academic_main_batch');
+            const electiveBatch = localStorage.getItem('academic_elective_batch');
+            const openElective = localStorage.getItem('academic_open_elective');
+            if (!stream || !mainBatch || !electiveBatch || !openElective) {
+                subjectEl.innerText = "Please complete onboarding";
+                roomEl.innerText = "";
+                return;
+            }
 
+            const currentDay = getSystemDay();
+            const filteredSchedule = getFilteredSchedule(stream, mainBatch, electiveBatch, openElective);
+            const daySchedule = filteredSchedule[currentDay] || {};
+
+            // Check slot 5 first (starts at 1:25 PM, right after lunch break ends)
+            const nextSlot = daySchedule[5];
+            
             if (nextSlot) {
+                let cardSubject = nextSlot.subject || "";
+                let cardRoom = nextSlot.room || "N/A";
+                
                 if (nextSlot.isSplit) {
-                    subjectEl.innerText = `Practical Labs`;
-                    roomEl.innerText = nextSlot.labs.map(l => `${l.batch}: ${l.sub}`).join(' | ');
-                } else {
-                    subjectEl.innerText = nextSlot.subject || "Free Period";
-                    roomEl.innerText = nextSlot.room ? `Room ${nextSlot.room}` : "No Room Assigned";
+                    const lab = nextSlot.labs[0];
+                    if (lab) {
+                        cardSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
+                        cardRoom = lab.room || "N/A";
+                    }
                 }
+                
+                subjectEl.innerText = cardSubject || "Free Period";
+                roomEl.innerText = `Room ${cardRoom}`;
             } else {
-                subjectEl.innerText = "Free Period";
-                roomEl.innerText = "Enjoy your break";
+                let foundItem = null;
+                for (let id = 6; id <= 8; id++) {
+                    if (daySchedule[id]) {
+                        foundItem = daySchedule[id];
+                        break;
+                    }
+                }
+                
+                if (foundItem) {
+                    let cardSubject = foundItem.subject || "";
+                    let cardRoom = foundItem.room || "N/A";
+                    if (foundItem.isSplit) {
+                        const lab = foundItem.labs[0];
+                        if (lab) {
+                            cardSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
+                            cardRoom = lab.room || "N/A";
+                        }
+                    }
+                    subjectEl.innerText = cardSubject;
+                    roomEl.innerText = `Room ${cardRoom}`;
+                } else {
+                    subjectEl.innerText = "Free Period";
+                    roomEl.innerText = "Enjoy your break";
+                }
             }
         }
 
-        // Accessibility Modal Focus Trap Helper
         function trapFocus(modalEl) {
-            const focusableElements = modalEl.querySelectorAll('button, [tabindex="0"], a');
+            const focusableElements = modalEl.querySelectorAll('button, [tabindex="0"], a, input[type="text"], input[type="radio"]');
             if (focusableElements.length === 0) return;
             const firstFocusable = focusableElements[0];
             const lastFocusable = focusableElements[focusableElements.length - 1];
@@ -1130,7 +1923,6 @@
                 breakStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 40, 0);
                 breakEndTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 13, 25, 0);
             } else {
-                // Test mode: 45 minute simulated countdown. Always reset when entering test mode.
                 const endMins = now.getTime() + 45 * 60 * 1000;
                 sessionStorage.setItem('testBreakEnd', endMins);
                 breakEndTime = new Date(endMins);
@@ -1190,10 +1982,9 @@
         function showBreakPopup() {
             if (breakOverlay) {
                 breakOverlay.style.display = 'flex';
-                breakOverlay.offsetWidth; // Reflow
+                breakOverlay.offsetWidth;
                 breakOverlay.classList.add('active');
                 
-                // Focus modal control
                 const firstBtn = document.getElementById('break-reload-btn');
                 if (firstBtn) firstBtn.focus();
                 trapFocus(breakOverlay);
@@ -1213,7 +2004,6 @@
             return currentMins >= startMins && currentMins < endMins;
         }
 
-        const urlParams = new URLSearchParams(window.location.search);
         const isTestMode = urlParams.has('test') && urlParams.get('test') === 'break';
 
         function checkAndOpenBreak() {
@@ -1255,11 +2045,10 @@
                     breakOverlay.style.display = 'none';
                     stopAnimation();
                     stopBreakOverlayTicker();
-                }, 300); // 300ms transition time
+                }, 300);
             }
         }
 
-        // Event Listeners
         window.addEventListener('resize', resizeCanvas);
         
         if (breakCanvas) {
@@ -1289,27 +2078,179 @@
             });
         }
 
-        // Accessibility Modal Lock: Allow escape key closing for the break popup
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && breakOverlay && breakOverlay.classList.contains('active')) {
                 closeBreakPopup();
             }
         });
 
-        // Initialize Dynamic Pages on Load
+        // =================================================================
+        // DOM INITIALIZATION
+        // =================================================================
+
         document.addEventListener('DOMContentLoaded', () => {
+            initAcademicProfile();
             renderTimetableGrid();
             renderMobileTimeline();
             setupDaySelector();
-            highlightCurrent();
+            updateLiveLectureTracker();
             checkAndOpenBreak();
             
-            // Periodical loops
-            setInterval(highlightCurrent, 60000);
+            // Loop once per minute to avoid battery draining (Phase 10)
+            setInterval(updateLiveLectureTracker, 60000);
             setInterval(checkAndOpenBreak, 60000);
         });
     </script>
     
+    <!-- Onboarding Fullscreen Overlay -->
+    <div id="onboarding-overlay" class="onboarding-overlay" role="dialog" aria-modal="true" aria-labelledby="onboarding-title">
+        <div class="onboarding-card">
+            <div class="onboarding-header">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="logo-icon"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                <h2 id="onboarding-title">Personalize Your Schedule</h2>
+                <p>Set up your profile to filter classes, labs, and track live lectures.</p>
+            </div>
+            
+            <!-- Step 1: Select Stream -->
+            <div class="onboarding-step active" id="ob-step-1">
+                <h3>Select Your Stream</h3>
+                <div class="stream-selection-grid">
+                    <div class="stream-card" id="ob-stream-ai" tabindex="0" role="radio" aria-checked="false">
+                        <div class="stream-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        </div>
+                        <div class="stream-card-info">
+                            <h4>Artificial Intelligence (AI)</h4>
+                            <p>Focus on Machine Learning, Python, and data-driven intelligence.</p>
+                        </div>
+                    </div>
+                    <div class="stream-card" id="ob-stream-cyber" tabindex="0" role="radio" aria-checked="false">
+                        <div class="stream-card-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <div class="stream-card-info">
+                            <h4>Cyber Security</h4>
+                            <p>Focus on network defense, ethical hacking, and cyber threat hunting.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="onboarding-footer">
+                    <button id="ob-next-btn" class="tech-button primary" disabled>Next Step</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Select Batches -->
+            <div class="onboarding-step" id="ob-step-2" style="display: none;">
+                <h3>Select Your Batches</h3>
+                <div class="batch-input-container">
+                    <label for="ob-main-batch-select" class="tech-label">Main Labs Batch (SE, DAA, Python)</label>
+                    <select id="ob-main-batch-select" class="tech-input" style="margin-bottom: 4px; width: 100%; display: block; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2523A1A1AA%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 16px top 50%; background-size: 10px auto;">
+                        <option value="" disabled selected>Select Main Labs Batch</option>
+                        <option value="1A08">1A08</option>
+                        <option value="1B08">1B08</option>
+                        <option value="1C08">1C08</option>
+                        <option value="1D08">1D08</option>
+                    </select>
+                    <span class="error-msg" id="ob-main-batch-error" style="margin-bottom: 12px; display: block;"></span>
+                    
+                    <label for="ob-elective-batch-select" class="tech-label">Elective Labs Batch (AI / Cyber)</label>
+                    <select id="ob-elective-batch-select" class="tech-input" style="margin-bottom: 4px; width: 100%; display: block; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2523A1A1AA%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 16px top 50%; background-size: 10px auto;">
+                        <option value="" disabled selected>Select Elective Labs Batch</option>
+                    </select>
+                    <span class="error-msg" id="ob-elective-batch-error"></span>
+                </div>
+                <div class="onboarding-footer">
+                    <button id="ob-back-btn" class="tech-button secondary outline">Back</button>
+                    <button id="ob-step-2-next-btn" class="tech-button primary">Next Step</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Select Open Elective -->
+            <div class="onboarding-step" id="ob-step-3" style="display: none;">
+                <h3>Select Your Open Elective</h3>
+                <div class="batch-input-container">
+                    <label for="ob-oe-select" class="tech-label">Open Elective Subject</label>
+                    <select id="ob-oe-select" class="tech-input" style="margin-bottom: 4px; width: 100%; display: block; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2523A1A1AA%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 16px top 50%; background-size: 10px auto;">
+                        <option value="" disabled selected>Select Open Elective Subject</option>
+                        <option value="Sustainability Engineering">Sustainability Engineering</option>
+                        <option value="Energy Systems">Energy Systems</option>
+                        <option value="Sensor & Automation">Sensor & Automation</option>
+                        <option value="Non-Conventional Energy Sources">Non-Conventional Energy Sources</option>
+                        <option value="Project Management">Project Management</option>
+                    </select>
+                    <span class="error-msg" id="ob-oe-error"></span>
+                </div>
+                <div class="onboarding-footer">
+                    <button id="ob-oe-back-btn" class="tech-button secondary outline">Back</button>
+                    <button id="ob-finish-btn" class="tech-button primary">Finish Setup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Sleek Modal -->
+    <div id="settings-overlay" class="tech-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title" style="display: none;">
+        <div class="tech-modal">
+            <div class="modal-header">
+                <div class="header-left">
+                    <div class="pulse-indicator"></div>
+                    <h2 id="settings-title" class="modal-title">Academic Details</h2>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="settings-group">
+                    <label class="settings-label">Stream</label>
+                    <div class="settings-stream-grid">
+                        <label class="settings-radio-card" id="set-stream-ai-card">
+                            <input type="radio" name="settings-stream" id="set-stream-ai" value="AI">
+                            <div class="radio-card-content">
+                                <span>Artificial Intelligence</span>
+                            </div>
+                        </label>
+                        <label class="settings-radio-card" id="set-stream-cyber-card">
+                            <input type="radio" name="settings-stream" id="set-stream-cyber" value="Cyber Security">
+                            <div class="radio-card-content">
+                                <span>Cyber Security</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-group" style="margin-top: 20px;">
+                    <label for="settings-main-batch-select" class="settings-label">Main Labs Batch</label>
+                    <select id="settings-main-batch-select" class="settings-text-input" style="margin-bottom: 4px; width: 100%; display: block; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2523A1A1AA%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 16px top 50%; background-size: 10px auto;">
+                        <option value="" disabled selected>Select Main Labs Batch</option>
+                        <option value="1A08">1A08</option>
+                        <option value="1B08">1B08</option>
+                        <option value="1C08">1C08</option>
+                        <option value="1D08">1D08</option>
+                    </select>
+                    <span class="error-msg" id="settings-main-batch-error" style="margin-bottom: 12px; display: block;"></span>
+                    
+                    <label for="settings-elective-batch-select" class="settings-label">Elective Labs Batch</label>
+                    <select id="settings-elective-batch-select" class="settings-text-input" style="margin-bottom: 4px; width: 100%; display: block; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2523A1A1AA%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 16px top 50%; background-size: 10px auto;">
+                        <option value="" disabled selected>Select Elective Labs Batch</option>
+                    </select>
+                    <span class="error-msg" id="settings-elective-batch-error" style="margin-bottom: 12px; display: block;"></span>
+
+                    <label for="settings-oe-select" class="settings-label">Open Elective Subject</label>
+                    <select id="settings-oe-select" class="settings-text-input" style="margin-bottom: 4px; width: 100%; display: block; appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2523A1A1AA%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 16px top 50%; background-size: 10px auto;">
+                        <option value="" disabled selected>Select Open Elective Subject</option>
+                        <option value="Sustainability Engineering">Sustainability Engineering</option>
+                        <option value="Energy Systems">Energy Systems</option>
+                        <option value="Sensor & Automation">Sensor & Automation</option>
+                        <option value="Non-Conventional Energy Sources">Non-Conventional Energy Sources</option>
+                        <option value="Project Management">Project Management</option>
+                    </select>
+                    <span class="error-msg" id="settings-oe-error" style="margin-bottom: 12px; display: block;"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="settings-cancel-btn" class="tech-button secondary outline">Cancel</button>
+                <button id="settings-save-btn" class="tech-button primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Load local offline-capable html2canvas library -->
     <script src="html2canvas.min.js"></script>
 </body>
