@@ -937,6 +937,8 @@ html[data-theme="light"] .status-badge.completed {
     font-weight: 600;
     color: var(--text-white);
     margin-bottom: 4px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .status-badge {
@@ -1397,4 +1399,27 @@ html[data-theme="light"] .status-badge.completed {
 select option {
     background-color: var(--bg-card);
     color: var(--text-white);
+}
+
+/* Open App State Button (Neon Cyan) */
+.tech-button.open-app-state {
+    background-color: rgba(0, 195, 255, 0.1) !important;
+    color: var(--color-secondary) !important;
+    border-color: rgba(0, 195, 255, 0.3) !important;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(0, 195, 255, 0.15);
+    transition: all 0.2s ease;
+}
+.tech-button.open-app-state:hover {
+    background-color: rgba(0, 195, 255, 0.2) !important;
+    border-color: var(--color-secondary) !important;
+    box-shadow: 0 0 16px rgba(0, 195, 255, 0.3);
+}
+
+/* Ensure mobile tabs don't overflow on small screens down to 320px */
+@media (max-width: 375px) {
+    .segment-tab {
+        font-size: 0.75rem;
+        padding: 0 2px;
+    }
 }

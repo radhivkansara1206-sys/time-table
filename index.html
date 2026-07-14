@@ -66,7 +66,7 @@
                 <button class="segment-tab" data-day="Friday" role="tab" aria-selected="false" id="tab-fri" aria-controls="panel-fri">Fri</button>
             </div>
             
-            <div class="agenda-timeline" id="mobile-timeline" role="tabpanel" id="panel-day" aria-labelledby="tab-day">
+            <div class="agenda-timeline" id="mobile-timeline" role="tabpanel" aria-labelledby="tab-mon">
                 <!-- Dynamically generated timeline list -->
             </div>
         </section>
@@ -125,6 +125,25 @@
         // Timetable Data Structure
         const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
         
+        const HOLIDAYS = {
+            "01-26": "Republic Day",
+            "08-15": "Independence Day",
+            "10-02": "Gandhi Jayanti",
+            "12-25": "Christmas Day"
+        };
+
+        function getHolidayName() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mockHoliday = urlParams.get('mock_holiday');
+            if (mockHoliday) return mockHoliday;
+            if (urlParams.get('mock_day') === 'Holiday') return "Mock Holiday";
+            
+            const now = new Date();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            return HOLIDAYS[`${m}-${d}`] || null;
+        }
+
         const TIME_SLOTS = [
             { id: 1, start: "9:05", end: "9:55" },
             { id: 2, start: "10:00", end: "10:50" },
@@ -153,12 +172,12 @@
                         { batch: "1A08", sub: "SE", room: "D303A", faculty: "Mr. Sanjay Patel" },
                         { batch: "1B08", sub: "PP", room: "D203E", faculty: "Mr. Pravin Savariya" },
                         { batch: "1C08", sub: "DAA", room: "D303E", faculty: "Dr. Malay Bhatt" },
-                        { batch: "1D08", sub: "WD", room: "A313", faculty: "Mr. Harshal Makwana" }
+                        { batch: "1D08", sub: "WD", room: "D203A", faculty: "Mr. Harshal Makwana" }
                     ] 
                 },
                 6: null,
                 7: { subject: "Design and Analysis of Algorithms", type: "red", faculty: "Dr. Malay Bhatt" },
-                8: { subject: "Open Elective", type: "white", faculty: "Staff" }
+                8: null
             },
             "Tuesday": {
                 1: { subject: "Software Engineering", type: "red", faculty: "Ms. Sushama Sainwar" },
@@ -181,7 +200,7 @@
                     type: "yellow",
                     labs: [
                         { batch: "1A08", sub: "DAA", room: "D303E", faculty: "Dr. Malay Bhatt" },
-                        { batch: "1B08", sub: "WD", room: "A313", faculty: "Mr. Harshal Makwana" },
+                        { batch: "1B08", sub: "WD", room: "D105", faculty: "Mr. Harshal Makwana" },
                         { batch: "1C08", sub: "SE", room: "D303A", faculty: "Mr. Sanjay Patel" },
                         { batch: "1D08", sub: "PP", room: "D203E", faculty: "Mr. Pravin Savariya" }
                     ]
@@ -200,14 +219,14 @@
                     rowspan: 2,
                     type: "yellow",
                     labs: [
-                        { batch: "1B08", sub: "CYBER", room: "D203E", faculty: "Mr. Kush Patel", stream: "Cyber Security" },
+                        { batch: "1A08", sub: "CYBER", room: "D203E", faculty: "Mr. Kush Patel", stream: "Cyber Security" },
                         { batch: "1B08", sub: "AI", room: "D203B", faculty: "Dr. Hetal Chudasama", stream: "AI" },
                         { batch: "1A08", sub: "AI", room: "D203A", faculty: "Mr. Sanjay Patel", stream: "AI" }
                     ]
                 },
                 6: null,
                 7: { subject: "Artificial Intelligence", type: "blue", stream: "AI", faculty: "Mr. Sanjay Patel" },
-                8: { subject: "Open Elective", type: "white", faculty: "Staff" }
+                8: null
             },
             "Thursday": {
                 1: null,
@@ -219,12 +238,12 @@
                     rowspan: 2,
                     type: "yellow",
                     labs: [
-                        { batch: "1A08", sub: "CYBER", room: "D203E", faculty: "Mr. Kush Patel", stream: "Cyber Security" },
+                        { batch: "1B08", sub: "CYBER", room: "D203E", faculty: "Mr. Kush Patel", stream: "Cyber Security" },
                         { batch: "1C08", sub: "AI", room: "D203A", faculty: "Mr. Sanjay Patel", stream: "AI" }
                     ]
                 },
                 6: null,
-                7: { subject: "Artificial Intelligence", type: "blue", stream: "AI", faculty: "Mr. Sanjay Patel" },
+                7: null,
                 8: null
             },
             "Friday": {
@@ -244,14 +263,8 @@
                     ]
                 },
                 6: null,
-                7: { subject: "Open Elective", type: "white", faculty: "Staff" },
-                8: {
-                    isSplit: true,
-                    type: "yellow",
-                    labs: [
-                        { batch: "1D08", sub: "OE Lab", room: "OE Lab", faculty: "Staff" }
-                    ]
-                }
+                7: null,
+                8: null
             }
         };
 
@@ -325,6 +338,7 @@
         async function updateInstallUI(state) {
             if (!installBtn) return;
             installBtn.classList.remove('installed');
+            installBtn.classList.remove('open-app-state');
             installBtn.disabled = false;
 
             if (state === 'hidden') {
@@ -347,11 +361,10 @@
                     installBtn.hidden = true;
                 } else {
                     installBtn.hidden = false;
-                    installBtn.disabled = true;
-                    installBtn.classList.add('installed');
+                    installBtn.classList.add('open-app-state');
                     installBtn.innerHTML = `
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Installed ✓
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        Open App
                     `;
                 }
             }
@@ -447,6 +460,10 @@
 
         if (installBtn) {
             installBtn.addEventListener('click', async () => {
+                if (installBtn.classList.contains('open-app-state')) {
+                    window.open(window.location.origin + window.location.pathname, '_blank');
+                    return;
+                }
                 if (!deferredPrompt) return;
                 await updateInstallUI('installing');
                 try {
@@ -629,35 +646,76 @@
                         }
                     }
 
-                    if (itemCopy.isSplit) {
-                        // Check for Friday Slot 8 Open Elective Lab
-                        let hasOELab = itemCopy.labs.some(l => l.sub === "OE Lab");
-                        if (hasOELab) {
-                            const oeData = OPEN_ELECTIVES[openElective];
-                            if (oeData && oeData.hasLab) {
-                                itemCopy.labs = itemCopy.labs.map(l => {
-                                    if (l.sub === "OE Lab") {
-                                        return {
-                                            batch: l.batch,
-                                            sub: openElective + " Lab",
-                                            room: oeData.labRoom,
-                                            faculty: oeData.labFaculty
-                                        };
+                    if (itemCopy.isStreamSplit) {
+                        const matchingLecture = itemCopy.lectures.find(l => l.stream === stream);
+                        if (matchingLecture) {
+                            filtered[day][slot.id] = matchingLecture;
+                        } else {
+                            filtered[day][slot.id] = null;
+                        }
+                    } else if (itemCopy.isSplit) {
+                        const matchingLabs = [];
+                        
+                        for (const lab of itemCopy.labs) {
+                            if (lab.isOELab) {
+                                const oeData = OPEN_ELECTIVES[openElective];
+                                if (mainBatch === "1D08" && oeData && oeData.hasLab) {
+                                    matchingLabs.push({
+                                        batch: "1D08",
+                                        sub: openElective + " Lab",
+                                        room: oeData.labRoom,
+                                        faculty: oeData.labFaculty,
+                                        type: "yellow",
+                                        rowspan: lab.rowspan || 2
+                                    });
+                                }
+                            } else if (lab.isOELecture) {
+                                const oeData = OPEN_ELECTIVES[openElective];
+                                const is1D08 = mainBatch === "1D08";
+                                const oeHasLab = oeData && oeData.hasLab;
+                                
+                                if (lab.batch === mainBatch && (!is1D08 || !oeHasLab)) {
+                                    let oeRoom = "A218";
+                                    if (oeData) {
+                                        if (openElective === "Non-Conventional Energy Sources") {
+                                            oeRoom = (day === "Friday") ? "A204" : "A201";
+                                        } else {
+                                            oeRoom = oeData.room;
+                                        }
                                     }
-                                    return l;
-                                });
+                                    matchingLabs.push({
+                                        batch: lab.batch,
+                                        sub: openElective,
+                                        room: oeRoom,
+                                        faculty: oeData ? oeData.faculty : "Staff",
+                                        type: "white",
+                                        rowspan: 1
+                                    });
+                                }
                             } else {
-                                // Other electives do not have a lab, so this slot is free/null
-                                filtered[day][slot.id] = null;
-                                return;
+                                if (matchesLab(lab, stream, mainBatch, electiveBatch)) {
+                                    matchingLabs.push(lab);
+                                }
                             }
                         }
-
-                        // Filter labs
-                        const matchingLabs = itemCopy.labs.filter(lab => matchesLab(lab, stream, mainBatch, electiveBatch));
+                        
                         if (matchingLabs.length > 0) {
-                            itemCopy.labs = matchingLabs;
-                            filtered[day][slot.id] = itemCopy;
+                            const matched = matchingLabs[0];
+                            if (matched.type === "white") {
+                                filtered[day][slot.id] = {
+                                    subject: matched.sub,
+                                    room: matched.room,
+                                    faculty: matched.faculty,
+                                    type: "white",
+                                    rowspan: 1
+                                };
+                            } else {
+                                itemCopy.labs = matchingLabs;
+                                if (matched.rowspan) {
+                                    itemCopy.rowspan = matched.rowspan;
+                                }
+                                filtered[day][slot.id] = itemCopy;
+                            }
                         } else {
                             filtered[day][slot.id] = null;
                         }
@@ -1050,6 +1108,7 @@
             const dayIndex = getSystemDayIndex();
             const isWeekend = (dayIndex === 0 || dayIndex === 6);
             const currentDay = DAYS[dayIndex - 1] || "Monday";
+            const holidayName = getHolidayName();
 
             const filteredSchedule = getFilteredSchedule(stream, mainBatch, electiveBatch, openElective);
             const daySchedule = filteredSchedule[currentDay] || {};
@@ -1062,7 +1121,7 @@
             let upcomingDay = null;
 
             // 1. Check for ongoing lecture today
-            if (!isWeekend) {
+            if (!isWeekend && !holidayName) {
                 TIME_SLOTS.forEach(slot => {
                     const times = getPeriodTimes(slot.id, 1);
                     if (!times) return;
@@ -1082,16 +1141,18 @@
                         
                         if (currentMins >= startMins && currentMins < actualEndMins) {
                             ongoingItem = item;
-                            ongoingSlot = slot;
-                            ongoingSlot.actualEndMins = actualEndMins;
-                            ongoingSlot.actualStartMins = startMins;
+                            ongoingSlot = {
+                                ...slot,
+                                actualStartMins: startMins,
+                                actualEndMins: actualEndMins
+                            };
                         }
                     }
                 });
             }
 
             // 2. Find next lecture today
-            if (!isWeekend) {
+            if (!isWeekend && !holidayName) {
                 let minDiff = Infinity;
                 TIME_SLOTS.forEach(slot => {
                     if (slot.isBreak) return;
@@ -1141,9 +1202,36 @@
                 }
             }
 
-            // 3. Render Ongoing Lecture
+            // 3. Render Ongoing Lecture Card
             let ongoingHtml = '';
-            if (ongoingItem) {
+            
+            if (holidayName) {
+                ongoingHtml = `
+                    <div class="live-card idle-live holiday-live">
+                        <div class="live-indicator">
+                            <span class="idle-dot"></span>
+                            <span class="live-text muted">OFFICIAL HOLIDAY</span>
+                        </div>
+                        <div class="live-card-body">
+                            <h3 class="live-subject muted">Holiday: ${holidayName}</h3>
+                            <p class="live-subtitle">Enjoy your day off! No classes are scheduled today.</p>
+                        </div>
+                    </div>
+                `;
+            } else if (isWeekend) {
+                ongoingHtml = `
+                    <div class="live-card idle-live weekend-live">
+                        <div class="live-indicator">
+                            <span class="idle-dot"></span>
+                            <span class="live-text muted">WEEKEND FALLBACK</span>
+                        </div>
+                        <div class="live-card-body">
+                            <h3 class="live-subject muted">Enjoy your weekend!</h3>
+                            <p class="live-subtitle">No classes scheduled on Saturdays or Sundays.</p>
+                        </div>
+                    </div>
+                `;
+            } else if (ongoingItem) {
                 const times = getPeriodTimes(ongoingSlot.id, ongoingItem.rowspan || 1);
                 const startFormatted = formatTime(times.start);
                 const endFormatted = formatTime(times.end);
@@ -1163,11 +1251,18 @@
                     }
                 }
 
+                // Countdown calculations
+                const remainingMins = ongoingSlot.actualEndMins - currentMins;
+                const elapsedMins = currentMins - ongoingSlot.actualStartMins;
+                const totalMins = ongoingSlot.actualEndMins - ongoingSlot.actualStartMins;
+                const progressPct = Math.min(100, Math.max(0, (elapsedMins / totalMins) * 100));
+
                 ongoingHtml = `
                     <div class="live-card active-live">
                         <div class="live-indicator">
                             <span class="live-dot pulse"></span>
                             <span class="live-text">🟢 LIVE NOW</span>
+                            <span class="countdown-badge" style="background-color: rgba(255, 51, 102, 0.1); color: var(--color-primary); border-color: rgba(255, 51, 102, 0.2);">${remainingMins} min${remainingMins > 1 ? 's' : ''} left</span>
                         </div>
                         <div class="live-card-body">
                             <h3 class="live-subject">${ongoingSubject}</h3>
@@ -1185,27 +1280,98 @@
                                     <span>${startFormatted} - ${endFormatted}</span>
                                 </div>
                             </div>
+                            <div class="tech-progress-container" style="margin-top: 14px; margin-bottom: 0;" aria-label="Lecture progress">
+                                <div class="tech-progress-track" style="height: 6px;">
+                                    <div class="tech-progress-bar" style="width: ${progressPct}%; background: linear-gradient(90deg, var(--color-secondary), var(--color-primary)); box-shadow: 0 0 8px var(--color-primary);"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
             } else {
-                ongoingHtml = `
-                    <div class="live-card idle-live">
-                        <div class="live-indicator">
-                            <span class="idle-dot"></span>
-                            <span class="live-text muted">No ongoing lecture right now</span>
+                // Check for a class transition break (gaps <= 10 mins)
+                let isTransitionGap = false;
+                let gapMinutesRemaining = 0;
+                let transitionNextSlot = null;
+                let transitionNextItem = null;
+
+                if (upcomingItem && upcomingDay === currentDay && !isWeekend) {
+                    const times = getPeriodTimes(upcomingSlot.id, 1);
+                    const startMins = parseTimeToMinutes(times.start);
+                    const diffMins = startMins - currentMins;
+                    if (diffMins > 0 && diffMins <= 10) {
+                        isTransitionGap = true;
+                        gapMinutesRemaining = diffMins;
+                        transitionNextSlot = upcomingSlot;
+                        transitionNextItem = upcomingItem;
+                    }
+                }
+
+                if (isTransitionGap) {
+                    let nextSubject = transitionNextItem.subject || "";
+                    let nextRoom = transitionNextItem.room || "A218";
+                    if (transitionNextItem.isSplit) {
+                        const lab = transitionNextItem.labs[0];
+                        if (lab) {
+                            nextSubject = lab.sub + (lab.sub.toLowerCase().includes("lab") ? "" : " Lab");
+                            nextRoom = lab.room || "A218";
+                        }
+                    }
+
+                    ongoingHtml = `
+                        <div class="live-card active-live transition-live">
+                            <div class="live-indicator">
+                                <span class="live-dot pulse" style="background-color: var(--color-secondary);"></span>
+                                <span class="live-text" style="color: var(--color-secondary);">🟢 CLASS TRANSITION</span>
+                                <span class="countdown-badge" style="background-color: rgba(0, 195, 255, 0.1); color: var(--color-secondary); border-color: rgba(0, 195, 255, 0.2);">${gapMinutesRemaining} min${gapMinutesRemaining > 1 ? 's' : ''} left</span>
+                            </div>
+                            <div class="live-card-body">
+                                <h3 class="live-subject">Transition Break</h3>
+                                <p class="live-subtitle">Next up: <strong>${nextSubject}</strong> starting soon</p>
+                                <div class="live-meta">
+                                    <div class="meta-item">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                        <span>Move to Room ${nextRoom}</span>
+                                    </div>
+                                </div>
+                                <div class="tech-progress-container" style="margin-top: 14px; margin-bottom: 0;" aria-label="Transition progress">
+                                    <div class="tech-progress-track" style="height: 6px;">
+                                        <div class="tech-progress-bar" style="width: ${((10 - gapMinutesRemaining) / 10) * 100}%; background: linear-gradient(90deg, var(--color-primary), var(--color-secondary)); box-shadow: 0 0 8px var(--color-secondary);"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="live-card-body">
-                            <h3 class="live-subject muted">Enjoy your break!</h3>
-                            <p class="live-subtitle">No classes are currently scheduled at this time.</p>
+                    `;
+                } else {
+                    ongoingHtml = `
+                        <div class="live-card idle-live">
+                            <div class="live-indicator">
+                                <span class="idle-dot"></span>
+                                <span class="live-text muted">No ongoing lecture right now</span>
+                            </div>
+                            <div class="live-card-body">
+                                <h3 class="live-subject muted">Enjoy your break!</h3>
+                                <p class="live-subtitle">No classes are currently scheduled at this time.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // 4. Render Upcoming Lecture Card
+            let upcomingHtml = '';
+            if (holidayName) {
+                upcomingHtml = `
+                    <div class="upcoming-card idle-upcoming">
+                        <div class="upcoming-indicator">
+                            <span>Next Lecture</span>
+                        </div>
+                        <div class="upcoming-card-body">
+                            <h3 class="upcoming-subject muted">No classes today</h3>
                         </div>
                     </div>
                 `;
-            }
-
-            // 4. Render Upcoming Lecture
-            let upcomingHtml = '';
-            if (upcomingItem) {
+            } else if (upcomingItem) {
                 const times = getPeriodTimes(upcomingSlot.id, upcomingItem.rowspan || 1);
                 const startFormatted = formatTime(times.start);
 
@@ -2096,9 +2262,9 @@
             updateLiveLectureTracker();
             checkAndOpenBreak();
             
-            // Loop once per minute to avoid battery draining (Phase 10)
-            setInterval(updateLiveLectureTracker, 60000);
-            setInterval(checkAndOpenBreak, 60000);
+            // Loop once per 10 seconds for precise countdowns and transition updates
+            setInterval(updateLiveLectureTracker, 10000);
+            setInterval(checkAndOpenBreak, 10000);
         });
     </script>
     
