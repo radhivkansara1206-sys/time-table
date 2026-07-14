@@ -1423,3 +1423,38 @@ select option {
         padding: 0 2px;
     }
 }
+
+/* ==========================================================================
+   NOTES MODAL & INDICATOR
+   ========================================================================== */
+
+.tech-textarea {
+    width: 100%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--color-border);
+    color: var(--text-white);
+    border-radius: var(--border-radius-sm);
+    padding: 12px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    resize: vertical;
+    transition: var(--transition);
+}
+
+.tech-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-glow);
+}
+
+.notes-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    box-shadow: var(--shadow-glow);
+    z-index: 10;
+}
