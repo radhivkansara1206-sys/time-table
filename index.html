@@ -118,6 +118,8 @@
                 <button id="break-resume-btn" class="tech-button primary" aria-label="Resume schedule view">Resume Session</button>
             </div>
         </div>
+    </div>
+
     <!-- Notes Modal -->
     <div id="notes-modal-overlay" class="tech-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="notes-modal-title" tabindex="-1" style="display: none; opacity: 0; pointer-events: none;">
         <div class="tech-modal">
@@ -1874,7 +1876,13 @@
                 
                 // If they completed batches but miss elective, give fallback so we don't block
                 if (localStorage.getItem('academic_stream') && localStorage.getItem('academic_main_batch')) {
-                    localStorage.setItem('academic_open_elective', 'Sustainability Engineering');
+                    const fallbackBatch = localStorage.getItem('academic_main_batch');
+                    if (!localStorage.getItem('academic_elective_batch')) {
+                        localStorage.setItem('academic_elective_batch', fallbackBatch);
+                    }
+                    if (!localStorage.getItem('academic_open_elective')) {
+                        localStorage.setItem('academic_open_elective', 'Sustainability Engineering');
+                    }
                     initAcademicProfile();
                     return;
                 }
@@ -2407,6 +2415,26 @@
             // Loop once per 10 seconds for precise countdowns and transition updates
             setInterval(updateLiveLectureTracker, 10000);
             setInterval(checkAndOpenBreak, 10000);
+            // Force reload if an old cache is detected to fix PWA caching issues
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    for (let name of names) {
+                        if (name.startsWith('schedule-v') && name !== 'schedule-v33') {
+                            caches.delete(name);
+                            // Unregister all old service workers to ensure immediate update
+                            if ('serviceWorker' in navigator) {
+                                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                                    for(let registration of registrations) {
+                                        registration.unregister();
+                                    }
+                                });
+                            }
+                            // Reload to get fresh assets
+                            setTimeout(() => window.location.reload(true), 500);
+                        }
+                    }
+                });
+            }
         });
     </script>
     

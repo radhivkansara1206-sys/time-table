@@ -460,7 +460,7 @@ html[data-theme="light"] .class-card:hover {
     width: 100%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .live-dashboard {
         grid-template-columns: 1fr;
         gap: 16px;
@@ -1249,8 +1249,8 @@ html[data-theme="light"] .status-badge.completed {
    RESPONSIVE LAYOUT SWITCHING (No Horizontal Scrolling)
    ========================================================================== */
 
-/* Enforce Vertical Agenda View on Mobile */
-@media (max-width: 768px) {
+/* Enforce Vertical Agenda View on Mobile and Tablets */
+@media (max-width: 1024px) {
     body {
         padding: 30px 15px;
     }
