@@ -425,9 +425,10 @@
             toast.textContent = '✓ App installed successfully!';
             document.body.appendChild(toast);
 
-            requestAnimationFrame(() => {
-                toast.classList.add('toast-visible');
-            });
+            // Force a reflow so the CSS transition actually triggers
+            toast.offsetWidth;
+            
+            toast.classList.add('toast-visible');
 
             setTimeout(() => {
                 toast.classList.remove('toast-visible');
@@ -2349,15 +2350,14 @@
                 modal.style.display = 'flex';
                 // Trigger reflow
                 modal.offsetWidth;
-                modal.style.opacity = '1';
-                modal.style.pointerEvents = 'auto';
+                modal.classList.add('active');
                 
                 textarea.focus();
+                trapFocus(modal);
             }
 
             function closeNotesModal() {
-                modal.style.opacity = '0';
-                modal.style.pointerEvents = 'none';
+                modal.classList.remove('active');
                 setTimeout(() => {
                     modal.style.display = 'none';
                     currentSubject = null;
