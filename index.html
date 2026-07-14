@@ -177,7 +177,7 @@
                 },
                 6: null,
                 7: { subject: "Design and Analysis of Algorithms", type: "red", faculty: "Dr. Malay Bhatt" },
-                8: null
+                8: { subject: "Open Elective", type: "white", faculty: "Staff" }
             },
             "Tuesday": {
                 1: { subject: "Software Engineering", type: "red", faculty: "Ms. Sushama Sainwar" },
@@ -206,7 +206,13 @@
                     ]
                 },
                 6: null,
-                7: { subject: "Cyber Security", room: "A323", type: "blue", stream: "Cyber Security", faculty: "Mr. Kush Patel" },
+                7: {
+                    isStreamSplit: true,
+                    lectures: [
+                        { subject: "Cyber Security", room: "A323", type: "blue", stream: "Cyber Security", faculty: "Mr. Kush Patel" },
+                        { subject: "Artificial Intelligence", room: "A218", type: "blue", stream: "AI", faculty: "Mr. Sanjay Patel" }
+                    ]
+                },
                 8: null
             },
             "Wednesday": {
@@ -226,7 +232,7 @@
                 },
                 6: null,
                 7: { subject: "Artificial Intelligence", type: "blue", stream: "AI", faculty: "Mr. Sanjay Patel" },
-                8: null
+                8: { subject: "Open Elective", type: "white", faculty: "Staff" }
             },
             "Thursday": {
                 1: null,
@@ -263,7 +269,17 @@
                     ]
                 },
                 6: null,
-                7: null,
+                7: {
+                    isSplit: true,
+                    type: "white",
+                    labs: [
+                        { batch: "1D08", sub: "OE Lab", room: "OE Lab", faculty: "Staff", isOELab: true, rowspan: 2 },
+                        { batch: "1A08", sub: "Open Elective", room: "A218", faculty: "Staff", isOELecture: true },
+                        { batch: "1B08", sub: "Open Elective", room: "A218", faculty: "Staff", isOELecture: true },
+                        { batch: "1C08", sub: "Open Elective", room: "A218", faculty: "Staff", isOELecture: true },
+                        { batch: "1D08", sub: "Open Elective", room: "A218", faculty: "Staff", isOELecture: true, onlyIfNoOELab: true }
+                    ]
+                },
                 8: null
             }
         };
