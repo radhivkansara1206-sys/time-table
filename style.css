@@ -1458,3 +1458,195 @@ select option {
     box-shadow: var(--shadow-glow);
     z-index: 10;
 }
+
+/* Tasks Section */
+.tasks-list {
+    max-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.tasks-list::-webkit-scrollbar {
+    width: 6px;
+}
+.tasks-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+.tasks-list::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--bg-surface);
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition);
+}
+
+.task-item:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+html[data-theme="light"] .task-item:hover {
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.task-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--text-muted);
+    border-radius: 4px;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.task-checkbox:checked {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 8px rgba(0, 195, 255, 0.4);
+}
+
+.task-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 4px;
+    height: 9px;
+    border: solid var(--bg-card);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.task-text {
+    flex: 1;
+    font-size: 0.85rem;
+    color: var(--text-white);
+    transition: var(--transition);
+    word-break: break-word;
+}
+
+html[data-theme="light"] .task-text {
+    color: var(--text-white); /* Since light theme var(--text-white) is Zinc 950 */
+}
+
+.task-item.completed .task-text {
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+.delete-task-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.delete-task-btn:hover {
+    color: var(--color-primary);
+    background-color: rgba(255, 51, 102, 0.1);
+}
+
+/* ==========================================================================
+   GLOBAL TASKS DASHBOARD
+   ========================================================================== */
+
+.global-tasks-container {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.dashboard-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-white);
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+}
+
+.global-tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.global-task-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.global-task-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+html[data-theme="light"] .global-task-card:hover {
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.global-task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 10px;
+}
+
+.global-task-subject {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.global-task-deadline {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.global-task-deadline.has-deadline {
+    color: var(--color-primary);
+    background-color: rgba(255, 51, 102, 0.1);
+    padding: 3px 8px;
+    border-radius: var(--border-radius-pill);
+    border: 1px solid rgba(255, 51, 102, 0.2);
+}
+
+.global-task-body {
+    display: flex;
+    align-items: flex-start;
+}
+
+.global-task-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    width: 100%;
+}

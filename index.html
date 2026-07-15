@@ -51,6 +51,11 @@
             <!-- Dynamically populated live and upcoming lectures -->
         </section>
 
+        <!-- Global Pending Tasks Dashboard -->
+        <section class="global-tasks-section" id="global-tasks-panel" aria-label="Pending Tasks Dashboard">
+            <!-- Dynamically populated pending tasks -->
+        </section>
+
         <!-- Desktop Grid Wrapper (Hidden on mobile) -->
         <section class="table-wrapper" id="desktop-grid-section" aria-label="Timetable Grid View">
              <!-- Dynamically generated day columns content -->
@@ -129,9 +134,17 @@
                     <h2 id="notes-modal-title" class="modal-title" style="margin-left: 8px;">Subject Notes</h2>
                 </div>
             </div>
-            <div class="modal-body">
-                <div class="notes-container" style="margin-top: 10px;">
-                    <textarea id="notes-textarea" class="tech-textarea" placeholder="Add tasks, assignments, or quick notes for this subject..." rows="4"></textarea>
+            <div class="modal-body" style="gap: 16px;">
+                <div class="tasks-section">
+                    <label class="tech-label" style="display: block; margin-bottom: 8px;">Tasks & Assignments</label>
+                    <div id="tasks-list" class="tasks-list">
+                        <!-- Dynamically injected tasks go here -->
+                    </div>
+                    <div class="add-task-container" style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                        <input type="text" id="new-task-input" class="tech-input" style="flex: 2; min-width: 150px;" placeholder="Add a new task..." />
+                        <input type="date" id="new-task-deadline" class="tech-input" style="flex: 1; min-width: 120px;" />
+                        <button id="add-task-btn" class="tech-button secondary" style="flex: 1; min-width: 80px;">Add</button>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -771,30 +784,26 @@
         }
 
         // =================================================================
-        // NOTES MANAGEMENT
+        // TASKS MANAGEMENT
         // =================================================================
 
-        function getAcademicNotes() {
-            try {
-                return JSON.parse(localStorage.getItem('academic_notes')) || {};
-            } catch {
-                return {};
-            }
+        function getAcademicTasks() {
+            try { return JSON.parse(localStorage.getItem('academic_tasks')) || {}; } catch { return {}; }
         }
 
-        function saveAcademicNote(subject, note) {
-            const notes = getAcademicNotes();
-            if (note.trim() === '') {
-                delete notes[subject];
+        function saveAcademicTasks(subject, tasksList) {
+            const tasks = getAcademicTasks();
+            if (!tasksList || tasksList.length === 0) {
+                delete tasks[subject];
             } else {
-                notes[subject] = note;
+                tasks[subject] = tasksList;
             }
-            localStorage.setItem('academic_notes', JSON.stringify(notes));
+            localStorage.setItem('academic_tasks', JSON.stringify(tasks));
         }
 
-        function hasAcademicNote(subject) {
-            const notes = getAcademicNotes();
-            return !!notes[subject] && notes[subject].trim() !== '';
+        function hasAcademicTask(subject) {
+            const tasks = getAcademicTasks();
+            return !!tasks[subject] && tasks[subject].some(t => !t.completed);
         }
 
         // =================================================================
@@ -883,7 +892,7 @@
                         }
                     }
 
-                    const noteIndicator = hasAcademicNote(cardSubject) ? '<div class="notes-indicator"></div>' : '';
+                    const noteIndicator = hasAcademicTask(cardSubject) ? '<div class="notes-indicator"></div>' : '';
 
                     html += `
                         <div class="class-card type-${cardType}" 
@@ -1009,7 +1018,7 @@
                     }
                 }
 
-                const noteIndicator = hasAcademicNote(cardSubject) ? '<div class="notes-indicator"></div>' : '';
+                const noteIndicator = hasAcademicTask(cardSubject) ? '<div class="notes-indicator"></div>' : '';
 
                 timelineHtml += `
                     <div class="timeline-card type-${cardType}" 
@@ -2343,28 +2352,191 @@
             }
         });
 
+        function renderGlobalTasksDashboard() {
+            const panel = document.getElementById('global-tasks-panel');
+            if (!panel) return;
+            
+            const allTasks = getAcademicTasks();
+            let pendingTasks = [];
+            
+            // Gather all pending tasks
+            for (const subject in allTasks) {
+                allTasks[subject].forEach(task => {
+                    if (!task.completed) {
+                        pendingTasks.push({ ...task, subject });
+                    }
+                });
+            }
+            
+            if (pendingTasks.length === 0) {
+                panel.innerHTML = '';
+                return;
+            }
+            
+            // Sort by deadline if available
+            pendingTasks.sort((a, b) => {
+                if (!a.deadline) return 1;
+                if (!b.deadline) return -1;
+                return new Date(a.deadline) - new Date(b.deadline);
+            });
+            
+            let html = `
+                <div class="global-tasks-container">
+                    <h3 class="dashboard-section-title">Pending Assignments</h3>
+                    <div class="global-tasks-grid">
+            `;
+            
+            pendingTasks.forEach(task => {
+                const deadlineText = task.deadline ? new Date(task.deadline).toLocaleDateString(undefined, {month: 'short', day: 'numeric'}) : 'No deadline';
+                html += `
+                    <div class="global-task-card" data-subject="${task.subject}" data-id="${task.id}">
+                        <div class="global-task-header">
+                            <span class="global-task-subject">${task.subject}</span>
+                            <span class="global-task-deadline ${task.deadline ? 'has-deadline' : ''}">${deadlineText}</span>
+                        </div>
+                        <div class="global-task-body">
+                            <label class="global-task-label">
+                                <input type="checkbox" class="task-checkbox global-checkbox" data-subject="${task.subject}" data-id="${task.id}" />
+                                <span class="task-text">${task.text}</span>
+                            </label>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            panel.innerHTML = html;
+            
+            // Add event listeners for global checkboxes
+            const checkboxes = panel.querySelectorAll('.global-checkbox');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const subject = e.target.getAttribute('data-subject');
+                    const id = e.target.getAttribute('data-id');
+                    
+                    const tasks = getAcademicTasks();
+                    if (tasks[subject]) {
+                        const taskIndex = tasks[subject].findIndex(t => t.id === id);
+                        if (taskIndex !== -1) {
+                            tasks[subject][taskIndex].completed = true;
+                            saveAcademicTasks(subject, tasks[subject]);
+                            renderTimetableGrid();
+                            renderMobileTimeline();
+                            renderGlobalTasksDashboard();
+                        }
+                    }
+                });
+            });
+        }
+
         function setupNotesModal() {
             const modal = document.getElementById('notes-modal-overlay');
             const closeBtn = document.getElementById('notes-close-btn');
             const saveBtn = document.getElementById('notes-save-btn');
-            const textarea = document.getElementById('notes-textarea');
             const title = document.getElementById('notes-modal-title');
             
+            const tasksList = document.getElementById('tasks-list');
+            const newTaskInput = document.getElementById('new-task-input');
+            const newTaskDeadline = document.getElementById('new-task-deadline');
+            const addTaskBtn = document.getElementById('add-task-btn');
+            
             let currentSubject = null;
+            let currentTasks = [];
+
+            function renderTasks() {
+                if (!tasksList) return;
+                tasksList.innerHTML = '';
+                if (currentTasks.length === 0) {
+                    tasksList.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem; padding: 10px;">No tasks yet. Add one below!</div>';
+                    return;
+                }
+                
+                currentTasks.forEach(task => {
+                    const taskItem = document.createElement('div');
+                    taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'task-checkbox';
+                    checkbox.checked = task.completed;
+                    checkbox.addEventListener('change', () => {
+                        task.completed = checkbox.checked;
+                        renderTasks();
+                    });
+                    
+                    const textContainer = document.createElement('div');
+                    textContainer.className = 'task-text-container';
+                    textContainer.style.flex = '1';
+                    
+                    const text = document.createElement('div');
+                    text.className = 'task-text';
+                    text.innerText = task.text;
+                    textContainer.appendChild(text);
+                    
+                    if (task.deadline) {
+                        const deadline = document.createElement('div');
+                        deadline.className = 'task-deadline-subtext';
+                        deadline.style.fontSize = '0.7rem';
+                        deadline.style.color = 'var(--text-muted)';
+                        deadline.style.marginTop = '2px';
+                        deadline.innerText = 'Due: ' + new Date(task.deadline).toLocaleDateString();
+                        textContainer.appendChild(deadline);
+                    }
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-task-btn';
+                    deleteBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
+                    deleteBtn.addEventListener('click', () => {
+                        currentTasks = currentTasks.filter(t => t.id !== task.id);
+                        renderTasks();
+                    });
+                    
+                    taskItem.appendChild(checkbox);
+                    taskItem.appendChild(textContainer);
+                    taskItem.appendChild(deleteBtn);
+                    tasksList.appendChild(taskItem);
+                });
+            }
+
+            function handleAddTask() {
+                const text = newTaskInput.value.trim();
+                const deadline = newTaskDeadline.value;
+                if (text) {
+                    currentTasks.push({ id: Date.now().toString(), text, completed: false, deadline });
+                    newTaskInput.value = '';
+                    newTaskDeadline.value = '';
+                    renderTasks();
+                }
+            }
+
+            if (addTaskBtn) addTaskBtn.addEventListener('click', handleAddTask);
+            if (newTaskInput) {
+                newTaskInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddTask();
+                    }
+                });
+            }
 
             function openNotesModal(subject) {
                 currentSubject = subject;
-                title.innerText = `Notes: ${subject}`;
+                title.innerText = `Tasks: ${subject}`;
                 
-                const notes = getAcademicNotes();
-                textarea.value = notes[subject] || '';
+                const allTasks = getAcademicTasks();
+                currentTasks = allTasks[subject] || [];
+                renderTasks();
                 
                 modal.style.display = 'flex';
                 // Trigger reflow
                 modal.offsetWidth;
                 modal.classList.add('active');
                 
-                textarea.focus();
+                newTaskInput.focus();
                 trapFocus(modal);
             }
 
@@ -2379,11 +2551,12 @@
             if (closeBtn) closeBtn.addEventListener('click', closeNotesModal);
             if (saveBtn) saveBtn.addEventListener('click', () => {
                 if (currentSubject) {
-                    saveAcademicNote(currentSubject, textarea.value);
+                    saveAcademicTasks(currentSubject, currentTasks);
                     closeNotesModal();
-                    // Re-render to update indicators
+                    // Re-render to update indicators and dashboard
                     renderTimetableGrid();
                     renderMobileTimeline();
+                    renderGlobalTasksDashboard();
                 }
             });
 
@@ -2423,6 +2596,7 @@
             setupDaySelector();
             updateLiveLectureTracker();
             checkAndOpenBreak();
+            renderGlobalTasksDashboard();
             
             if ("Notification" in window && Notification.permission === "default") {
                 Notification.requestPermission();
