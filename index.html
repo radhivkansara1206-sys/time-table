@@ -121,7 +121,7 @@
     </div>
 
     <!-- Notes Modal -->
-    <div id="notes-modal-overlay" class="tech-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="notes-modal-title" tabindex="-1" style="display: none; opacity: 0; pointer-events: none;">
+    <div id="notes-modal-overlay" class="tech-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="notes-modal-title" tabindex="-1" style="display: none;">
         <div class="tech-modal">
             <div class="modal-header">
                 <div class="header-left">
@@ -1470,6 +1470,18 @@
                     if (diffMins > 0) {
                         if (diffMins < 60) {
                             countdownText = `Starts in ${diffMins} min${diffMins > 1 ? 's' : ''}`;
+                            
+                            // Send notification if 5 mins left
+                            if (diffMins === 5 && "Notification" in window && Notification.permission === "granted") {
+                                const notifKey = 'notif_' + currentDay + '_' + upcomingSlot.id;
+                                if (!sessionStorage.getItem(notifKey)) {
+                                    new Notification("Upcoming Lecture", {
+                                        body: `${upcomingSubject} in Room ${upcomingRoom} starts in 5 minutes!`,
+                                        icon: "icon.svg"
+                                    });
+                                    sessionStorage.setItem(notifKey, 'true');
+                                }
+                            }
                         } else {
                             const hrs = Math.floor(diffMins / 60);
                             const mins = diffMins % 60;
@@ -2411,6 +2423,10 @@
             setupDaySelector();
             updateLiveLectureTracker();
             checkAndOpenBreak();
+            
+            if ("Notification" in window && Notification.permission === "default") {
+                Notification.requestPermission();
+            }
             
             // Loop once per 10 seconds for precise countdowns and transition updates
             setInterval(updateLiveLectureTracker, 10000);
