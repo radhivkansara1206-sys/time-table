@@ -2605,26 +2605,6 @@
             // Loop once per 10 seconds for precise countdowns and transition updates
             setInterval(updateLiveLectureTracker, 10000);
             setInterval(checkAndOpenBreak, 10000);
-            // Force reload if an old cache is detected to fix PWA caching issues
-            if ('caches' in window) {
-                caches.keys().then(names => {
-                    for (let name of names) {
-                        if (name.startsWith('schedule-v') && name !== 'schedule-v33') {
-                            caches.delete(name);
-                            // Unregister all old service workers to ensure immediate update
-                            if ('serviceWorker' in navigator) {
-                                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                                    for(let registration of registrations) {
-                                        registration.unregister();
-                                    }
-                                });
-                            }
-                            // Reload to get fresh assets
-                            setTimeout(() => window.location.reload(true), 500);
-                        }
-                    }
-                });
-            }
         });
     </script>
     
