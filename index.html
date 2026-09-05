@@ -247,7 +247,7 @@
                         { subject: "Artificial Intelligence", room: "A218", type: "blue", stream: "AI", faculty: "Mr. Sanjay Patel" }
                     ]
                 },
-                8: { subject: "Minor Degree", type: "white", faculty: "Staff" }
+                8: null
             },
             "Wednesday": {
                 1: null,
@@ -284,7 +284,7 @@
                 },
                 6: null,
                 7: null,
-                8: { subject: "Minor Degree", type: "white", faculty: "Staff" }
+                8: null
             },
             "Friday": {
                 1: { subject: "Design and Analysis of Algorithms", type: "red", faculty: "RU" },
@@ -303,17 +303,7 @@
                     ]
                 },
                 6: null,
-                7: {
-                    isSplit: true,
-                    type: "white",
-                    labs: [
-                        { batch: "1D08", sub: "OE Lab", room: "OE Lab", faculty: "Staff", isOELab: true, rowspan: 2 },
-                        { batch: "1A08", sub: "Open Elective", room: "A218", faculty: "Staff", isOELecture: true },
-                        { batch: "1B08", sub: "Open Elective", room: "A218", faculty: "Staff", isOELecture: true },
-                        { batch: "1C08", sub: "Open Elective", room: "A218", faculty: "Staff", isOELecture: true },
-                        { batch: "1D08", sub: "Open Elective", room: "A218", faculty: "Staff", isOELecture: true, onlyIfNoOELab: true }
-                    ]
-                },
+                7: { subject: "Open Elective", type: "white", faculty: "Staff" },
                 8: null
             }
         };
@@ -642,9 +632,7 @@
                 code: "202090521",
                 faculty: "Dr. Geetali Saha",
                 room: "F401",
-                hasLab: true,
-                labFaculty: "A-GS / B-RRP(EC)",
-                labRoom: "D209 / D207"
+                hasLab: false
             },
             "Non-Conventional Energy Sources": {
                 code: "202090521",
