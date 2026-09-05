@@ -319,6 +319,159 @@
             { text: "We are all Spider-Man. And we are counting on you.", author: "Mary Jane" }
         ];
 
+        // =================================================================
+        // SPIDER-SENSE AUDIO & VIBRATION SYNTHESIZER (Web Audio API)
+        // =================================================================
+        const SpiderSense = {
+            audioCtx: null,
+
+            init() {
+                if (!this.audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+                    try {
+                        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                        this.audioCtx = new AudioContextClass();
+                    } catch (e) {}
+                }
+                if (this.audioCtx && this.audioCtx.state === 'suspended') {
+                    this.audioCtx.resume();
+                }
+            },
+
+            isEnabled() {
+                return localStorage.getItem('spidey_sense_enabled') !== 'false';
+            },
+
+            setEnabled(enabled) {
+                localStorage.setItem('spidey_sense_enabled', enabled ? 'true' : 'false');
+            },
+
+            vibrate(pattern) {
+                if (!this.isEnabled()) return;
+                if ('vibrate' in navigator) {
+                    try { navigator.vibrate(pattern); } catch (e) {}
+                }
+            },
+
+            // Comic Web-Shooter "Thwip" + Achievement Chime for task checkoff
+            playThwip() {
+                if (!this.isEnabled()) return;
+                try {
+                    this.init();
+                    if (!this.audioCtx) return;
+                    const ctx = this.audioCtx;
+                    const now = ctx.currentTime;
+
+                    // Web-shooter "thwip" white noise sweep
+                    const bufferSize = Math.floor(ctx.sampleRate * 0.08);
+                    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        data[i] = Math.random() * 2 - 1;
+                    }
+                    const noise = ctx.createBufferSource();
+                    noise.buffer = buffer;
+
+                    const bandpass = ctx.createBiquadFilter();
+                    bandpass.type = 'bandpass';
+                    bandpass.frequency.setValueAtTime(800, now);
+                    bandpass.frequency.exponentialRampToValueAtTime(3400, now + 0.07);
+
+                    const noiseGain = ctx.createGain();
+                    noiseGain.gain.setValueAtTime(0.18, now);
+                    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+                    noise.connect(bandpass);
+                    bandpass.connect(noiseGain);
+                    noiseGain.connect(ctx.destination);
+                    noise.start(now);
+
+                    // Dual comic chime (C6 + G6)
+                    [1046.50, 1567.98].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + 0.03 + (idx * 0.04));
+                        gain.gain.setValueAtTime(0, now);
+                        gain.gain.setValueAtTime(0.12, now + 0.03 + (idx * 0.04));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35 + (idx * 0.04));
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + 0.03 + (idx * 0.04));
+                        osc.stop(now + 0.4);
+                    });
+
+                    this.vibrate([40, 30, 60]);
+                } catch (e) {}
+            },
+
+            // Futuristic Dimensional Chime when Break popup opens
+            playBreakChime() {
+                if (!this.isEnabled()) return;
+                try {
+                    this.init();
+                    if (!this.audioCtx) return;
+                    const ctx = this.audioCtx;
+                    const now = ctx.currentTime;
+
+                    const freqs = [523.25, 659.25, 783.99, 1046.50];
+                    freqs.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + (idx * 0.06));
+                        gain.gain.setValueAtTime(0, now);
+                        gain.gain.setValueAtTime(0.1, now + (idx * 0.06));
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6 + (idx * 0.08));
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + (idx * 0.06));
+                        osc.stop(now + 0.8);
+                    });
+
+                    this.vibrate([80, 50, 120]);
+                } catch (e) {}
+            },
+
+            // Spider-Sense Tingling Alert (5-minute warning)
+            playSpiderSenseAlert() {
+                if (!this.isEnabled()) return;
+                try {
+                    this.init();
+                    if (!this.audioCtx) return;
+                    const ctx = this.audioCtx;
+                    const now = ctx.currentTime;
+
+                    [0, 0.18].forEach(offset => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(1200, now + offset);
+                        osc.frequency.exponentialRampToValueAtTime(800, now + offset + 0.12);
+
+                        const filter = ctx.createBiquadFilter();
+                        filter.type = 'lowpass';
+                        filter.frequency.setValueAtTime(2400, now + offset);
+
+                        gain.gain.setValueAtTime(0.12, now + offset);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.12);
+
+                        osc.connect(filter);
+                        filter.connect(gain);
+                        gain.connect(ctx.destination);
+
+                        osc.start(now + offset);
+                        osc.stop(now + offset + 0.13);
+                    });
+
+                    this.vibrate([80, 60, 80, 60, 150]);
+                } catch (e) {}
+            }
+        };
+
+        // Unlock audio context on first user interaction
+        window.addEventListener('click', () => SpiderSense.init(), { once: true });
+        window.addEventListener('touchstart', () => SpiderSense.init(), { once: true });
+
         // Service Worker registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -1468,15 +1621,18 @@
                         if (diffMins < 60) {
                             countdownText = `Starts in ${diffMins} min${diffMins > 1 ? 's' : ''}`;
                             
-                            // Send notification if 5 mins left
-                            if (diffMins === 5 && "Notification" in window && Notification.permission === "granted") {
+                            // Send Spider-Sense alert & notification if 5 mins left
+                            if (diffMins === 5) {
                                 const notifKey = 'notif_' + currentDay + '_' + upcomingSlot.id;
                                 if (!sessionStorage.getItem(notifKey)) {
-                                    new Notification("Upcoming Lecture", {
-                                        body: `${upcomingSubject} in Room ${upcomingRoom} starts in 5 minutes!`,
-                                        icon: "icon.svg"
-                                    });
                                     sessionStorage.setItem(notifKey, 'true');
+                                    SpiderSense.playSpiderSenseAlert();
+                                    if ("Notification" in window && Notification.permission === "granted") {
+                                        new Notification("🕷️ Spider-Sense Tingling!", {
+                                            body: `${upcomingSubject} in Room ${upcomingRoom} starts in 5 minutes!`,
+                                            icon: "icon.svg"
+                                        });
+                                    }
                                 }
                             }
                         } else {
@@ -1711,10 +1867,19 @@
             const settingsElectiveBatchError = document.getElementById('settings-elective-batch-error');
             const settingsOESelect = document.getElementById('settings-oe-select');
             const settingsOEError = document.getElementById('settings-oe-error');
+            const settingsSpideySenseToggle = document.getElementById('settings-spidey-sense-toggle');
+            const spideySenseTestBtn = document.getElementById('spidey-sense-test-btn');
             
             const setStreamAi = document.getElementById('set-stream-ai');
             const setStreamCyber = document.getElementById('set-stream-cyber');
             
+            if (spideySenseTestBtn) {
+                spideySenseTestBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    SpiderSense.playSpiderSenseAlert();
+                });
+            }
+
             const handleStreamChange = () => {
                 const currentStream = setStreamAi.checked ? 'AI' : 'Cyber Security';
                 const currentElectiveVal = settingsElectiveBatchSelect.value;
@@ -1748,6 +1913,10 @@
                 settingsOEError.innerText = "";
                 settingsOESelect.classList.remove('input-error');
                 
+                if (settingsSpideySenseToggle) {
+                    settingsSpideySenseToggle.checked = SpiderSense.isEnabled();
+                }
+
                 settingsOverlay.style.display = 'flex';
                 settingsOverlay.offsetWidth;
                 settingsOverlay.classList.add('active');
@@ -1809,6 +1978,10 @@
                 localStorage.setItem('academic_elective_batch', electiveBatch);
                 localStorage.setItem('academic_open_elective', openElective);
                 
+                if (settingsSpideySenseToggle) {
+                    SpiderSense.setEnabled(settingsSpideySenseToggle.checked);
+                }
+
                 closeSettings();
                 
                 renderTimetableGrid();
@@ -2236,6 +2409,7 @@
         }
 
         function showBreakPopup() {
+            SpiderSense.playBreakChime();
             if (breakOverlay) {
                 breakOverlay.style.display = 'flex';
                 breakOverlay.offsetWidth;
@@ -2403,6 +2577,9 @@
             const checkboxes = panel.querySelectorAll('.global-checkbox');
             checkboxes.forEach(cb => {
                 cb.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        SpiderSense.playThwip();
+                    }
                     const subject = e.target.getAttribute('data-subject');
                     const id = e.target.getAttribute('data-id');
                     
@@ -2453,6 +2630,9 @@
                     checkbox.checked = task.completed;
                     checkbox.addEventListener('change', () => {
                         task.completed = checkbox.checked;
+                        if (checkbox.checked) {
+                            SpiderSense.playThwip();
+                        }
                         renderTasks();
                     });
                     
@@ -2736,6 +2916,23 @@
                         <option value="Project Management">Project Management</option>
                     </select>
                     <span class="error-msg" id="settings-oe-error" style="margin-bottom: 12px; display: block;"></span>
+                </div>
+                <div class="settings-group" style="margin-top: 16px;">
+                    <label class="settings-label">Spider-Sense Feedback</label>
+                    <div class="spidey-sense-toggle-card">
+                        <label class="switch-container">
+                            <input type="checkbox" id="settings-spidey-sense-toggle" checked>
+                            <span class="tech-switch-slider"></span>
+                        </label>
+                        <div class="spidey-sense-info">
+                            <div class="spidey-sense-title">Audio & Vibration</div>
+                            <div class="spidey-sense-desc">Comic-style SFX on tasks & 5-min lecture alerts</div>
+                        </div>
+                        <button type="button" id="spidey-sense-test-btn" class="tech-button secondary outline" style="padding: 6px 12px; font-size: 0.75rem; min-height: 32px;" aria-label="Test Spider-Sense Alert">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                            Test
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
